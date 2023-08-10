@@ -1,7 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
 class Brand(models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField(null=True)
@@ -35,15 +34,33 @@ class Perfume(models.Model):
     notes = models.ManyToManyField(Note, null=True)
     year = models.SmallIntegerField(null=True)
 
+    @property
+    def name(self):
+        return "{} {}".format(self.brand.name, self.name)
+
+    def __str__(self):
+        return self.name
+
 
 class User(models.Model):
     username = models.CharField(max_length=64, unique=True)
     email = models.CharField(max_length=64, unique=True)
+    password = models.CharField(max_length=64)
     perfumes = models.ManyToManyField(Perfume, through='Collection')
 
 
+# not sure about how the swap request model
 class Collection(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     perfume = models.ForeignKey(Perfume, on_delete=models.CASCADE)
     looking_for = models.BooleanField(default=False)
     to_exchange = models.BooleanField(default=False)
+
+
+class SwapRequest(models.Model):
+    requester = models.ForeignKey(User, on_delete=models.CASCADE)
+    requested_perfume = models.ForeignKey(Perfume, related_name='requested_perfume', on_delete=models.CASCADE)
+    offering_perfume = models.ForeignKey(Perfume, related_name='offering_perfume', on_delete=models.CASCADE)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_accepted = models.BooleanField(default=False)
