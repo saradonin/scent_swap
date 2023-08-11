@@ -1,6 +1,21 @@
 {% extends '__base__.html' %}
 {% block content %}
 
-nothing to see here
+    <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th colspan="3">Dupa</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ch in '0123456789' %}
+            <tr>
+                <td>{{ ch }}</td>
+                <td>{{ ch }}</td>
+                <td>{{ ch }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock content %}
