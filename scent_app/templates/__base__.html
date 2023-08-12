@@ -10,15 +10,26 @@
 <body class="d-flex flex-column min-vh-100 bg-dark bg-gradient text-white">
 <!-- //--------------------------- nav bar ------------------------------// -->
 <nav class="navbar navbar-dark bg-dark p-2 mb-4">
-    <form class="container-fluid justify-content-start">
+    <form class="container-fluid justify-content-start align-items-end">
 
         <a class="navbar-brand" href="#">
             <img src="{% static 'logo.png' %}" alt="Logo" width="240" height="60"
                  class="d-inline-block align-text-top">
         </a>
         <ul class="nav justify-content-center">
+            {#            <li class="nav-item">#}
+            {#                <a class="nav-link" href=""><h4>Search</h4></a>#}
+            {#            </li>#}
             <li class="nav-item">
-                <a class="nav-link" href=""><h4>Search</h4></a>
+                <form action="/search" method="POST">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        {{ form.as_table }}
+                        <div class="input-group-append">
+                            <input class="btn btn-outline-primary" type="submit" value="Search">
+                        </div>
+                    </div>
+                </form>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href=""><h4>Perfumes</h4></a>
