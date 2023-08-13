@@ -45,10 +45,20 @@ class SearchView(View):
             return render(request, 'search.html', ctx)
 
 
+class BrandListView(ListView):
+    model = Brand
+    template_name = "brand_list.html"
+    paginate_by = 20  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
 class PerfumeListView(ListView):
     model = Perfume
     template_name = "perfume_list.html"
-    paginate_by = 50 # if pagination is desired
+    paginate_by = 20  # if pagination is desired
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
