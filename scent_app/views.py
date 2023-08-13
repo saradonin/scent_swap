@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import CreateView, UpdateView, ListView
 
 from scent_app.forms import SearchForm
 from scent_app.models import Brand, Perfume, Category, User, SwapOffer
@@ -42,3 +43,13 @@ class SearchView(View):
                 'message': message
             }
             return render(request, 'search.html', ctx)
+
+
+class PerfumeListView(ListView):
+    model = Perfume
+    template_name = "perfume_list.html"
+    paginate_by = 50 # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
