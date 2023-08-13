@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
@@ -53,6 +54,20 @@ class BrandListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class BrandAddView(CreateView):
+    model = Brand
+    fields = "__all__"
+    template_name = "brand_add_form.html"
+    success_url = reverse_lazy('brand-list')
+
+
+class BrandUpdateView(UpdateView):
+    model = Brand
+    fields = "__all__"
+    template_name = "brand_update_form.html"
+    success_url = reverse_lazy('brand-list')
 
 
 class PerfumeListView(ListView):
