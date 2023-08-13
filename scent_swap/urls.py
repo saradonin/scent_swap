@@ -17,11 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from scent_app.views import IndexView, SearchView, PerfumeListView
+from scent_app.views import IndexView, SearchView, PerfumeListView, BrandListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name="index"),
     path('search', SearchView.as_view(), name="search"),
-    path('perfumes', PerfumeListView.as_view(), name="perfume-list")
+    path('brands', BrandListView.as_view(), name="brand-list"),
+    path('perfumes', PerfumeListView.as_view(), name="perfume-list"),
 ]
