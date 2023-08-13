@@ -38,7 +38,6 @@ class Perfume(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     concentration = models.CharField(max_length=32, choices=CONCENTRATIONS)
     perfumer = models.ManyToManyField(Perfumer)
-    category = models.ManyToManyField(Category)
     top_notes = models.ManyToManyField(Note, related_name="perfumes_top_note")
     middle_notes = models.ManyToManyField(Note, related_name="perfumes_middle_note")
     base_notes = models.ManyToManyField(Note, related_name="perfumes_base_note")
