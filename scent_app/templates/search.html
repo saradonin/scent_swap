@@ -1,0 +1,100 @@
+{% extends '__base__.html' %}
+{% block content %}
+
+
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+            {{ form.as_table }}
+            <div class="input-group-append">
+                <input class="btn btn-outline-primary" type="submit" value="Search">
+            </div>
+        </div>
+    </form>
+
+    {% if perfumes %}
+        <table class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th colspan="3">Perfumes</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for perfume in perfumes %}
+                <tr>
+                    <td>{{ perfume.brand }}</td>
+                    <td>{{ perfume.name }}</td>
+                    <td>Details</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if brands %}
+        <table class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th colspan="3">Brands</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for brand in brands %}
+                <tr>
+                    <td>{{ brand.name }}</td>
+                    <td></td>
+                    <td>Details</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if offers %}
+        <table class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th colspan="3">Offers</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for offer in offers %}
+                <tr>
+                    <td>{{ offer.requested_perfume.perfume.name }}</td>
+                    <td>{{ offer.requested_perfume.user.username }}</td>
+                    <td>Details</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+
+    {% if users %}
+        <table class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th colspan="3">Users</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td></td>
+                    <td>Details</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <p>{{ message }}</p>
+
+
+{% endblock content %}
