@@ -34,7 +34,7 @@ class Perfume(models.Model):
         ('Eau de Parfum', 'Eau de Parfum'),
         ('Parfum', 'Parfum')
     )
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     concentration = models.CharField(max_length=32, choices=CONCENTRATIONS)
     perfumer = models.ManyToManyField(Perfumer)
@@ -43,13 +43,6 @@ class Perfume(models.Model):
     middle_notes = models.ManyToManyField(Note, related_name="perfumes_middle_note")
     base_notes = models.ManyToManyField(Note, related_name="perfumes_base_note")
     year = models.SmallIntegerField(null=True)
-
-    @property
-    def name(self):
-        return "{} {}".format(self.brand.name, self.name)
-
-    def __str__(self):
-        return self.name
 
 
 class User(models.Model):
