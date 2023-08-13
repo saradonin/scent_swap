@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
     description = models.TextField(null=True)
 
 
