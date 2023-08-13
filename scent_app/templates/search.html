@@ -33,6 +33,26 @@
         </table>
     {% endif %}
 
+        {% if perfumers %}
+        <table class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th colspan="3">Perfumers</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for perfumer in perfumers %}
+                <tr>
+                    <td>{{ perfumer.first_name }}</td>
+                    <td>{{ perfumer.last_name }}</td>
+                    <td>Details</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
     {% if brands %}
         <table class="table table-dark table-striped">
             <thead>
