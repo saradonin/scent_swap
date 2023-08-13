@@ -5,6 +5,9 @@ class Brand(models.Model):
     name = models.CharField(max_length=64, unique=True)
     description = models.TextField(null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Perfumer(models.Model):
     first_name = models.CharField(max_length=64)
@@ -24,6 +27,9 @@ class Category(models.Model):
 
 class Note(models.Model):
     name = models.CharField(max_length=64, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Perfume(models.Model):
