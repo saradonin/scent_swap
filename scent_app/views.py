@@ -2,14 +2,19 @@ from django.shortcuts import render
 from django.views import View
 
 from scent_app.forms import SearchForm
-from scent_app.models import Brand, Perfume, Category, User
+from scent_app.models import Brand, Perfume, Category, User, SwapOffer
 
 
 # Create your views here.
 class IndexView(View):
     def get(self, request):
+        return render(request, 'index.html')
+
+
+class SearchView(View):
+    def get(self, request):
         form = SearchForm()
-        return render(request, 'index.html', {'form': form})
+        return render(request, 'search.html', {'form': form})
 
     def post(self, request):
         form = SearchForm(request.POST)
@@ -17,9 +22,13 @@ class IndexView(View):
             search_value = form.cleaned_data['value']
             matched_brands = Brand.objects.filter(name__icontains=search_value)
             matched_perfumes = Perfume.objects.filter(name__icontains=search_value)
-            matched_offers = Perfume.objects.filter(requested_perfume__name__icontains=search_value)
+            matched_offers = SwapOffer.objects.filter(requested_perfume__perfume__name__icontains=search_value)
             matched_users = User.objects.filter(username__icontains=search_value)
-            if not matched_products.exists() and not matched_categories.exists():
+
+            if (not matched_brands.exists()
+                    and not matched_perfumes.exists()
+                    and not matched_offers.exists()
+                    and not matched_users.exists()):
                 message = "Sorry, nothing to show you"
             else:
                 message = ''
