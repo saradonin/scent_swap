@@ -44,6 +44,9 @@ class Perfume(models.Model):
     base_notes = models.ManyToManyField(Note, related_name="perfumes_base_note")
     year = models.SmallIntegerField(null=True)
 
+    class Meta:
+        unique_together = ('name', 'brand', 'concentration')
+
 
 class User(models.Model):
     username = models.CharField(max_length=64, unique=True)
