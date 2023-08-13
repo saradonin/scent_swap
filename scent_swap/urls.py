@@ -17,9 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from scent_app.views import IndexView
+from scent_app.views import IndexView, SearchView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name="index"),
+    path('search', SearchView.as_view(), name="search"),
 ]
