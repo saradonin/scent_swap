@@ -91,7 +91,7 @@ class PerfumerAddView(CreateView):
 
 
 class PerfumerUpdateView(UpdateView):
-    model = Brand
+    model = Perfumer
     fields = "__all__"
     template_name = "perfumer_update_form.html"
     success_url = reverse_lazy('perfumer-list')
@@ -112,3 +112,17 @@ class PerfumeListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class PerfumeAddView(CreateView):
+    model = Perfume
+    fields = "__all__"
+    template_name = "perfume_add_form.html"
+    success_url = reverse_lazy('perfume-list')
+
+
+class PerfumeUpdateView(UpdateView):
+    model = Perfume
+    fields = "__all__"
+    template_name = "perfume_update_form.html"
+    success_url = reverse_lazy('perfume-list')
