@@ -1,6 +1,9 @@
 {% extends '__base__.html' %}
 {% block content %}
 
+    <a href="{% url 'brand-add' %}">
+        <button type="button" class="btn btn-outline-success">Add brand</button>
+    </a>
 
     <table class="table table-dark table-striped">
         <thead>
@@ -16,7 +19,11 @@
             <tr>
                 <td>{{ brand.name }}</td>
                 <td>{{ brand.description }}</td>
-                <td>Details</td>
+                <td>
+                    <a href="{% url 'brand-update' brand.id %}">
+                        <button type="button" class="btn btn-outline-secondary">Edit</button>
+                    </a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
@@ -26,7 +33,8 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link bg-dark text-white" href="?page={{ object_list.previous_page_number }}"><<</a></li>
+                <li class="page-item"><a class="page-link bg-dark text-white"
+                                         href="?page={{ object_list.previous_page_number }}"><<</a></li>
             {% endif %}
 
 
@@ -34,16 +42,19 @@
                 {% if num == page_obj.number %}
                     <li class="page-item"><a class="page-link bg-secondary text-white">{{ num }}</a></li>
                 {% else %}
-                    <li class="page-item"><a class="page-link bg-dark text-white" href="?page={{ num }}">{{ num }}</a></li>
+                    <li class="page-item"><a class="page-link bg-dark text-white" href="?page={{ num }}">{{ num }}</a>
+                    </li>
                 {% endif %}
             {% endfor %}
 
 
             {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link bg-dark text-white" href="?page={{ page_obj.next_page_number }}">>></a></li>
+                <li class="page-item"><a class="page-link bg-dark text-white"
+                                         href="?page={{ page_obj.next_page_number }}">>></a></li>
             {% endif %}
         </ul>
     </nav>
+    <!-- //--------------------------- pagination links end---------------------------// -->
 
 
 
