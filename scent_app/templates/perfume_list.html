@@ -20,7 +20,7 @@
                 <td>{{ perfume.brand }}</td>
                 <td>{{ perfume.name }}</td>
                 <td>
-                    <a href="">
+                    <a href="{% url 'perfume-details' perfume.id %}">
                         <button type="button" class="btn btn-outline-secondary">Details</button>
                     </a>
                     <a href="{% url 'perfume-update' perfume.id %}">

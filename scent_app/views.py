@@ -126,3 +126,11 @@ class PerfumeUpdateView(UpdateView):
     fields = "__all__"
     template_name = "perfume_update_form.html"
     success_url = reverse_lazy('perfume-list')
+
+
+class PerfumeDetailsView(View):
+    def get(self, request, perfume_id):
+        ctx = {
+            'perfume': Perfume.objects.get(id=perfume_id)
+        }
+        return render(request, 'perfume_details.html', ctx)
