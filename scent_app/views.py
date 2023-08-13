@@ -4,7 +4,7 @@ from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
 from scent_app.forms import SearchForm
-from scent_app.models import Brand, Perfume, Category, User, SwapOffer
+from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer
 
 
 # Create your views here.
@@ -68,6 +68,30 @@ class BrandUpdateView(UpdateView):
     fields = "__all__"
     template_name = "brand_update_form.html"
     success_url = reverse_lazy('brand-list')
+
+
+class PerfumerListView(ListView):
+    model = Perfumer
+    template_name = "perfumer_list.html"
+    paginate_by = 20  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class PerfumerAddView(CreateView):
+    model = Perfumer
+    fields = "__all__"
+    template_name = "perfumer_add_form.html"
+    success_url = reverse_lazy('perfumer-list')
+
+
+class PerfumerUpdateView(UpdateView):
+    model = Brand
+    fields = "__all__"
+    template_name = "perfumer_update_form.html"
+    success_url = reverse_lazy('perfumer-list')
 
 
 class PerfumeListView(ListView):
