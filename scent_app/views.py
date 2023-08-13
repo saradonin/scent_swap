@@ -4,7 +4,7 @@ from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
 from scent_app.forms import SearchForm
-from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer
+from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer, Note
 
 
 # Create your views here.
@@ -95,6 +95,13 @@ class PerfumerUpdateView(UpdateView):
     fields = "__all__"
     template_name = "perfumer_update_form.html"
     success_url = reverse_lazy('perfumer-list')
+
+
+class NoteAddView(CreateView):
+    model = Note
+    fields = "__all__"
+    template_name = "note_add_form.html"
+    success_url = reverse_lazy('note-add')
 
 
 class PerfumeListView(ListView):
