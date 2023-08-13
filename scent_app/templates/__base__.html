@@ -17,19 +17,8 @@
                  class="d-inline-block align-text-top">
         </a>
         <ul class="nav justify-content-center">
-            {#            <li class="nav-item">#}
-            {#                <a class="nav-link" href=""><h4>Search</h4></a>#}
-            {#            </li>#}
             <li class="nav-item">
-                <form action="/search" method="POST">
-                    {% csrf_token %}
-                    <div class="input-group">
-                        {{ form.as_table }}
-                        <div class="input-group-append">
-                            <input class="btn btn-outline-primary" type="submit" value="Search">
-                        </div>
-                    </div>
-                </form>
+                <a class="nav-link" href="{% url 'search' %}"><h4>Search</h4></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href=""><h4>Perfumes</h4></a>
