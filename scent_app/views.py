@@ -50,14 +50,48 @@ class SearchView(View):
             return render(request, 'search.html', ctx)
 
 
-class BrandListView(ListView):
-    model = Brand
-    template_name = "brand_list.html"
-    paginate_by = 20  # if pagination is desired
+# class BrandListView(ListView):
+#     model = Brand
+#     template_name = "brand_list.html"
+#     paginate_by = 20  # if pagination is desired
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         return context
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+class BrandListView(View):
+    def get(self, request):
+        form = SearchForm()
+        brands = Brand.objects.all().order_by("name")
+        # Paginator object with plans and 50 per page
+        paginator = Paginator(brands, 20)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
+        ctx = {
+            'page_obj': page_obj,
+            'form': form,
+        }
+        return render(request, "brand_list.html", ctx)
+
+    def post(self, request):
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            search_value = form.cleaned_data['value']
+            brands = Brand.objects.filter(name__icontains=search_value).order_by("name")
+        else:
+            brands = Brand.objects.all().order_by("name")
+
+        paginator = Paginator(brands, 20)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+        ctx = {
+            'page_obj': page_obj,
+            'form': form,
+        }
+        return render(request, "brand_list.html", ctx)
 
 
 class BrandAddView(CreateView):
