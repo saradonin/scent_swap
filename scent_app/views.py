@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
@@ -104,14 +105,47 @@ class NoteAddView(CreateView):
     success_url = reverse_lazy('note-add')
 
 
-class PerfumeListView(ListView):
-    model = Perfume
-    template_name = "perfume_list.html"
-    paginate_by = 20  # if pagination is desired
+# class PerfumeListView(ListView):
+#     model = Perfume
+#     template_name = "perfume_list.html"
+#     paginate_by = 20  # if pagination is desired
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         return context
+class PerfumeListView(View):
+    def get(self, request):
+        form = SearchForm()
+        perfumes = Perfume.objects.all().order_by("name")
+        # Paginator object with plans and 50 per page
+        paginator = Paginator(perfumes, 20)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+        ctx = {
+            'page_obj': page_obj,
+            'form': form,
+        }
+        return render(request, "perfume_list.html", ctx)
+
+    def post(self, request):
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            search_value = form.cleaned_data['value']
+            perfumes = Perfume.objects.filter(name__icontains=search_value).order_by("name")
+        else:
+            perfumes = Perfume.objects.all().order_by("name")
+
+        paginator = Paginator(perfumes, 20)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+        ctx = {
+            'page_obj': page_obj,
+            'form': form,
+        }
+        return render(request, "perfume_list.html", ctx)
 
 
 class PerfumeAddView(CreateView):
