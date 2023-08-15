@@ -11,7 +11,18 @@ from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer
 # Create your views here.
 class IndexView(View):
     def get(self, request):
-        return render(request, 'index.html')
+        brands_count = Brand.objects.count()
+        perfumes_count = Perfume.objects.count()
+        offers_count = SwapOffer.objects.count()
+        users_count = User.objects.count()
+
+        ctx = {
+            'brands_count': brands_count,
+            'perfumes_count': perfumes_count,
+            'offers_count': offers_count,
+            'users_count': users_count,
+        }
+        return render(request, 'index.html', ctx)
 
 
 class SearchView(View):
