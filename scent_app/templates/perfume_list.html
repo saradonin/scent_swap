@@ -24,6 +24,8 @@
         <tr>
             <th>Brand:</th>
             <th>Name:</th>
+            <th>Concentration:</th>
+            <th>Year:</th>
             <th>Details:</th>
         </tr>
         </thead>
@@ -33,6 +35,8 @@
             <tr>
                 <td>{{ perfume.brand }}</td>
                 <td>{{ perfume.name }}</td>
+                <td>{{ perfume.concentration }}</td>
+                <td>{{ perfume.year }}</td>
                 <td>
                     <a href="{% url 'perfume-details' perfume.id %}">
                         <button type="button" class="btn btn-outline-secondary">Details</button>
