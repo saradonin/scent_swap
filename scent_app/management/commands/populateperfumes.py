@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from scent_app.management.commands._privateperfumes import generate_random_perfume
+from scent_app.management.commands._privateperfumes import generate_random_perfume, delete_perfumes
 
 
 class Command(BaseCommand):

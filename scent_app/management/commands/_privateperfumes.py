@@ -34,12 +34,8 @@ def get_random_year():
     return random_year
 
 
-def delete_perfumes():
-    Perfume.objects.all().delete()
-
-
 def generate_random_name():
-    random_name = "Test perfume " + random.choice(string.ascii_letters) + (str(random.randint(1, 999999)))
+    random_name = "Perfume " + random.choice(string.ascii_letters) + (str(random.randint(1, 999999)))
     return random_name
 
 
@@ -70,3 +66,7 @@ def generate_random_perfume():
     for i in range(random.randint(1, 7)):
         note = get_random_note()
         perfume.base_notes.add(note)
+
+
+def delete_perfumes():
+    Perfume.objects.all().delete()
