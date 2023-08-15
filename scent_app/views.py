@@ -119,6 +119,23 @@ class BrandUpdateView(UpdateView):
     success_url = reverse_lazy('brand-list')
 
 
+class BrandPerfumeListView(View):
+    def get(self, request, brand_id):
+        brand = Brand.objects.get(id=brand_id)
+        perfumes = Perfume.objects.filter(brand=brand).order_by("name")
+        # Paginator object with plans and 50 per page
+        paginator = Paginator(perfumes, 20)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
+        ctx = {
+            'brand': brand,
+            'page_obj': page_obj,
+        }
+        return render(request, "brand_perfumes_list.html", ctx)
+
+
 class PerfumerListView(ListView):
     model = Perfumer
     template_name = "perfumer_list.html"
