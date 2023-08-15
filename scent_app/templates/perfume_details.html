@@ -32,6 +32,14 @@
             </td>
         </tr>
         <tr>
+            <td>Category:</td>
+            <td>
+                {% for category in perfume.category.all %}
+                    {{ category.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
             <td>Top notes:</td>
             <td>
                 {% for note in perfume.top_notes.all %}
