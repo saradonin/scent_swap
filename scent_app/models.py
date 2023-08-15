@@ -3,6 +3,14 @@ from django.db import models
 
 User = get_user_model()
 
+CONCENTRATIONS = (
+    ('Eau Fraiche', 'Eau Fraiche'),
+    ('Eau de Cologne', 'Eau de Cologne'),
+    ('Eau de Toilette', 'Eau de Toilette'),
+    ('Eau de Parfum', 'Eau de Parfum'),
+    ('Parfum', 'Parfum')
+)
+
 
 class Brand(models.Model):
     name = models.CharField(max_length=64, unique=True)
@@ -39,13 +47,6 @@ class Note(models.Model):
 
 
 class Perfume(models.Model):
-    CONCENTRATIONS = (
-        ('Eau Fraiche', 'Eau Fraiche'),
-        ('Eau de Cologne', 'Eau de Cologne'),
-        ('Eau de Toilette', 'Eau de Toilette'),
-        ('Eau de Parfum', 'Eau de Parfum'),
-        ('Parfum', 'Parfum')
-    )
     name = models.CharField(max_length=64, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     concentration = models.CharField(max_length=32, choices=CONCENTRATIONS)
