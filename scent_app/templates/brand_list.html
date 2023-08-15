@@ -33,9 +33,9 @@
                 <td>{{ brand.name }}</td>
                 <td>{{ brand.description }}</td>
                 <td>
-{#                    <a href="{% url 'brand-details' brand.id %}">#}
-{#                        <button type="button" class="btn btn-outline-secondary">Details</button>#}
-{#                    </a>#}
+                    <a href="{% url 'brand-perfumes' brand.id %}">
+                        <button type="button" class="btn btn-outline-secondary">Details</button>
+                    </a>
                     <a href="{% url 'brand-update' brand.id %}">
                         <button type="button" class="btn btn-outline-secondary">Edit</button>
                     </a>
