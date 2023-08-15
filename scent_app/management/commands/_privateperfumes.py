@@ -11,7 +11,7 @@ def get_random_brand():
 
 def get_random_concentration():
     random_concentration = random.choice(CONCENTRATIONS)
-    return random_concentration
+    return random_concentration[0]
 
 
 def get_random_note():
