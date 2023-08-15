@@ -1,4 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+
+User = get_user_model()
 
 
 class Brand(models.Model):
@@ -44,6 +47,7 @@ class Perfume(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     concentration = models.CharField(max_length=32, choices=CONCENTRATIONS)
     perfumer = models.ManyToManyField(Perfumer)
+    category = models.ManyToManyField(Category)
     top_notes = models.ManyToManyField(Note, related_name="perfumes_top_note")
     middle_notes = models.ManyToManyField(Note, related_name="perfumes_middle_note")
     base_notes = models.ManyToManyField(Note, related_name="perfumes_base_note")
@@ -51,13 +55,6 @@ class Perfume(models.Model):
 
     class Meta:
         unique_together = ('name', 'brand', 'concentration')
-
-
-class User(models.Model):
-    username = models.CharField(max_length=64, unique=True)
-    email = models.CharField(max_length=64, unique=True)
-    password = models.CharField(max_length=64)
-    perfumes = models.ManyToManyField(Perfume, through='UserPerfume')
 
 
 # not sure about how the swap request model
@@ -72,6 +69,5 @@ class UserPerfume(models.Model):
 class SwapOffer(models.Model):
     requested_perfume = models.ForeignKey(UserPerfume, related_name='requested_perfume', on_delete=models.CASCADE)
     offering_perfume = models.ForeignKey(UserPerfume, related_name='offering_perfume', on_delete=models.CASCADE)
-    message = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_accepted = models.BooleanField(default=False)
