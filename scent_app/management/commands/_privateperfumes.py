@@ -34,14 +34,14 @@ def get_random_year():
     return random_year
 
 
-def generate_random_name():
-    random_name = "Perfume " + random.choice(string.ascii_letters) + (str(random.randint(1, 999999)))
+def generate_random_name(brand):
+    random_name = "Perfume " + brand.name[0:2].upper() + "-" + (str(random.randint(1, 999))) + random.choice(string.ascii_letters)
     return random_name
 
 
 def generate_random_perfume():
-    name = generate_random_name()
     brand = get_random_brand()
+    name = generate_random_name(brand)
     concentration = get_random_concentration()
     perfumer = get_random_perfumer()
     year = get_random_year()
