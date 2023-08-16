@@ -12,12 +12,14 @@ from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer
 class IndexView(View):
     def get(self, request):
         brands_count = Brand.objects.count()
+        perfumer_count = Perfumer.objects.count()
         perfumes_count = Perfume.objects.count()
         offers_count = SwapOffer.objects.count()
         users_count = User.objects.count()
 
         ctx = {
             'brands_count': brands_count,
+            'perfumer_count': perfumer_count,
             'perfumes_count': perfumes_count,
             'offers_count': offers_count,
             'users_count': users_count,
@@ -124,7 +126,7 @@ class BrandPerfumeListView(View):
         brand = Brand.objects.get(id=brand_id)
         perfumes = Perfume.objects.filter(brand=brand).order_by("name")
         # Paginator object with plans and 50 per page
-        paginator = Paginator(perfumes, 20)
+        paginator = Paginator(perfumes, 25)
         # current page
         page_number = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_number)
@@ -180,7 +182,7 @@ class PerfumeListView(View):
         form = SearchForm()
         perfumes = Perfume.objects.all().order_by("name")
         # Paginator object with plans and 50 per page
-        paginator = Paginator(perfumes, 20)
+        paginator = Paginator(perfumes, 25)
         # current page
         page_number = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_number)
@@ -199,7 +201,7 @@ class PerfumeListView(View):
         else:
             perfumes = Perfume.objects.all().order_by("name")
 
-        paginator = Paginator(perfumes, 20)
+        paginator = Paginator(perfumes, 25)
         # current page
         page_number = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_number)
