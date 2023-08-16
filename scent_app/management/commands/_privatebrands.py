@@ -75,12 +75,12 @@ BRAND_LIST = ['Aaron Terence Hughes', 'Abdul Samad Al Qurashi', 'Abercrombie & F
               'Real Time Netherlands', 'Réminiscence Monaco', 'Replay', 'Revlon / Charles Revson', 'Reyane Tradition',
               'Rihanna', 'Rituals Netherlands', 'Robert Piguet', 'Roberto Capucci', 'Roberto Cavalli',
               'Roberto Ugolini', 'Rochas', 'Roger & Gallet', 'Rogue', 'Roja Parfums', 'Room 1015',
-              'Rosendo Mateu - Olfactive Expressions', 'Royal Crown', 'RP', 'Rue Broca', 's.Oliver',
+              'Rosendo Mateu - Olfactive Expressions', 'Royal Crown', 'Rue Broca', 's.Oliver',
               'S.T. Dupont', 'Salvador Dali', 'Salvatore Ferragamo', 'Santa Maria Novella', 'Sarah Jessica Parker',
               'ScentStory', 'Sean John', 'Serge Lutens', 'Shay & Blue', 'Shiseido', 'Simone Andreoli',
               'Sisley', 'Slava Zaïtsev Russia', 'Slumberhouse', 'Sol de Janeiro Brazil', 'Solinotes', 'soOud',
               'Sora Dora', 'Spirit', 'Stella McCartney', 'Stéphane Humbert Lucas', 'Strangers Parfumerie',
-              'Sultan Pasha Attars', 'Swiss Arabian', 'Sylvaine Delacourte', 'T', 'Taif Al-Emarat / طيف الإمارات',
+              'Sultan Pasha Attars', 'Swiss Arabian', 'Sylvaine Delacourte', 'Taif Al-Emarat',
               'Tauer Perfumes', 'Tauerville', 'Ted Lapidus', 'Téo Cabanel', 'Teone Reinthal Natural Perfume',
               "Tesori d'Oriente", 'Thameen', 'The Body Shop', 'The Different Company',
               'The Dua Brand / Dua Fragrances', 'The House of Oud', 'The Merchant Of Venice', 'The Nose Behind',
@@ -89,7 +89,7 @@ BRAND_LIST = ['Aaron Terence Hughes', 'Abdul Samad Al Qurashi', 'Abercrombie & F
               'Ulric de Varens', 'Une Nuit Nomade', 'Unic', "Unique'e Luxury", 'V Canto', 'Valentino',
               'Van Cleef & Arpels', 'Vera Wang', 'Versace', "Victoria's Secret", 'Viktor & Rolf', 'Vilhelm Parfumerie',
               'Vince Camuto', 'Vivienne Westwood', 'Weil', 'What We Do Is Secret / A Lab on Fire',
-              'Widian / AJ Arabia', 'Worth', 'XerJoff', 'Yardley', 'Yohji Yamamoto', 'Yves de Sistelle', 'Yves Rocher',
+              'Widian', 'Worth', 'XerJoff', 'Yardley', 'Yohji Yamamoto', 'Yves de Sistelle', 'Yves Rocher',
               'Yves Saint Laurent', 'Zadig & Voltaire', 'Zaharoff', 'Zara', 'Zarkoperfume', 'Zoologist']
 
 
