@@ -66,10 +66,11 @@
 
         </tbody>
     </table>
-
-    <a href="{% url 'perfume-update' perfume.id %}">
-        <button type="button" class="btn btn-outline-secondary">Edit</button>
-    </a>
+    {% if perms.scent_app.change_perfume %}
+        <a href="{% url 'perfume-update' perfume.id %}">
+            <button type="button" class="btn btn-outline-secondary">Edit</button>
+        </a>
+    {% endif %}
 
 
 

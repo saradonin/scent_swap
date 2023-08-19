@@ -9,56 +9,51 @@
 
 <body class="d-flex flex-column min-vh-100 bg-dark bg-gradient text-white">
 <!-- //--------------------------- nav bar ------------------------------// -->
-<nav class="navbar navbar-dark bg-dark p-2 mb-4">
-    <form class="container-fluid justify-content-between align-items-end">
+<nav class="navbar navbar-dark bg-dark align-items-center p-2 mb-4">
 
-        <a class="navbar-brand" href="{% url 'index' %}">
-            <img src="{% static 'logo.png' %}" alt="Logo" width="240" height="60"
-                 class="d-inline-block align-text-top">
-        </a>
+    <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'logo.png' %}" alt="Logo" width="240" height="60"
+             class="d-inline-block align-text-top">
+    </a>
 
-        <ul class="nav justify-content-center">
-            {#            <li class="nav-item">#}
-            {#                <a class="nav-link" href="{% url 'search' %}"><h4>Search</h4></a>#}
-            {#            </li>#}
+    <ul class="nav justify-content-center align-items-center">
+        {#            <li class="nav-item">#}
+        {#                <a class="nav-link" href="{% url 'search' %}"><h4>Search</h4></a>#}
+        {#            </li>#}
+        <li class="nav-item">
+            <a class="nav-link text-warning" href="{% url 'brand-list' %}"><h4>Brands</h4></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-danger" href="{% url 'perfume-list' %}"><h4>Perfumes</h4></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-success" href=""><h4>Users</h4></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href=""><h4>Swap offers</h4></a>
+        </li>
+    </ul>
+
+    <ul class="nav justify-content-end align-items-center">
+        {% if user.username %}
             <li class="nav-item">
-                <a class="nav-link text-warning" href="{% url 'brand-list' %}"><h4>Brands</h4></a>
+                <a class="nav-link">
+                    {{ user.username }}
+                </a>
             </li>
+            <a class="nav-link" href="{% url 'user-logout' %}">
+                <button class="btn btn-danger">Logout</button>
+            </a>
+            </li>
+
+        {% else %}
             <li class="nav-item">
-                <a class="nav-link text-danger" href="{% url 'perfume-list' %}"><h4>Perfumes</h4></a>
+                <a class="nav-link" href="{% url 'user-login' %}">
+                    <button class="btn btn-success">Login</button>
+                </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-success" href=""><h4>Users</h4></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href=""><h4>Swap offers</h4></a>
-            </li>
-        </ul>
-
-        <ul class="nav justify-content-end">
-            {% if user.username %}
-                <li class="nav-item">
-                    <a class="nav-link">
-                        {{ user.username }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user-logout' %}">
-                        <button class="btn btn-primary">Logout</button>
-                    </a>
-                </li>
-
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user-login' %}">
-                        <button class="btn btn-primary">Login</button>
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
-
-
-    </form>
+        {% endif %}
+    </ul>
 </nav>
 <!-- //--------------------------- nav bar end --------------------------// -->
 
