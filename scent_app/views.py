@@ -1,10 +1,11 @@
+from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
-from scent_app.forms import SearchForm
+from scent_app.forms import SearchForm, UserLoginForm
 from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer, Note
 
 
@@ -62,15 +63,6 @@ class SearchView(View):
             }
             return render(request, 'search.html', ctx)
 
-
-# class BrandListView(ListView):
-#     model = Brand
-#     template_name = "brand_list.html"
-#     paginate_by = 20  # if pagination is desired
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         return context
 
 class BrandListView(View):
     def get(self, request):
@@ -232,3 +224,37 @@ class PerfumeDetailsView(View):
             'perfume': Perfume.objects.get(id=perfume_id)
         }
         return render(request, 'perfume_details.html', ctx)
+
+
+class UserLoginView(View):
+    def get(self, request):
+        form = UserLoginForm()
+        ctx = {'form': form}
+        return render(request, 'user_login_form.html', ctx)
+
+    def post(self, request):
+        form = UserLoginForm(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+            else:
+                message = "Invalid input"
+
+            ctx = {
+                'form': form,
+                'message': message
+            }
+            return render(request, 'user_login_form.html', ctx)
+
+
+class UserLogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('user-login')
