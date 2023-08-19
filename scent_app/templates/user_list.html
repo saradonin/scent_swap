@@ -31,9 +31,9 @@
                 <td>{{ user.date_joined }}</td>
                 <td>
                     {% if user.is_superuser %}
-                    admin
+                        admin
                     {% elif user.is_staff %}
-                    staff
+                        staff
                     {% endif %}
                 </td>
             </tr>
