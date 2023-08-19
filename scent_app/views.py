@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -99,14 +100,16 @@ class BrandListView(View):
         return render(request, "brand_list.html", ctx)
 
 
-class BrandAddView(CreateView):
+class BrandAddView(PermissionRequiredMixin, CreateView):
+    permission_required = 'scent_app.add_brand'
     model = Brand
     fields = "__all__"
     template_name = "brand_add_form.html"
     success_url = reverse_lazy('brand-list')
 
 
-class BrandUpdateView(UpdateView):
+class BrandUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'scent_app.change_brand'
     model = Brand
     fields = "__all__"
     template_name = "brand_update_form.html"
@@ -140,35 +143,30 @@ class PerfumerListView(ListView):
         return context
 
 
-class PerfumerAddView(CreateView):
+class PerfumerAddView(PermissionRequiredMixin, CreateView):
+    permission_required = 'scent_app.add_perfumer'
     model = Perfumer
     fields = "__all__"
     template_name = "perfumer_add_form.html"
     success_url = reverse_lazy('perfumer-list')
 
 
-class PerfumerUpdateView(UpdateView):
+class PerfumerUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'scent_app.change_perfumer'
     model = Perfumer
     fields = "__all__"
     template_name = "perfumer_update_form.html"
     success_url = reverse_lazy('perfumer-list')
 
 
-class NoteAddView(CreateView):
+class NoteAddView(PermissionRequiredMixin, CreateView):
+    permission_required = 'scent_app.add_note'
     model = Note
     fields = "__all__"
     template_name = "note_add_form.html"
     success_url = reverse_lazy('note-add')
 
 
-# class PerfumeListView(ListView):
-#     model = Perfume
-#     template_name = "perfume_list.html"
-#     paginate_by = 20  # if pagination is desired
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         return context
 class PerfumeListView(View):
     def get(self, request):
         form = SearchForm()
@@ -204,14 +202,16 @@ class PerfumeListView(View):
         return render(request, "perfume_list.html", ctx)
 
 
-class PerfumeAddView(CreateView):
+class PerfumeAddView(PermissionRequiredMixin, CreateView):
+    permission_required = 'scent_app.add_perfume'
     model = Perfume
     fields = "__all__"
     template_name = "perfume_add_form.html"
     success_url = reverse_lazy('perfume-list')
 
 
-class PerfumeUpdateView(UpdateView):
+class PerfumeUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'scent_app.change_perfume'
     model = Perfume
     fields = "__all__"
     template_name = "perfume_update_form.html"
