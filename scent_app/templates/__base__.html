@@ -26,12 +26,15 @@
         <li class="nav-item">
             <a class="nav-link text-danger" href="{% url 'perfume-list' %}"><h4>Perfumes</h4></a>
         </li>
+        {% if perms.auth.view_user %}
         <li class="nav-item">
-            <a class="nav-link text-success" href=""><h4>Users</h4></a>
+            <a class="nav-link text-success" href="{% url 'user-list' %}"><h4>Users</h4></a>
         </li>
+        {% endif %}
         <li class="nav-item">
             <a class="nav-link" href=""><h4>Swap offers</h4></a>
         </li>
+
     </ul>
 
     <ul class="nav justify-content-end align-items-center">

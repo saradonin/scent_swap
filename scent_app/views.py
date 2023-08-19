@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -258,3 +258,38 @@ class UserLogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('user-login')
+
+
+class UserListView(LoginRequiredMixin, View):
+        def get(self, request):
+            form = SearchForm()
+            users = User.objects.all().order_by("username")
+            # Paginator object with plans and 50 per page
+            paginator = Paginator(users, 20)
+            # current page
+            page_number = request.GET.get('page', 1)
+            page_obj = paginator.get_page(page_number)
+
+            ctx = {
+                'page_obj': page_obj,
+                'form': form,
+            }
+            return render(request, "user_list.html", ctx)
+
+        def post(self, request):
+            form = SearchForm(request.POST)
+            if form.is_valid():
+                search_value = form.cleaned_data['value']
+                users = User.objects.filter(name__icontains=search_value).order_by("username")
+            else:
+                users = User.objects.all().order_by("username")
+
+            paginator = Paginator(users, 20)
+            # current page
+            page_number = request.GET.get('page', 1)
+            page_obj = paginator.get_page(page_number)
+            ctx = {
+                'page_obj': page_obj,
+                'form': form,
+            }
+            return render(request, "user_list.html", ctx)
