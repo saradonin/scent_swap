@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
-from scent_app.forms import SearchForm, UserLoginForm
+from scent_app.forms import SearchForm, UserLoginForm, UserAddForm
 from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer, Note
 
 
@@ -260,36 +260,58 @@ class UserLogoutView(View):
         return redirect('user-login')
 
 
+class UserAddView(View):
+    def get(self, request):
+        form = UserAddForm()
+        ctx = {'form': form}
+        return render(request, 'user_add.html', ctx)
+
+    def post(self, request):
+        form = UserAddForm(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            email = form.cleaned_data['email']
+            User.objects.create_user(username=username, email=email, password=password)
+            return redirect('user-login')
+        else:
+            ctx = {
+                'form': form
+            }
+            return render(request, 'user_add.html', ctx)
+
+
 class UserListView(LoginRequiredMixin, View):
-        def get(self, request):
-            form = SearchForm()
+    def get(self, request):
+        form = SearchForm()
+        users = User.objects.all().order_by("username")
+        # Paginator object with plans and 50 per page
+        paginator = Paginator(users, 20)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
+        ctx = {
+            'page_obj': page_obj,
+            'form': form,
+        }
+        return render(request, "user_list.html", ctx)
+
+    def post(self, request):
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            search_value = form.cleaned_data['value']
+            users = User.objects.filter(username__icontains=search_value).order_by("username")
+        else:
             users = User.objects.all().order_by("username")
-            # Paginator object with plans and 50 per page
-            paginator = Paginator(users, 20)
-            # current page
-            page_number = request.GET.get('page', 1)
-            page_obj = paginator.get_page(page_number)
 
-            ctx = {
-                'page_obj': page_obj,
-                'form': form,
-            }
-            return render(request, "user_list.html", ctx)
-
-        def post(self, request):
-            form = SearchForm(request.POST)
-            if form.is_valid():
-                search_value = form.cleaned_data['value']
-                users = User.objects.filter(name__icontains=search_value).order_by("username")
-            else:
-                users = User.objects.all().order_by("username")
-
-            paginator = Paginator(users, 20)
-            # current page
-            page_number = request.GET.get('page', 1)
-            page_obj = paginator.get_page(page_number)
-            ctx = {
-                'page_obj': page_obj,
-                'form': form,
-            }
-            return render(request, "user_list.html", ctx)
+        paginator = Paginator(users, 20)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+        ctx = {
+            'page_obj': page_obj,
+            'form': form,
+        }
+        return render(request, "user_list.html", ctx)
