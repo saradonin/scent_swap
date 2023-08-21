@@ -11,22 +11,27 @@
 <!-- //--------------------------- nav bar ------------------------------// -->
 <nav class="navbar navbar-dark bg-dark align-items-center p-2 mb-4">
         <a class="navbar-brand" href="{% url 'index' %}">
-            <img src="{% static 'logo.png' %}" alt="Logo" width="240" height="60"
+            <img src="{% static 'logo.png' %}" alt="Logo" width="180" height="45"
                  class="d-flex align-text-top">
         </a>
         <ul class="nav justify-content-center align-items-center">
             <li class="nav-item">
-                <a class="nav-link text-warning" href="{% url 'brand-list' %}"><h4>Brands</h4></a>
+                <a class="nav-link text-info" href="{% url 'brand-list' %}"><h5>Brands</h5></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-danger" href="{% url 'perfume-list' %}"><h4>Perfumes</h4></a>
+                <a class="nav-link text-info" href="{% url 'perfume-list' %}"><h5>Perfumes</h5></a>
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link text-success" href="{% url 'user-list' %}"><h4>Users</h4></a>
+                    <a class="nav-link text-info" href="{% url 'user-list' %}"><h5>Users</h5></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href=""><h4>Swap offers</h4></a>
+                    <a class="nav-link text-info" href=""><h5>Swap offers</h5></a>
+                </li>
+            {% endif %}
+                    {% if user.is_superuser %}
+                <li class="nav-item">
+                    <a class="nav-link text-info" href=""><h5>Data</h5></a>
                 </li>
             {% endif %}
         </ul>
@@ -39,14 +44,14 @@
                 </li>
                 <li>
                 <a class="nav-link" href="{% url 'user-logout' %}">
-                    <button class="btn btn-danger">Logout</button>
+                    <button class="btn btn-sm btn-danger">Logout</button>
                 </a>
                 </li>
 
             {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user-login' %}">
-                        <button class="btn btn-success">Login</button>
+                        <button class="btn btn-sm btn-success">Login</button>
                     </a>
                 </li>
             {% endif %}
