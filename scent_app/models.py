@@ -119,13 +119,13 @@ class Perfume(models.Model):
 # not sure about how the swap request model
 class UserPerfume(models.Model):
     """
-    Represents a relationship between a user and a perfume, including user-specific details.
+    Represents a perfume in user's collection with additional data.
 
     Attributes:
-        user (User): The user associated with the perfume.
+        user (User): The user owning the collection.
         perfume (Perfume): The perfume associated with the user.
-        volume (int): The volume of the perfume owned by the user.
-        status (str): The status of the user's interaction with the perfume.
+        volume (int): The initial volume of the perfume owned by the user.
+        status (str): The status of the user's perfume.
         to_exchange (bool): Indicates whether the perfume is available for exchange.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
