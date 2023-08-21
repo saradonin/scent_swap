@@ -12,6 +12,9 @@ from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer
 
 # Create your views here.
 class IndexView(View):
+    """
+    View for rendering the index page with statistics.
+    """
     def get(self, request):
         brands_count = Brand.objects.count()
         perfumer_count = Perfumer.objects.count()
@@ -30,7 +33,13 @@ class IndexView(View):
 
 
 class BrandListView(View):
+    """
+    View for displaying a list of brands with search functionality.
+    """
     def get(self, request):
+        """
+        Handle GET requests and display the paginated list of brands.
+        """
         form = SearchForm()
         brands = Brand.objects.all().order_by("name")
         # Paginator object with plans and 50 per page
@@ -46,6 +55,9 @@ class BrandListView(View):
         return render(request, "brand_list.html", ctx)
 
     def post(self, request):
+        """
+        Handle POST requests and display the filtered list of brands based on search.
+        """
         form = SearchForm(request.POST)
         if form.is_valid():
             search_value = form.cleaned_data['value']
@@ -65,6 +77,9 @@ class BrandListView(View):
 
 
 class BrandAddView(PermissionRequiredMixin, CreateView):
+    """
+    View for adding new brands.
+    """
     permission_required = 'scent_app.add_brand'
     model = Brand
     fields = "__all__"
@@ -73,6 +88,9 @@ class BrandAddView(PermissionRequiredMixin, CreateView):
 
 
 class BrandUpdateView(PermissionRequiredMixin, UpdateView):
+    """
+    View for updating brand details.
+    """
     permission_required = 'scent_app.change_brand'
     model = Brand
     fields = "__all__"
@@ -81,6 +99,9 @@ class BrandUpdateView(PermissionRequiredMixin, UpdateView):
 
 
 class BrandPerfumeListView(View):
+    """
+    View for displaying a list of perfumes of the specific brand..
+    """
     def get(self, request, brand_id):
         brand = Brand.objects.get(id=brand_id)
         perfumes = Perfume.objects.filter(brand=brand).order_by("name")
@@ -98,6 +119,9 @@ class BrandPerfumeListView(View):
 
 
 class PerfumerListView(ListView):
+    """
+    View for displaying a list of perfumers.
+    """
     model = Perfumer
     template_name = "perfumer_list.html"
     paginate_by = 20  # if pagination is desired
@@ -108,6 +132,9 @@ class PerfumerListView(ListView):
 
 
 class PerfumerAddView(PermissionRequiredMixin, CreateView):
+    """
+    View for adding new perfumers.
+    """
     permission_required = 'scent_app.add_perfumer'
     model = Perfumer
     fields = "__all__"
@@ -116,6 +143,9 @@ class PerfumerAddView(PermissionRequiredMixin, CreateView):
 
 
 class PerfumerUpdateView(PermissionRequiredMixin, UpdateView):
+    """
+    View for updating perfumers details.
+    """
     permission_required = 'scent_app.change_perfumer'
     model = Perfumer
     fields = "__all__"
@@ -124,6 +154,9 @@ class PerfumerUpdateView(PermissionRequiredMixin, UpdateView):
 
 
 class NoteAddView(PermissionRequiredMixin, CreateView):
+    """
+    View for adding new notes used in perfumes.
+    """
     permission_required = 'scent_app.add_note'
     model = Note
     fields = "__all__"
@@ -132,7 +165,13 @@ class NoteAddView(PermissionRequiredMixin, CreateView):
 
 
 class PerfumeListView(View):
+    """
+    View for displaying a list of perfumes with search functionality.
+    """
     def get(self, request):
+        """
+        Handle GET requests and display the paginated list of perfumes.
+        """
         form = SearchForm()
         perfumes = Perfume.objects.all().order_by("name")
         # Paginator object with plans and 50 per page
@@ -148,6 +187,9 @@ class PerfumeListView(View):
         return render(request, "perfume_list.html", ctx)
 
     def post(self, request):
+        """
+        Handle POST requests and display the filtered list of perfumes based on search.
+        """
         form = SearchForm(request.POST)
         if form.is_valid():
             search_value = form.cleaned_data['value']
@@ -167,6 +209,9 @@ class PerfumeListView(View):
 
 
 class PerfumeAddView(PermissionRequiredMixin, CreateView):
+    """
+    View for adding new perfumes.
+    """
     permission_required = 'scent_app.add_perfume'
     model = Perfume
     fields = "__all__"
@@ -175,6 +220,9 @@ class PerfumeAddView(PermissionRequiredMixin, CreateView):
 
 
 class PerfumeUpdateView(PermissionRequiredMixin, UpdateView):
+    """
+    View for updating perfume details.
+    """
     permission_required = 'scent_app.change_perfume'
     model = Perfume
     fields = "__all__"
@@ -183,6 +231,9 @@ class PerfumeUpdateView(PermissionRequiredMixin, UpdateView):
 
 
 class PerfumeDetailsView(View):
+    """
+    View for displaying details of specific perfume.
+    """
     def get(self, request, perfume_id):
         ctx = {
             'perfume': Perfume.objects.get(id=perfume_id)
@@ -191,12 +242,23 @@ class PerfumeDetailsView(View):
 
 
 class UserLoginView(View):
+    """
+    View for user login.
+    """
     def get(self, request):
+        """
+        Handle GET requests and display the user login form.
+        """
         form = UserLoginForm()
         ctx = {'form': form}
         return render(request, 'user_login_form.html', ctx)
 
     def post(self, request):
+        """
+        Handle POST requests and authenticate users.
+
+        Redirects to the appropriate page after successful login.
+        """
         form = UserLoginForm(request.POST)
 
         if form.is_valid():
@@ -219,18 +281,30 @@ class UserLoginView(View):
 
 
 class UserLogoutView(View):
+    """
+    View for user logout.
+    """
     def get(self, request):
         logout(request)
         return redirect('user-login')
 
 
 class UserAddView(View):
+    """
+    View for adding new users.
+    """
     def get(self, request):
+        """
+        Handle GET requests and display the user registration form.
+        """
         form = UserAddForm()
         ctx = {'form': form}
         return render(request, 'user_add.html', ctx)
 
     def post(self, request):
+        """
+        Handle POST requests and create new user accounts.
+        """
         form = UserAddForm(request.POST)
 
         if form.is_valid():
@@ -247,7 +321,13 @@ class UserAddView(View):
 
 
 class UserListView(LoginRequiredMixin, View):
+    """
+    View for displaying a list of users with search functionality.
+    """
     def get(self, request):
+        """
+        Handle GET requests and display the paginated list of users.
+        """
         form = SearchForm()
         users = User.objects.all().order_by("username")
         # Paginator object with plans and 50 per page
@@ -263,6 +343,9 @@ class UserListView(LoginRequiredMixin, View):
         return render(request, "user_list.html", ctx)
 
     def post(self, request):
+        """
+        Handle POST requests and display the filtered list of users based on search.
+        """
         form = SearchForm(request.POST)
         if form.is_valid():
             search_value = form.cleaned_data['value']

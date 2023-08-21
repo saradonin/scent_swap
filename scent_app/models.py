@@ -26,9 +26,6 @@ class Brand(models.Model):
     def __str__(self):
         """
         Return a string representation of the brand.
-
-        Returns:
-            str: The name of the brand.
         """
         return self.name
 
@@ -48,18 +45,12 @@ class Perfumer(models.Model):
     def name(self):
         """
         Get the full name of the perfumer.
-
-        Returns:
-            str: The full name of the perfumer.
         """
         return "{} {}".format(self.first_name, self.last_name)
 
     def __str__(self):
         """
         Return a string representation of the perfumer.
-
-        Returns:
-            str: The full name of the perfumer.
         """
         return self.name
 
@@ -76,9 +67,6 @@ class Category(models.Model):
     def __str__(self):
         """
         Return a string representation of the category.
-
-        Returns:
-            str: The name of the category.
         """
         return self.name
 
@@ -95,9 +83,6 @@ class Note(models.Model):
     def __str__(self):
         """
         Return a string representation of the note.
-
-        Returns:
-            str: The name of the note.
         """
         return self.name
 
