@@ -5,6 +5,12 @@ from scent_app.validators import validate_username_unique
 
 
 class SearchForm(forms.Form):
+    """
+    Form for searching by value..
+
+    Attributes:
+        value (str): The search value, limited to 32 characters.
+    """
     value = forms.CharField(label="",
                             max_length=32,
                             widget=forms.TextInput(attrs={'placeholder': 'Search',
@@ -12,6 +18,13 @@ class SearchForm(forms.Form):
 
 
 class UserLoginForm(forms.Form):
+    """
+    Form for user login..
+
+    Attributes:
+        username (str): The username of the user, limited to 64 characters.
+        password (str): The password of the user.
+    """
     username = forms.CharField(max_length=64)
     password = forms.CharField(max_length=64, widget=forms.PasswordInput)
 
