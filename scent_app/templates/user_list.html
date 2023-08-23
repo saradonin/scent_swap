@@ -21,6 +21,7 @@
             <th>Username:</th>
             <th>Member since:</th>
             <th>Staff:</th>
+            <th>Actions:</th>
         </tr>
         </thead>
 
@@ -35,6 +36,14 @@
                     {% elif user.is_staff %}
                         staff
                     {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'userperfume-list' user.id %}">
+                        <button type="button" class="btn btn-outline-secondary">Collection</button>
+                    </a>
+                    <a href="">
+                        <button type="button" class="btn btn-outline-secondary">Offers</button>
+                    </a>
                 </td>
             </tr>
         {% endfor %}
