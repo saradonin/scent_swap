@@ -1,7 +1,7 @@
 {% extends '__base__.html' %}
 {% block content %}
 
-    <h3><a href="">{{ user.username }}</a> collection</h3>
+    <h3><a href="">{{ username }}</a> collection</h3>
     <table class="table table-dark table-striped">
         <thead>
         <tr>
@@ -12,7 +12,7 @@
             <th>Volume:</th>
             <th>Status:</th>
             <th>To exchange:</th>
-            <th>Actions:</th>
+            <th></th>
         </tr>
         </thead>
 
@@ -27,14 +27,15 @@
                 <td>{{ userperfume.status }}</td>
                 <td>{{ userperfume.to_exchange|yesno:"Yes,No"}}</td>
                 <td>
+                {% if user == userperfume.user %}
                     <a href="{% url 'perfume-details' userperfume.perfume.id %}">
                         <button type="button" class="btn btn-outline-secondary">Details</button>
                     </a>
-                    {% if perms.scent_app.change_perfume %}
-                        <a href="{% url 'perfume-update' perfume.id %}">
+
+                        <a href="">
                             <button type="button" class="btn btn-outline-secondary">Edit</button>
                         </a>
-                    {% endif %}
+                {% endif %}
                 </td>
             </tr>
         {% endfor %}
