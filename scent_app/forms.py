@@ -66,6 +66,14 @@ class UserAddForm(forms.Form):
 
 
 class UserPerfumeAddForm(forms.Form):
+    """
+    Form for adding a perfume to user's collection.
+
+    Attributes:
+        volume (IntegerField): The volume of the perfume.
+        status (CharField): The status of the perfume in the user's collection.
+        to_exchange (BooleanField): Whether the user is open to exchanging the perfume.
+    """
     volume = forms.IntegerField(validators=[validate_perfume_volume])
     status = forms.CharField(max_length=255)
     to_exchange = forms.BooleanField(required=False)

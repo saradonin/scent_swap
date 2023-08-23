@@ -380,6 +380,9 @@ class UserPerfumeAddView(LoginRequiredMixin, View):
     """
 
     def get(self, request, perfume_id):
+        """
+        Handle GET requests and display the form for adding a perfume to user's collection
+        """
         form = UserPerfumeAddForm()
         user = request.user
         perfume = Perfume.objects.get(id=perfume_id)
@@ -391,6 +394,9 @@ class UserPerfumeAddView(LoginRequiredMixin, View):
         return render(request, 'userperfume_add_form.html', ctx)
 
     def post(self, request, perfume_id):
+        """
+        Handle POST requests and add perfume to user's collection
+        """
         form = UserPerfumeAddForm(request.POST)
         user = request.user
         perfume = Perfume.objects.get(id=perfume_id)
