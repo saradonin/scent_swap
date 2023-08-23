@@ -8,7 +8,7 @@ from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
 from scent_app.forms import SearchForm, UserLoginForm, UserAddForm, UserPerfumeAddForm
-from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer, Note, UserPerfume
+from scent_app.models import Brand, Perfume, User, SwapOffer, Perfumer, Note, UserPerfume
 
 
 # Create your views here.
