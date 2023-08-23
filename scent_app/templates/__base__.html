@@ -16,29 +16,29 @@
         </a>
         <ul class="nav justify-content-center align-items-center">
             <li class="nav-item">
-                <a class="nav-link text-info" href="{% url 'brand-list' %}"><h5>Brands</h5></a>
+                <a class="nav-link" href="{% url 'brand-list' %}"><h5>Brands</h5></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-info" href="{% url 'perfume-list' %}"><h5>Perfumes</h5></a>
+                <a class="nav-link" href="{% url 'perfume-list' %}"><h5>Perfumes</h5></a>
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link text-info" href="{% url 'user-list' %}"><h5>Users</h5></a>
+                    <a class="nav-link" href="{% url 'user-list' %}"><h5>Users</h5></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-info" href=""><h5>Swap offers</h5></a>
+                    <a class="nav-link" href=""><h5>Swap offers</h5></a>
                 </li>
             {% endif %}
                     {% if user.is_superuser %}
                 <li class="nav-item">
-                    <a class="nav-link text-info" href=""><h5>Data</h5></a>
+                    <a class="nav-link " href=""><h5>Data</h5></a>
                 </li>
             {% endif %}
         </ul>
         <ul class="nav justify-content-end align-items-center">
             {% if user.username %}
                 <li class="nav-item">
-                    <a class="nav-link text-white">
+                    <a class="nav-link text-white" href="">
                         {{ user.username }}
                     </a>
                 </li>

@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
-from scent_app.forms import SearchForm, UserLoginForm, UserAddForm
+from scent_app.forms import SearchForm, UserLoginForm, UserAddForm, UserPerfumeAddForm
 from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer, Note, UserPerfume
 
 
@@ -15,6 +15,7 @@ class IndexView(View):
     """
     View for rendering the index page with statistics.
     """
+
     def get(self, request):
         brands_count = Brand.objects.count()
         perfumer_count = Perfumer.objects.count()
@@ -36,6 +37,7 @@ class BrandListView(View):
     """
     View for displaying a list of brands with search functionality.
     """
+
     def get(self, request):
         """
         Handle GET requests and display the paginated list of brands.
@@ -102,6 +104,7 @@ class BrandPerfumeListView(View):
     """
     View for displaying a list of perfumes of the specific brand..
     """
+
     def get(self, request, brand_id):
         brand = Brand.objects.get(id=brand_id)
         perfumes = Perfume.objects.filter(brand=brand).order_by("name")
@@ -168,6 +171,7 @@ class PerfumeListView(View):
     """
     View for displaying a list of perfumes with search functionality.
     """
+
     def get(self, request):
         """
         Handle GET requests and display the paginated list of perfumes.
@@ -234,6 +238,7 @@ class PerfumeDetailsView(View):
     """
     View for displaying details of specific perfume.
     """
+
     def get(self, request, perfume_id):
         ctx = {
             'perfume': Perfume.objects.get(id=perfume_id)
@@ -245,6 +250,7 @@ class UserLoginView(View):
     """
     View for user login.
     """
+
     def get(self, request):
         """
         Handle GET requests and display the user login form.
@@ -284,6 +290,7 @@ class UserLogoutView(View):
     """
     View for user logout.
     """
+
     def get(self, request):
         logout(request)
         return redirect('user-login')
@@ -293,6 +300,7 @@ class UserAddView(View):
     """
     View for adding new users.
     """
+
     def get(self, request):
         """
         Handle GET requests and display the user registration form.
@@ -324,6 +332,7 @@ class UserListView(LoginRequiredMixin, View):
     """
     View for displaying a list of users with search functionality.
     """
+
     def get(self, request):
         """
         Handle GET requests and display the paginated list of users.
@@ -364,23 +373,49 @@ class UserListView(LoginRequiredMixin, View):
         return render(request, "user_list.html", ctx)
 
 
-class UserPerfumeAddView(LoginRequiredMixin, CreateView):
+# TODO finish adding
+class UserPerfumeAddView(LoginRequiredMixin, View):
     """
     View for adding new perfumes to user's collection.
     """
-    model = UserPerfume
-    fields = "__all__"
-    template_name = "userperfume_add_form.html"
-    success_url = reverse_lazy('userperfume-list')
+
+    def get(self, request, perfume_id):
+        form = UserPerfumeAddForm()
+        user = request.user
+        perfume = Perfume.objects.get(id=perfume_id)
+        ctx = {
+            'form': form,
+            'user': user,
+            'perfume': perfume
+        }
+        return render(request, 'userperfume_add_form.html', ctx)
+
+    def post(self, request, perfume_id):
+        form = UserPerfumeAddForm(request.POST)
+        user = request.user
+        perfume = Perfume.objects.get(id=perfume_id)
+
+        if form.is_valid():
+            volume = form.cleaned_data['volume']
+            status = form.cleaned_data['status']
+            to_exchange = form.cleaned_data['to_exchange']
+            UserPerfume.objects.create(user=user, perfume=perfume, volume=volume, status=status, to_exchange=to_exchange)
+            return redirect('userperfume-list', user_id=request.user.id)
+        else:
+            ctx = {
+                'form': form
+            }
+            return render(request, 'userperfume_add_form.html', ctx)
 
 
 class UserPerfumeListView(View):
     """
     View for displaying a list of perfumers in user's collection.
     """
+
     def get(self, request, user_id):
         """
-        Handle GET requests and display the paginated list of perfumes.
+        Handle GET requests and display the paginated list of perfumes in user's collection.
         """
         user = User.objects.get(id=user_id)
         perfumes = UserPerfume.objects.filter(user=user)
@@ -394,3 +429,4 @@ class UserPerfumeListView(View):
             'page_obj': page_obj,
         }
         return render(request, "userperfume_list.html", ctx)
+

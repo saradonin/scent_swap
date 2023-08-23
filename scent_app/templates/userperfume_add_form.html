@@ -1,7 +1,7 @@
 {% extends '__base__.html' %}
 {% block content %}
 
-
+    <h3>Add perfume to <a href="">{{ user.username }}</a> collecion</h3>
     <table class="table table-dark table-striped">
         <thead>
         <tr>
@@ -66,17 +66,11 @@
 
         </tbody>
     </table>
-    {% if perms.scent_app.change_perfume %}
-        <a href="{% url 'perfume-update' perfume.id %}">
-            <button type="button" class="btn btn-outline-secondary">Edit</button>
-        </a>
-    {% endif %}
-    {% if user.is_authenticated %}
-        <a href="{% url 'userperfume-add' perfume.id %}">
-            <button type="button" class="btn btn-success">Add to collection</button>
-        </a>
-    {% endif %}
-
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <input class="btn btn-success" type="submit" value="Add">
+    </form>
 
 
 {% endblock content %}

@@ -58,3 +58,9 @@ class UserAddForm(forms.Form):
         if password1 != password2:
             raise forms.ValidationError('Passwords are not the same!')
 
+
+class UserPerfumeAddForm(forms.Form):
+    volume = forms.IntegerField()
+    status = forms.CharField(max_length=255)
+    to_exchange = forms.BooleanField(required=False)
+
