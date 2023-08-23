@@ -9,13 +9,8 @@
                 <form action="" method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <input class="btn btn-success" type="submit" value="Register">
+                    <input class="btn btn-success" type="submit" value="Create account">
                 </form>
-                {{ message }}
-
-                <a class="btn btn-outline-primary mt-4" href="{% url 'user-add' %}">
-                    Create new account
-                </a>
             </div>
             <div class="col">
 

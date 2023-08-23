@@ -433,7 +433,7 @@ class UserPerfumeListView(View):
 
         ctx = {
             'page_obj': page_obj,
-            'current_username': user
+            'current_user': user
         }
         return render(request, "userperfume_list.html", ctx)
 

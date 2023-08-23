@@ -36,22 +36,22 @@
             {% endif %}
         </ul>
         <ul class="nav justify-content-end align-items-center">
-            {% if user.username %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="">
-                        {{ user.username }}
+            {% if user.is_authenticated %}
+                <li>
+                    <a class="nav-link text-white" href="{% url 'userperfume-list' user.id %}">
+                        <h5>{{ user.username }}</h5>
                     </a>
                 </li>
                 <li>
                 <a class="nav-link" href="{% url 'user-logout' %}">
-                    <button class="btn btn-sm btn-danger">Logout</button>
+                    <button class="btn btn-danger">Logout</button>
                 </a>
                 </li>
 
             {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user-login' %}">
-                        <button class="btn btn-sm btn-success">Login</button>
+                        <button class="btn btn-success">Login</button>
                     </a>
                 </li>
             {% endif %}
