@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
 from scent_app.forms import SearchForm, UserLoginForm, UserAddForm
-from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer, Note
+from scent_app.models import Brand, Perfume, Category, User, SwapOffer, Perfumer, Note, UserPerfume
 
 
 # Create your views here.
@@ -362,3 +362,35 @@ class UserListView(LoginRequiredMixin, View):
             'form': form,
         }
         return render(request, "user_list.html", ctx)
+
+
+class UserPerfumeAddView(LoginRequiredMixin, CreateView):
+    """
+    View for adding new perfumes to user's collection.
+    """
+    model = UserPerfume
+    fields = "__all__"
+    template_name = "userperfume_add_form.html"
+    success_url = reverse_lazy('userperfume-list')
+
+
+class UserPerfumeListView(View):
+    """
+    View for displaying a list of perfumers in user's collection.
+    """
+    def get(self, request, user_id):
+        """
+        Handle GET requests and display the paginated list of perfumes.
+        """
+        user = User.objects.get(id=user_id)
+        perfumes = UserPerfume.objects.filter(user=user)
+        # Paginator object with plans and 50 per page
+        paginator = Paginator(perfumes, 25)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
+        ctx = {
+            'page_obj': page_obj,
+        }
+        return render(request, "userperfume_list.html", ctx)
