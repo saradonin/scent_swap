@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -197,7 +198,7 @@ class PerfumeListView(View):
         form = SearchForm(request.POST)
         if form.is_valid():
             search_value = form.cleaned_data['value']
-            perfumes = Perfume.objects.filter(name__icontains=search_value).order_by("name")
+            perfumes = Perfume.objects.filter(Q(name__icontains=search_value) | Q(brand__name__icontains=search_value)).order_by("name")
         else:
             perfumes = Perfume.objects.all().order_by("name")
 
