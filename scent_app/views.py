@@ -373,7 +373,6 @@ class UserListView(LoginRequiredMixin, View):
         return render(request, "user_list.html", ctx)
 
 
-# TODO finish adding
 class UserPerfumeAddView(LoginRequiredMixin, View):
     """
     View for adding new perfumes to user's collection.
@@ -427,6 +426,7 @@ class UserPerfumeListView(View):
 
         ctx = {
             'page_obj': page_obj,
+            'user': user
         }
         return render(request, "userperfume_list.html", ctx)
 
