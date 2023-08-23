@@ -19,14 +19,16 @@ class SearchForm(forms.Form):
 
 class UserLoginForm(forms.Form):
     """
-    Form for user login..
+    Form for user login.
 
     Attributes:
         username (str): The username of the user, limited to 64 characters.
         password (str): The password of the user.
     """
-    username = forms.CharField(max_length=64)
-    password = forms.CharField(max_length=64, widget=forms.PasswordInput)
+    username = forms.CharField(max_length=64,
+                               widget=forms.TextInput(attrs={'class': 'form-control bg-secondary text-white'}))
+    password = forms.CharField(max_length=64,
+                               widget=forms.PasswordInput(attrs={'class': 'form-control bg-secondary text-white'}))
 
 
 class UserAddForm(forms.Form):
@@ -39,10 +41,14 @@ class UserAddForm(forms.Form):
         password1 (str): The password of the new user.
         password2 (str): The repeated password for confirmation.
     """
-    username = forms.CharField(max_length=64, validators=[validate_username_unique])
-    email = forms.CharField(max_length=64, validators=[validate_email])
-    password1 = forms.CharField(max_length=64, label="Password:", widget=forms.PasswordInput)
-    password2 = forms.CharField(max_length=64, label="Repeat password:", widget=forms.PasswordInput)
+    username = forms.CharField(max_length=64, validators=[validate_username_unique],
+                               widget=forms.TextInput(attrs={'class': 'form-control bg-secondary text-white'}))
+    email = forms.CharField(max_length=64, validators=[validate_email],
+                            widget=forms.TextInput(attrs={'class': 'form-control bg-secondary text-white'}))
+    password1 = forms.CharField(max_length=64, label="Password:",
+                                widget=forms.PasswordInput(attrs={'class': 'form-control bg-secondary text-white'}))
+    password2 = forms.CharField(max_length=64, label="Repeat password:",
+                                widget=forms.PasswordInput(attrs={'class': 'form-control bg-secondary text-white'}))
 
     def clean(self):
         """
@@ -63,4 +69,3 @@ class UserPerfumeAddForm(forms.Form):
     volume = forms.IntegerField(validators=[validate_perfume_volume])
     status = forms.CharField(max_length=255)
     to_exchange = forms.BooleanField(required=False)
-

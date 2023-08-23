@@ -1,15 +1,30 @@
 {% extends '__base__.html' %}
 {% block content %}
 
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input class="btn btn-success mt-2" type="submit" value="Login">
-    </form>
 
-    <a class="btn btn-outline-primary mt-4" href="{% url 'user-add' %}">
-        Create new account
-    </a>
+    <div class="container">
+        <div class="row align-items-start">
+            <div class="col">
+
+            </div>
+            <div class="col">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input class="btn btn-success mt-2" type="submit" value="Login">
+                </form>
+
+                <a class="btn btn-outline-primary mt-4" href="{% url 'user-add' %}">
+                    Create new account
+                </a>
+            </div>
+            <div class="col">
+
+            </div>
+        </div>
+    </div>
+
+
 
 
 {% endblock content %}
