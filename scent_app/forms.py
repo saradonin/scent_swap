@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import validate_email
 
-from scent_app.validators import validate_username_unique
+from scent_app.validators import validate_username_unique, validate_perfume_volume
 
 
 class SearchForm(forms.Form):
@@ -60,7 +60,7 @@ class UserAddForm(forms.Form):
 
 
 class UserPerfumeAddForm(forms.Form):
-    volume = forms.IntegerField()
+    volume = forms.IntegerField(validators=[validate_perfume_volume])
     status = forms.CharField(max_length=255)
     to_exchange = forms.BooleanField(required=False)
 
