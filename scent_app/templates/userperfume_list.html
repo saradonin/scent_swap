@@ -1,7 +1,7 @@
 {% extends '__base__.html' %}
 {% block content %}
 
-
+    <h3><a href="">{{ user.username }}</a> collection</h3>
     <table class="table table-dark table-striped">
         <thead>
         <tr>
@@ -23,9 +23,9 @@
                 <td>{{ userperfume.perfume.name }}</td>
                 <td>{{ userperfume.perfume.concentration }}</td>
                 <td>{{ userperfume.perfume.year }}</td>
-                <td>{{ userperfume.volume }}</td>
+                <td>{{ userperfume.volume }} ml</td>
                 <td>{{ userperfume.status }}</td>
-                <td>{{ userperfume.to_exchange }}</td>
+                <td>{{ userperfume.to_exchange|yesno:"Yes,No"}}</td>
                 <td>
                     <a href="{% url 'perfume-details' userperfume.perfume.id %}">
                         <button type="button" class="btn btn-outline-secondary">Details</button>
