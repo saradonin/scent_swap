@@ -375,6 +375,30 @@ class UserListView(LoginRequiredMixin, View):
         return render(request, "user_list.html", ctx)
 
 
+class UserPerfumeListView(View):
+    """
+    View for displaying a list of perfumers in user's collection.
+    """
+
+    def get(self, request, user_id):
+        """
+        Handle GET requests and display the paginated list of perfumes in user's collection.
+        """
+        user = User.objects.get(id=user_id)
+        perfumes = UserPerfume.objects.filter(user=user).order_by("perfume__brand", "perfume__name")
+        # Paginator object with plans and 50 per page
+        paginator = Paginator(perfumes, 25)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
+        ctx = {
+            'page_obj': page_obj,
+            'current_user': user
+        }
+        return render(request, "userperfume_list.html", ctx)
+
+
 class UserPerfumeAddView(LoginRequiredMixin, View):
     """
     View for adding new perfumes to user's collection.
@@ -416,28 +440,25 @@ class UserPerfumeAddView(LoginRequiredMixin, View):
             return render(request, 'userperfume_add_form.html', ctx)
 
 
-class UserPerfumeListView(View):
+class UserPerfumeDeleteView(View):
     """
-    View for displaying a list of perfumers in user's collection.
+    Display confirmation to delete perfume from users collection and handle room deletion.
     """
 
-    def get(self, request, user_id):
-        """
-        Handle GET requests and display the paginated list of perfumes in user's collection.
-        """
-        user = User.objects.get(id=user_id)
-        perfumes = UserPerfume.objects.filter(user=user).order_by("perfume__brand", "perfume__name")
-        # Paginator object with plans and 50 per page
-        paginator = Paginator(perfumes, 25)
-        # current page
-        page_number = request.GET.get('page', 1)
-        page_obj = paginator.get_page(page_number)
-
+    def get(self, request, userperfume_id):
         ctx = {
-            'page_obj': page_obj,
-            'current_user': user
+            'userperfume': UserPerfume.objects.get(id=userperfume_id)
         }
-        return render(request, "userperfume_list.html", ctx)
+        return render(request, 'userperfume_delete_confirmation.html', ctx)
+
+    def post(self, request, userperfume_id):
+        confirm = request.POST.get('confirm')
+        userperfume = UserPerfume.objects.get(id=userperfume_id)
+        if confirm == "Yes":
+            userperfume.delete()
+            return redirect('userperfume-list', user_id=request.user.id)
+        else:
+            return redirect('userperfume-list', user_id=request.user.id)
 
 
 class OfferListView(LoginRequiredMixin, ListView):
