@@ -26,7 +26,7 @@
                     <a class="nav-link" href="{% url 'user-list' %}"><h5>Users</h5></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href=""><h5>Swap offers</h5></a>
+                    <a class="nav-link" href="{% url 'offer-list' %}"><h5>Swap offers</h5></a>
                 </li>
             {% endif %}
                     {% if user.is_superuser %}

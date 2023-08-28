@@ -140,14 +140,14 @@ class SwapOffer(models.Model):
     Represents an offer to swap perfumes between users.
 
     Attributes:
-        requested_perfume (UserPerfume): The perfume requested by the user initiating the swap.
         offering_perfume (UserPerfume): The perfume being offered by the user initiating the swap.
+        requested_perfumes (Perfume): The perfume requested by the user initiating the swap.
         created_at (datetime): The date and time when the swap offer was created.
         is_accepted (bool): Indicates whether the swap offer has been accepted.
         is_completed (bool): Indicates whether the swap has been completed.
     """
-    requested_perfume = models.ForeignKey(UserPerfume, related_name='requested_perfume', on_delete=models.CASCADE)
     offering_perfume = models.ForeignKey(UserPerfume, related_name='offering_perfume', on_delete=models.CASCADE)
+    requested_perfumes = models.ManyToManyField(Perfume, related_name='requested_perfume')
     created_at = models.DateTimeField(auto_now_add=True)
     is_accepted = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)

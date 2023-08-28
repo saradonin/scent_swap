@@ -198,7 +198,8 @@ class PerfumeListView(View):
         form = SearchForm(request.POST)
         if form.is_valid():
             search_value = form.cleaned_data['value']
-            perfumes = Perfume.objects.filter(Q(name__icontains=search_value) | Q(brand__name__icontains=search_value)).order_by("name")
+            perfumes = Perfume.objects.filter(
+                Q(name__icontains=search_value) | Q(brand__name__icontains=search_value)).order_by("name")
         else:
             perfumes = Perfume.objects.all().order_by("name")
 
@@ -405,7 +406,8 @@ class UserPerfumeAddView(LoginRequiredMixin, View):
             volume = form.cleaned_data['volume']
             status = form.cleaned_data['status']
             to_exchange = form.cleaned_data['to_exchange']
-            UserPerfume.objects.create(user=user, perfume=perfume, volume=volume, status=status, to_exchange=to_exchange)
+            UserPerfume.objects.create(user=user, perfume=perfume, volume=volume, status=status,
+                                       to_exchange=to_exchange)
             return redirect('userperfume-list', user_id=request.user.id)
         else:
             ctx = {
@@ -424,7 +426,7 @@ class UserPerfumeListView(View):
         Handle GET requests and display the paginated list of perfumes in user's collection.
         """
         user = User.objects.get(id=user_id)
-        perfumes = UserPerfume.objects.filter(user=user)
+        perfumes = UserPerfume.objects.filter(user=user).order_by("perfume__brand", "perfume__name")
         # Paginator object with plans and 50 per page
         paginator = Paginator(perfumes, 25)
         # current page
@@ -437,3 +439,37 @@ class UserPerfumeListView(View):
         }
         return render(request, "userperfume_list.html", ctx)
 
+
+class OfferListView(ListView):
+    """
+    View for displaying a list of offers.
+    """
+    model = SwapOffer
+    template_name = "offer_list.html"
+    paginate_by = 20  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class OfferAddView(PermissionRequiredMixin, CreateView):
+    """
+    View for adding new offers.
+    """
+    permission_required = 'scent_app.add_swapoffer'
+    model = SwapOffer
+    fields = "__all__"
+    template_name = "offer_add_form.html"
+    success_url = reverse_lazy('offer-list')
+
+
+class OfferUpdateView(PermissionRequiredMixin, UpdateView):
+    """
+    View for updating offer details.
+    """
+    permission_required = 'scent_app.change_swapoffer'
+    model = SwapOffer
+    fields = "__all__"
+    template_name = "offer_update_form.html"
+    success_url = reverse_lazy('offer-list')
