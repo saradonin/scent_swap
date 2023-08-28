@@ -2,7 +2,7 @@
 {% block content %}
 
     <a href="{% url 'offer-add' %}">
-        <button type="button" class="btn btn-success">Add new offer</button>
+        <button type="button" class="btn btn-success">Create swap offer</button>
     </a>
 
 
@@ -29,7 +29,7 @@
                 <td>{{ offer.created_at|date:"Y-m-d"  }}</td>
                 <td>
                     <a href="">
-                        <button type="button" class="btn btn-outline-secondary">Details</button>
+                        <button type="button" class="btn btn-outline-primary">Message</button>
                     </a>
                 </td>
             </tr>

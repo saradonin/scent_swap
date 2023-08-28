@@ -23,7 +23,11 @@
                 <td>{{ userperfume.perfume.name }}</td>
                 <td>{{ userperfume.perfume.concentration }}</td>
                 <td>{{ userperfume.perfume.year }}</td>
-                <td>{{ userperfume.volume }} ml</td>
+                {% if userperfume.volume %}
+                    <td>{{ userperfume.volume }} ml</td>
+                {% else %}
+                    <td>N/D</td>
+                {% endif %}
                 <td>{{ userperfume.status }}</td>
                 <td>{{ userperfume.to_exchange|yesno:"Yes,No" }}</td>
                 <td>

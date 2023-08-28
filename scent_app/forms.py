@@ -75,8 +75,8 @@ class UserPerfumeAddForm(forms.Form):
         status (CharField): The status of the perfume in the user's collection.
         to_exchange (BooleanField): Whether the user is open to exchanging the perfume.
     """
-    volume = forms.IntegerField(validators=[validate_perfume_volume])
-    status = forms.CharField(max_length=255)
+    volume = forms.IntegerField(required=False, validators=[validate_perfume_volume])
+    status = forms.CharField(required=False, max_length=255)
     to_exchange = forms.BooleanField(required=False)
 
 

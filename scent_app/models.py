@@ -143,8 +143,8 @@ class UserPerfume(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     perfume = models.ForeignKey(Perfume, on_delete=models.CASCADE)
-    volume = models.SmallIntegerField()
-    status = models.CharField(max_length=255)
+    volume = models.SmallIntegerField(null=True)
+    status = models.CharField(null=True, max_length=255)
     to_exchange = models.BooleanField(default=False)
 
     @property
@@ -173,7 +173,28 @@ class SwapOffer(models.Model):
         is_completed (bool): Indicates whether the swap has been completed.
     """
     offering_perfume = models.ForeignKey(UserPerfume, related_name='offering_perfume', on_delete=models.CASCADE)
-    requested_perfume = models.ForeignKey(Perfume, related_name='requested_perfume', on_delete=models.Empty)
+    requested_perfume = models.ForeignKey(Perfume, related_name='requested_perfume', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     is_accepted = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
+
+
+class Message(models.Model):
+    """
+    Represents a message between two users.
+
+    Attributes:
+        sender (User): The user who sent the message.
+        receiver (User): The user who received the message.
+        title (SwapOffer): The topic of the conversation.
+        content (str): The content of the message.
+        timestamp (datetime): The date and time when the message was sent.
+        is_read (bool): Indicates whether the message has been read by the receiver.
+    """
+    sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
+    title = models.ForeignKey(SwapOffer, on_delete=models.SET("Deleted offer"))
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
