@@ -115,6 +115,19 @@ class Perfume(models.Model):
     class Meta:
         unique_together = ('name', 'brand', 'concentration')
 
+    @property
+    def full_name(self):
+        """
+        Get the full name of perfume.
+        """
+        return "{} {} ({})".format(self.brand, self.name, self.concentration)
+
+    def __str__(self):
+        """
+        Return a string representation of perfume.
+        """
+        return self.full_name
+
 
 # not sure about how the swap request model
 class UserPerfume(models.Model):
@@ -134,6 +147,19 @@ class UserPerfume(models.Model):
     status = models.CharField(max_length=255)
     to_exchange = models.BooleanField(default=False)
 
+    @property
+    def name(self):
+        """
+        Get the full name of perfume.
+        """
+        return "{} {} ({})".format(self.perfume.brand, self.perfume.name, self.perfume.concentration)
+
+    def __str__(self):
+        """
+        Return a string representation of perfume.
+        """
+        return self.name
+
 
 class SwapOffer(models.Model):
     """
@@ -141,13 +167,13 @@ class SwapOffer(models.Model):
 
     Attributes:
         offering_perfume (UserPerfume): The perfume being offered by the user initiating the swap.
-        requested_perfumes (Perfume): The perfume requested by the user initiating the swap.
+        requested_perfume (Perfume): The perfume requested by the user initiating the swap.
         created_at (datetime): The date and time when the swap offer was created.
         is_accepted (bool): Indicates whether the swap offer has been accepted.
         is_completed (bool): Indicates whether the swap has been completed.
     """
     offering_perfume = models.ForeignKey(UserPerfume, related_name='offering_perfume', on_delete=models.CASCADE)
-    requested_perfumes = models.ManyToManyField(Perfume, related_name='requested_perfume')
+    requested_perfume = models.ForeignKey(Perfume, related_name='requested_perfume', on_delete=models.Empty)
     created_at = models.DateTimeField(auto_now_add=True)
     is_accepted = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)

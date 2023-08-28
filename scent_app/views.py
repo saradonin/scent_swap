@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
-from scent_app.forms import SearchForm, UserLoginForm, UserAddForm, UserPerfumeAddForm
+from scent_app.forms import SearchForm, UserLoginForm, UserAddForm, UserPerfumeAddForm, OfferAddForm
 from scent_app.models import Brand, Perfume, User, SwapOffer, Perfumer, Note, UserPerfume
 
 
@@ -440,7 +440,7 @@ class UserPerfumeListView(View):
         return render(request, "userperfume_list.html", ctx)
 
 
-class OfferListView(ListView):
+class OfferListView(LoginRequiredMixin, ListView):
     """
     View for displaying a list of offers.
     """
@@ -453,22 +453,57 @@ class OfferListView(ListView):
         return context
 
 
-class OfferAddView(PermissionRequiredMixin, CreateView):
-    """
-    View for adding new offers.
-    """
-    permission_required = 'scent_app.add_swapoffer'
-    model = SwapOffer
-    fields = "__all__"
-    template_name = "offer_add_form.html"
-    success_url = reverse_lazy('offer-list')
+# class OfferAddView(LoginRequiredMixin, CreateView):
+#     """
+#     View for adding new offers.
+#     """
+#     model = SwapOffer
+#     fields = "offering_perfume", "requested_perfume"
+#     template_name = "offer_add_form.html"
+#     success_url = reverse_lazy('offer-list')
 
 
-class OfferUpdateView(PermissionRequiredMixin, UpdateView):
+class OfferAddView(LoginRequiredMixin, View):
+    """
+    View for adding new swap offer.
+    """
+
+    def get(self, request):
+        """
+        Handle GET requests and display the form for adding new swap offer.
+        """
+        form = OfferAddForm(request.user)
+        ctx = {
+            'form': form,
+        }
+        return render(request, 'offer_add_form.html', ctx)
+
+    def post(self, request):
+        """
+        Handle POST requests and adds swap offer
+        """
+        form = OfferAddForm(request.user, request.POST)
+
+        if form.is_valid():
+            offering_perfume = form.cleaned_data['offering_perfume']
+            requested_perfume = form.cleaned_data['requested_perfume']
+            SwapOffer.objects.create(offering_perfume=offering_perfume, requested_perfume=requested_perfume)
+
+            offering_perfume.to_exchange = True
+            offering_perfume.save()
+
+            return redirect('offer-list')
+        else:
+            ctx = {
+                'form': form
+            }
+            return render(request, 'offer_add_form.html', ctx)
+
+
+class OfferUpdateView(LoginRequiredMixin, UpdateView):
     """
     View for updating offer details.
     """
-    permission_required = 'scent_app.change_swapoffer'
     model = SwapOffer
     fields = "__all__"
     template_name = "offer_update_form.html"

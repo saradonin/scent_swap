@@ -1,6 +1,7 @@
 from django import forms
 from django.core.validators import validate_email
 
+from scent_app.models import UserPerfume, SwapOffer, Perfume
 from scent_app.validators import validate_username_unique, validate_perfume_volume
 
 
@@ -77,3 +78,25 @@ class UserPerfumeAddForm(forms.Form):
     volume = forms.IntegerField(validators=[validate_perfume_volume])
     status = forms.CharField(max_length=255)
     to_exchange = forms.BooleanField(required=False)
+
+
+class OfferAddForm(forms.ModelForm):
+    """
+    Form for adding new swap offer
+    """
+    class Meta:
+        model = SwapOffer
+        fields = ['offering_perfume', 'requested_perfume']
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Limit choices for offering_perfume field to UserPerfume objects owned by logged it user
+        self.fields['offering_perfume'].queryset = UserPerfume.objects.filter(user=user)
+
+        # Ordered list
+        self.fields['requested_perfume'].queryset = Perfume.objects.all().order_by("brand", "name")
+
+
+
+
