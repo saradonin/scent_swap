@@ -2,14 +2,14 @@
 {% block content %}
 
     <a href="{% url 'offer-add' %}">
-        <button type="button" class="btn btn-outline-success">Add offer</button>
+        <button type="button" class="btn btn-success">Add new offer</button>
     </a>
 
 
     <table class="table table-dark table-striped">
         <thead>
         <tr>
-            <th>Username:</th>
+            <th>User:</th>
             <th>Perfume offered:</th>
             <th>Status:</th>
             <th>Perfume requested:</th>
@@ -26,7 +26,7 @@
                 <td>{{ offer.offering_perfume.brand }} {{ offer.offering_perfume.name }}</td>
                 <td>{{ offer.offering_perfume.status }}</td>
                 <td>{{ offer.requested_perfume.brand }} {{ offer.requested_perfume.name }}</td>
-                <td>{{ offer.created_at }}</td>
+                <td>{{ offer.created_at|date:"Y-m-d"  }}</td>
                 <td>
                     <a href="">
                         <button type="button" class="btn btn-outline-secondary">Details</button>

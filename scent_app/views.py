@@ -453,16 +453,6 @@ class OfferListView(LoginRequiredMixin, ListView):
         return context
 
 
-# class OfferAddView(LoginRequiredMixin, CreateView):
-#     """
-#     View for adding new offers.
-#     """
-#     model = SwapOffer
-#     fields = "offering_perfume", "requested_perfume"
-#     template_name = "offer_add_form.html"
-#     success_url = reverse_lazy('offer-list')
-
-
 class OfferAddView(LoginRequiredMixin, View):
     """
     View for adding new swap offer.

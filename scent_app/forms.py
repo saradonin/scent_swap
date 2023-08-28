@@ -7,7 +7,7 @@ from scent_app.validators import validate_username_unique, validate_perfume_volu
 
 class SearchForm(forms.Form):
     """
-    Form for searching by value..
+    Form for searching by value.
 
     Attributes:
         value (str): The search value, limited to 32 characters.
@@ -80,23 +80,23 @@ class UserPerfumeAddForm(forms.Form):
     to_exchange = forms.BooleanField(required=False)
 
 
-class OfferAddForm(forms.ModelForm):
+class OfferAddForm(forms.Form):
     """
-    Form for adding new swap offer
+    Form for adding a new swap offer
     """
-    class Meta:
-        model = SwapOffer
-        fields = ['offering_perfume', 'requested_perfume']
+    offering_perfume = forms.ModelChoiceField(
+        queryset=None,
+        widget=forms.Select(attrs={'class': 'form-control bg-secondary text-white'})
+    )
+
+    requested_perfume = forms.ModelChoiceField(
+        queryset=Perfume.objects.all().order_by("brand", "name"),
+        widget=forms.Select(attrs={'class': 'form-control bg-secondary text-white'})
+    )
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Limit choices for offering_perfume field to UserPerfume objects owned by logged it user
-        self.fields['offering_perfume'].queryset = UserPerfume.objects.filter(user=user)
-
-        # Ordered list
-        self.fields['requested_perfume'].queryset = Perfume.objects.all().order_by("brand", "name")
-
-
-
-
+        # Limit choices for offering_perfume field to UserPerfume objects owned by the logged-in user
+        self.fields['offering_perfume'].queryset = UserPerfume.objects.filter(user=user).order_by("perfume__brand",
+                                                                                                  "perfume__name")
