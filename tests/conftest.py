@@ -1,5 +1,6 @@
 import pytest
 from django.contrib.auth.models import User
+from django.test import Client
 
 from tests.utils import create_test_user, create_categories, create_fake_brand, create_fake_perfumer, \
     create_random_perfume
@@ -16,6 +17,15 @@ def create_test_superuser():
 
 
 @pytest.fixture
+def user_logged_in():
+    User.objects.create_user(username='testuser', password='testpassword')
+    client = Client()
+    client.login(username='testuser', password='testpassword')
+    return client
+
+
+
+@pytest.fixture
 def set_up():
     create_test_superuser()
     for _ in range(3):
@@ -27,4 +37,3 @@ def set_up():
         create_fake_perfumer()
     for _ in range(10):
         create_random_perfume()
-
