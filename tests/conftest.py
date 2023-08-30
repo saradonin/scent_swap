@@ -1,8 +1,30 @@
 import pytest
 from django.contrib.auth.models import User
 
+from tests.utils import create_test_user, create_categories, create_fake_brand, create_fake_perfumer, \
+    create_random_perfume
+
 
 @pytest.fixture
-def create_test_user():
-    test_user = User.objects.create_user(username="test_user1", email="test_email1@django.com", password="haslo123")
-    return test_user
+def create_test_superuser():
+    test_superuser = User.objects.create_superuser(
+        username="test_superuser",
+        email="super_email@django.com",
+        password="haslo123",
+        is_superuser=True)
+    return test_superuser
+
+
+@pytest.fixture
+def set_up():
+    create_test_superuser()
+    for _ in range(3):
+        create_test_user()
+
+    create_categories()
+    for _ in range(5):
+        create_fake_brand()
+        create_fake_perfumer()
+    for _ in range(10):
+        create_random_perfume()
+
