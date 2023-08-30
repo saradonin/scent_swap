@@ -35,7 +35,8 @@ def get_random_year():
 
 
 def generate_random_name(brand):
-    random_name = "Perfume " + brand.name[0:2].upper() + "-" + (str(random.randint(1, 999))) + random.choice(string.ascii_letters)
+    random_name = "Perfume " + brand.name[0:2].upper() + "-" + (str(random.randint(1, 999))) + random.choice(
+        string.ascii_letters)
     return random_name
 
 
