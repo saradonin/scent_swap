@@ -6,7 +6,7 @@ from faker import Faker
 from common.utils import get_random_brand, get_random_concentration, get_random_year, get_random_category
 from scent_app.models import Category, Brand, Perfumer, Note, Perfume, CONCENTRATIONS
 
-faker = Faker(["en_EN", "it_IT", "fr_FR"])
+faker = Faker(["en_GB", "it_IT", "fr_FR"])
 
 
 def create_test_user():
