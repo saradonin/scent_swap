@@ -19,6 +19,6 @@ class Command(BaseCommand):
         create_brands()
         self.stdout.write(self.style.SUCCESS("Popular brands added"))
 
-        for _ in range(50):
+        for _ in range(500):
             generate_random_perfume()
         self.stdout.write(self.style.SUCCESS("Random fake perfumes added"))
