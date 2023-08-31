@@ -461,17 +461,51 @@ class UserPerfumeDeleteView(View):
             return redirect('userperfume-list', user_id=request.user.id)
 
 
-class OfferListView(LoginRequiredMixin, ListView):
+class OfferListView(LoginRequiredMixin, View):
     """
     View for displaying a list of offers.
     """
-    model = SwapOffer
-    template_name = "offer_list.html"
-    paginate_by = 20  # if pagination is desired
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    def get(self, request):
+        """
+        Handle GET requests and display the paginated list of swap offers.
+        """
+        form = SearchForm()
+        offers = SwapOffer.objects.all().order_by("-created_at")
+        # Paginator object with plans and 50 per page
+        paginator = Paginator(offers, 25)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
+        ctx = {
+            'page_obj': page_obj,
+            'form': form,
+        }
+        return render(request, "offer_list.html", ctx)
+
+    def post(self, request):
+        """
+        Handle POST requests and display the filtered list of swap offers based on search.
+        """
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            search_value = form.cleaned_data['value']
+            offers = SwapOffer.objects.filter(
+                Q(offering_perfume__perfume__name__icontains=search_value) |
+                Q(offering_perfume__perfume__brand__name__icontains=search_value)).order_by("-created_at")
+        else:
+            offers = SwapOffer.objects.all().order_by("-created_at")
+
+        paginator = Paginator(offers, 25)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+        ctx = {
+            'page_obj': page_obj,
+            'form': form,
+        }
+        return render(request, "offer_list.html", ctx)
 
 
 class OfferAddView(LoginRequiredMixin, View):
