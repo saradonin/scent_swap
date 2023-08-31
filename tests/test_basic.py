@@ -49,3 +49,9 @@ def test_get_offer_list_not_logged():
 def test_get_offer_list_logged(user_logged_in):
     response = user_logged_in.get(reverse("offer-list"))
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_get_offer_list_logged_superuser(superuser_logged_in):
+    response = superuser_logged_in.get(reverse("offer-list"))
+    assert response.status_code == 200

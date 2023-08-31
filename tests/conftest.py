@@ -3,26 +3,28 @@ from django.contrib.auth.models import User
 from django.test import Client
 
 from tests.utils import create_test_user, create_categories, create_fake_brand, create_fake_perfumer, \
-    create_random_perfume
+    create_random_perfume, create_test_superuser
 
 
 @pytest.fixture
-def create_test_superuser():
+def superuser_logged_in():
     test_superuser = User.objects.create_superuser(
         username="test_superuser",
         email="super_email@django.com",
-        password="haslo123",
+        password="admin_password",
         is_superuser=True)
-    return test_superuser
+    client = Client()
+    client.login(username='test_superuser', password='admin_password')
+    return client
+
 
 
 @pytest.fixture
 def user_logged_in():
-    User.objects.create_user(username='testuser', password='testpassword')
+    User.objects.create_user(username='test_user', password='test_password')
     client = Client()
-    client.login(username='testuser', password='testpassword')
+    client.login(username='test_user', password='test_password')
     return client
-
 
 
 @pytest.fixture

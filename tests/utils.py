@@ -18,6 +18,16 @@ def create_test_user():
     return test_user
 
 
+def create_test_superuser():
+    test_superuser = User.objects.create_superuser(
+        username=faker.first_name(),
+        email=faker.ascii_free_email(),
+        password="haslo123",
+        is_superuser=True
+    )
+    return test_superuser
+
+
 def create_categories():
     category_list = ['Citrus', 'Floral', 'Fresh', 'Fruity', 'Spicy']
     for category in category_list:
