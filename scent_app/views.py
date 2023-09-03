@@ -8,7 +8,7 @@ from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
 from scent_app.forms import SearchForm, UserLoginForm, UserAddForm, UserPerfumeAddForm, OfferAddForm, MessageAddForm
-from scent_app.models import Brand, Perfume, User, SwapOffer, Perfumer, Note, UserPerfume
+from scent_app.models import Brand, Perfume, User, SwapOffer, Perfumer, Note, UserPerfume, Message
 
 
 # Create your views here.
@@ -574,28 +574,46 @@ class MessageAddView(LoginRequiredMixin, View):
             'offer': offer
         }
         return render(request, 'message_add_form.html', ctx)
-# TODO post action
-    # def post(self, request, perfume_id):
-    #     """
-    #     Handle POST requests and add perfume to user's collection
-    #     """
-    #     form = UserPerfumeAddForm(request.POST)
-    #     user = request.user
-    #     perfume = Perfume.objects.get(id=perfume_id)
-    #
-    #     if form.is_valid():
-    #         volume = form.cleaned_data['volume']
-    #         status = form.cleaned_data['status']
-    #         to_exchange = form.cleaned_data['to_exchange']
-    #         UserPerfume.objects.create(user=user, perfume=perfume, volume=volume, status=status,
-    #                                    to_exchange=to_exchange)
-    #         return redirect('userperfume-list', user_id=request.user.id)
-    #     else:
-    #         ctx = {
-    #             'form': form
-    #         }
-    #         return render(request, 'userperfume_add_form.html', ctx)
+
+    def post(self, request, offer_id):
+        """
+        Handle POST requests and create message
+        """
+        form = MessageAddForm(request.POST)
+        sender = request.user
+        offer = SwapOffer.objects.get(id=offer_id)
+
+        if form.is_valid():
+            content = form.cleaned_data['content']
+
+            Message.objects.create(sender=sender,
+                                   receiver=offer.offering_perfume.user,
+                                   title=offer.offering_perfume.perfume.full_name,
+                                   content=content)
+            # TODO render message list
+            # return redirect('userperfume-list', user_id=request.user.id)
+            return redirect('index')
+        else:
+            ctx = {
+                'form': form,
+                'sender': sender,
+                'offer': offer
+            }
+            return render(request, 'message_add_form.html', ctx)
 
 
 class MessageListView(LoginRequiredMixin, View):
-    pass
+    """
+    View for displaying a list of offers.
+    """
+    def get(self, request):
+        user = request.user
+        messages = Message.objects.filter(Q(sender=user) | Q(receiver=user)).order_by("-timestamp")
+        paginator = Paginator(messages, 25)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+        ctx = {
+            'page_obj': page_obj
+        }
+        return render(request, 'message_list.html', ctx)

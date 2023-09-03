@@ -169,13 +169,11 @@ class SwapOffer(models.Model):
         offering_perfume (UserPerfume): The perfume being offered by the user initiating the swap.
         requested_perfume (Perfume): The perfume requested by the user initiating the swap.
         created_at (datetime): The date and time when the swap offer was created.
-        is_accepted (bool): Indicates whether the swap offer has been accepted.
         is_completed (bool): Indicates whether the swap has been completed.
     """
     offering_perfume = models.ForeignKey(UserPerfume, related_name='offering_perfume', on_delete=models.CASCADE)
     requested_perfume = models.ForeignKey(Perfume, related_name='requested_perfume', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    is_accepted = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
 
 
@@ -193,7 +191,7 @@ class Message(models.Model):
     """
     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
-    title = models.ForeignKey(SwapOffer, on_delete=models.SET("Deleted offer"))
+    title = models.CharField(max_length=255)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
