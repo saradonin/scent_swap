@@ -46,6 +46,9 @@
                         <a href="">
                             <button type="button" class="btn btn-outline-danger">Delete</button>
                         </a>
+                        <a href="">
+                            <button type="button" class="btn btn-outline-success">Close</button>
+                        </a>
                     {% else %}
                         <a href="{% url 'message-add' offer.id %}">
                             <button type="button" class="btn btn-outline-primary">Message</button>
@@ -58,7 +61,7 @@
     </table>
 
     <!-- //--------------------------- pagination links ------------------------------// -->
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation">
         <ul class="pagination">
             {% if page_obj.has_previous %}
                 <li class="page-item"><a class="page-link bg-dark text-white"
@@ -68,7 +71,9 @@
 
             {% for num in page_obj.paginator.page_range %}
                 {% if num == page_obj.number %}
-                    <li class="page-item"><a class="page-link bg-secondary text-white">{{ num }}</a></li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link bg-secondary text-white">{{ num }}</a></li>
+                    {% endif %}
                 {% else %}
                     <li class="page-item"><a class="page-link bg-dark text-white" href="?page={{ num }}">{{ num }}</a>
                     </li>
