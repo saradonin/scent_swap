@@ -607,6 +607,9 @@ class MessageListView(LoginRequiredMixin, View):
     View for displaying a list of offers.
     """
     def get(self, request):
+        """
+        Handle GET requests and display the paginated list of messages
+        """
         user = request.user
         messages = Message.objects.filter(Q(sender=user) | Q(receiver=user)).order_by("-timestamp")
         paginator = Paginator(messages, 25)

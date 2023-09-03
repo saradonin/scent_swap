@@ -32,12 +32,23 @@
     </ul>
     <ul class="nav justify-content-end align-items-center">
         {% if user.is_authenticated %}
-            <li>
-                <a class="nav-link" href="{% url 'message-list' %}">
-                    <img src="{% static 'message_grey.png' %}" alt="Message" width="28" height="28"
-                         class="d-flex align-text-top">
-                </a>
-            </li>
+
+            {% if unread_messages_exist %}
+                <li>
+                    <a class="nav-link" href="{% url 'message-list' %}">
+                        <img src="{% static 'message_yellow.png' %}" alt="Message" width="28" height="28"
+                             class="d-flex align-text-top">
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <a class="nav-link" href="{% url 'message-list' %}">
+                        <img src="{% static 'message_grey.png' %}" alt="Message" width="28" height="28"
+                             class="d-flex align-text-top">
+                    </a>
+                </li>
+            {% endif %}
+
             <li>
                 <a class="nav-link text-white" href="{% url 'userperfume-list' user.id %}">
                     <h5>{{ user.username }}</h5>
