@@ -10,47 +10,53 @@
 <body class="d-flex flex-column min-vh-100 bg-dark bg-gradient text-white">
 <!-- //--------------------------- nav bar ------------------------------// -->
 <nav class="navbar navbar-dark bg-dark align-items-center p-2 mb-4">
-        <a class="navbar-brand" href="{% url 'index' %}">
-            <img src="{% static 'logo.png' %}" alt="Logo" width="220" height="50"
-                 class="d-flex align-text-top">
-        </a>
-        <ul class="nav justify-content-center align-items-center">
+    <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'logo.png' %}" alt="Logo" width="220" height="50"
+             class="d-flex align-text-top">
+    </a>
+    <ul class="nav justify-content-center align-items-center">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'brand-list' %}"><h5>Brands</h5></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'perfume-list' %}"><h5>Perfumes</h5></a>
+        </li>
+        {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'brand-list' %}"><h5>Brands</h5></a>
+                <a class="nav-link" href="{% url 'user-list' %}"><h5>Users</h5></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'perfume-list' %}"><h5>Perfumes</h5></a>
+                <a class="nav-link" href="{% url 'offer-list' %}"><h5>Swap offers</h5></a>
             </li>
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user-list' %}"><h5>Users</h5></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'offer-list' %}"><h5>Swap offers</h5></a>
-                </li>
-            {% endif %}
-        </ul>
-        <ul class="nav justify-content-end align-items-center">
-            {% if user.is_authenticated %}
-                <li>
-                    <a class="nav-link text-white" href="{% url 'userperfume-list' user.id %}">
-                        <h5>{{ user.username }}</h5>
-                    </a>
-                </li>
-                <li>
+        {% endif %}
+    </ul>
+    <ul class="nav justify-content-end align-items-center">
+        {% if user.is_authenticated %}
+            <li>
+                <a class="nav-link" href="">
+                    <img src="{% static 'message_grey.png' %}" alt="Message" width="28" height="28"
+                         class="d-flex align-text-top">
+                </a>
+            </li>
+            <li>
+                <a class="nav-link text-white" href="{% url 'userperfume-list' user.id %}">
+                    <h5>{{ user.username }}</h5>
+                </a>
+            </li>
+            <li>
                 <a class="nav-link" href="{% url 'user-logout' %}">
                     <button class="btn btn-danger">Logout</button>
                 </a>
-                </li>
+            </li>
 
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user-login' %}">
-                        <button class="btn btn-success">Login</button>
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'user-login' %}">
+                    <button class="btn btn-success">Login</button>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
 </nav>
 <!-- //--------------------------- nav bar end --------------------------// -->
 
