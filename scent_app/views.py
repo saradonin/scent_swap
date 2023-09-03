@@ -471,7 +471,7 @@ class OfferListView(LoginRequiredMixin, View):
         Handle GET requests and display the paginated list of swap offers.
         """
         form = SearchForm()
-        offers = SwapOffer.objects.all().order_by("-created_at")
+        offers = SwapOffer.objects.filter(is_completed=False).order_by("-created_at")
         # Paginator object with plans and 50 per page
         paginator = Paginator(offers, 25)
         # current page
@@ -491,11 +491,11 @@ class OfferListView(LoginRequiredMixin, View):
         form = SearchForm(request.POST)
         if form.is_valid():
             search_value = form.cleaned_data['value']
-            offers = SwapOffer.objects.filter(
+            offers = SwapOffer.objects.filter(is_completed=False).filter(
                 Q(offering_perfume__perfume__name__icontains=search_value) |
                 Q(offering_perfume__perfume__brand__name__icontains=search_value)).order_by("-created_at")
         else:
-            offers = SwapOffer.objects.all().order_by("-created_at")
+            offers = SwapOffer.objects.filter(is_completed=False).order_by("-created_at")
 
         paginator = Paginator(offers, 25)
         # current page
