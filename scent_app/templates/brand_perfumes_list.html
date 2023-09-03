@@ -38,30 +38,8 @@
     </table>
 
     <!-- //--------------------------- pagination links ------------------------------// -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link bg-dark text-white"
-                                         href="?page={{ object_list.previous_page_number }}"><<</a></li>
-            {% endif %}
-
-
-            {% for num in page_obj.paginator.page_range %}
-                {% if num == page_obj.number %}
-                    <li class="page-item"><a class="page-link bg-secondary text-white">{{ num }}</a></li>
-                {% else %}
-                    <li class="page-item"><a class="page-link bg-dark text-white" href="?page={{ num }}">{{ num }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-
-
-            {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link bg-dark text-white"
-                                         href="?page={{ page_obj.next_page_number }}">>></a></li>
-            {% endif %}
-        </ul>
-    </nav>
+    {% include 'pagination_links.html' %}
+    {% block index %}{% endblock %}
     <!-- //--------------------------- pagination links end---------------------------// -->
 
 
