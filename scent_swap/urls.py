@@ -20,7 +20,8 @@ from django.urls import path
 from scent_app.views import IndexView, PerfumeListView, BrandListView, BrandAddView, BrandUpdateView, \
     PerfumerListView, PerfumerAddView, PerfumerUpdateView, NoteAddView, PerfumeAddView, PerfumeUpdateView, \
     PerfumeDetailsView, BrandPerfumeListView, UserLoginView, UserLogoutView, UserListView, UserAddView, \
-    UserPerfumeAddView, UserPerfumeListView, OfferListView, OfferAddView, OfferUpdateView, UserPerfumeDeleteView
+    UserPerfumeAddView, UserPerfumeListView, OfferListView, OfferAddView, OfferUpdateView, UserPerfumeDeleteView, \
+    MessageAddView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -54,4 +55,6 @@ urlpatterns = [
     path('offers', OfferListView.as_view(), name="offer-list"),
     path('offer/add', OfferAddView.as_view(), name="offer-add"),
     path('offer/edit/<pk>', OfferUpdateView.as_view(), name="offer-update"),
+
+    path('message/send/<int:offer_id>', MessageAddView.as_view(), name="message-add"),
 ]

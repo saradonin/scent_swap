@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 
-from scent_app.forms import SearchForm, UserLoginForm, UserAddForm, UserPerfumeAddForm, OfferAddForm
+from scent_app.forms import SearchForm, UserLoginForm, UserAddForm, UserPerfumeAddForm, OfferAddForm, MessageAddForm
 from scent_app.models import Brand, Perfume, User, SwapOffer, Perfumer, Note, UserPerfume
 
 
@@ -553,3 +553,49 @@ class OfferUpdateView(LoginRequiredMixin, UpdateView):
     fields = "__all__"
     template_name = "offer_update_form.html"
     success_url = reverse_lazy('offer-list')
+
+
+class MessageAddView(LoginRequiredMixin, View):
+    """
+    View for sending a message to other user.
+    """
+
+    def get(self, request, offer_id):
+        """
+        Handle GET requests and display the form for sending a message.
+        """
+        form = MessageAddForm()
+        sender = request.user
+        offer = SwapOffer.objects.get(id=offer_id)
+
+        ctx = {
+            'form': form,
+            'sender': sender,
+            'offer': offer
+        }
+        return render(request, 'message_add_form.html', ctx)
+# TODO post action
+    # def post(self, request, perfume_id):
+    #     """
+    #     Handle POST requests and add perfume to user's collection
+    #     """
+    #     form = UserPerfumeAddForm(request.POST)
+    #     user = request.user
+    #     perfume = Perfume.objects.get(id=perfume_id)
+    #
+    #     if form.is_valid():
+    #         volume = form.cleaned_data['volume']
+    #         status = form.cleaned_data['status']
+    #         to_exchange = form.cleaned_data['to_exchange']
+    #         UserPerfume.objects.create(user=user, perfume=perfume, volume=volume, status=status,
+    #                                    to_exchange=to_exchange)
+    #         return redirect('userperfume-list', user_id=request.user.id)
+    #     else:
+    #         ctx = {
+    #             'form': form
+    #         }
+    #         return render(request, 'userperfume_add_form.html', ctx)
+
+
+class MessageListView(LoginRequiredMixin, View):
+    pass
