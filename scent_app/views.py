@@ -590,9 +590,8 @@ class MessageAddView(LoginRequiredMixin, View):
                                    receiver=offer.offering_perfume.user,
                                    title=offer.offering_perfume.perfume.full_name,
                                    content=content)
-            # TODO render message list
-            # return redirect('userperfume-list', user_id=request.user.id)
-            return redirect('index')
+            return redirect('message-list')
+
         else:
             ctx = {
                 'form': form,

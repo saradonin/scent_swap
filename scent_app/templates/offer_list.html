@@ -47,7 +47,7 @@
                             <button type="button" class="btn btn-outline-danger">Delete</button>
                         </a>
                     {% else %}
-                        <a href="/message/send/{{ offer.offering_perfume.user.id }}">
+                        <a href="{% url 'message-add' offer.id %}">
                             <button type="button" class="btn btn-outline-primary">Message</button>
                         </a>
                     {% endif %}
