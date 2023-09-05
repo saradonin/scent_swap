@@ -447,12 +447,18 @@ class UserPerfumeDeleteView(View):
     """
 
     def get(self, request, userperfume_id):
+        """
+        Handle GET requests and display confirmation window.
+        """
         ctx = {
             'userperfume': UserPerfume.objects.get(id=userperfume_id)
         }
         return render(request, 'userperfume_delete_confirmation.html', ctx)
 
     def post(self, request, userperfume_id):
+        """
+        Handle POST requests and deletes perfume from collection.
+        """
         confirm = request.POST.get('confirm')
         userperfume = UserPerfume.objects.get(id=userperfume_id)
         if confirm == "Yes":
@@ -602,6 +608,59 @@ class MessageAddView(LoginRequiredMixin, View):
             return render(request, 'message_add_form.html', ctx)
 
 
+class MessageRespondView(LoginRequiredMixin, View):
+    """
+    View for responding to a message to other user.
+    """
+
+    def get(self, request, message_id):
+        """
+        Handle GET requests and display the form for sending a message.
+        """
+        form = MessageAddForm()
+        user = request.user
+        original_message = Message.objects.get(id=message_id)
+
+        if not original_message.receiver == user:
+            return HttpResponseForbidden()
+
+        title = "Re: " + original_message.title
+        ctx = {
+            'form': form,
+            'sender': user,
+            'original_message': original_message,
+            'title': title,
+        }
+        return render(request, 'message_respond_form.html', ctx)
+
+    def post(self, request, message_id):
+        """
+        Handle POST requests and create respond message
+        """
+        form = MessageAddForm(request.POST)
+        user = request.user
+        original_message = Message.objects.get(id=message_id)
+        title = "Re: " + original_message.title
+
+        if form.is_valid():
+            content = form.cleaned_data['content']
+
+            Message.objects.create(sender=user,
+                                   receiver=original_message.sender,
+                                   title=title,
+                                   content=content)
+            return redirect('message-list')
+
+        else:
+            ctx = {
+                'form': form,
+                'sender': user,
+                'original_message': original_message,
+                'title': title,
+            }
+            return render(request, 'message_respond_form.html', ctx)
+
+
 class MessageListView(LoginRequiredMixin, View):
     """
     View for displaying a list of messages.
@@ -627,6 +686,7 @@ class MessageDetailsView(LoginRequiredMixin, View):
     """
     View for displaying message details.
     """
+
     def get(self, request, message_id):
         """
         Handle GET requests and display message details.
@@ -646,4 +706,3 @@ class MessageDetailsView(LoginRequiredMixin, View):
             'message': message
         }
         return render(request, 'message_details.html', ctx)
-

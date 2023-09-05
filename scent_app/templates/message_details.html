@@ -26,10 +26,10 @@
 
         </tbody>
     </table>
-
-    <a href="">
-        <button type="button" class="btn btn-success">Respond</button>
-    </a>
-
+    {% if message.receiver == user %}
+        <a href="{% url 'message-respond' message.id %}">
+            <button type="button" class="btn btn-success">Respond</button>
+        </a>
+    {% endif %}
 
 {% endblock content %}
