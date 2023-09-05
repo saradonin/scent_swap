@@ -6,7 +6,7 @@
         <thead>
         <tr>
             <th><h4>From:</h4></th>
-            <th colspan="4"><h4>{{ message.sender }}</h4></th>
+            <th colspan="4"><h4>{{ other_user }}</h4></th>
         </tr>
         <tr>
             <th><h4>Title:</h4></th>
@@ -22,7 +22,7 @@
         {% for message in message_history %}
             <tr>
                 <td>{{ message.sender }}</td>
-                <td>{{ message.timestamp|date:"Y-m-d H:i:s" }}</td>
+                <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
                 <td colspan="3">{{ message.content }}</td>
             </tr>
         {% endfor %}

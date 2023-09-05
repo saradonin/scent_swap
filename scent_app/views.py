@@ -618,7 +618,9 @@ class MessageListView(LoginRequiredMixin, View):
         Handle GET requests and display the paginated list of messages
         """
         user = request.user
+
         messages = Message.objects.filter(Q(sender=user) | Q(receiver=user)).order_by("-timestamp")
+        # TODO group messages with the same user and the same subject
         paginator = Paginator(messages, 25)
         # current page
         page_number = request.GET.get('page', 1)
@@ -641,17 +643,26 @@ class MessageDetailsView(LoginRequiredMixin, View):
         user = request.user
         form = MessageAddForm()
         message = Message.objects.get(id=message_id)
-        message_history = Message.objects.filter(title__icontains=message.title).order_by("timestamp")
+        other_user = message.sender if message.receiver == user else message.receiver
+
+        message_history = Message.objects.filter(
+            Q(sender=user) | Q(receiver=user),
+            Q(sender=other_user) | Q(receiver=other_user),
+            title__icontains=message.title
+        ).order_by("timestamp")
 
         if not (message.receiver == user or message.sender == user):
             return HttpResponseForbidden()
 
         # mark message as read if displayed by receiver
-        if message.receiver == user and not message.is_read:
-            message.is_read = True
-            message.save()
+        for msg in message_history:
+            if msg.receiver == user and not msg.is_read:
+                msg.is_read = True
+                msg.save()
 
         ctx = {
+            'user': user,
+            'other_user': other_user,
             'form': form,
             'message': message,
             'message_history': message_history,
@@ -665,21 +676,26 @@ class MessageDetailsView(LoginRequiredMixin, View):
         form = MessageAddForm(request.POST)
         user = request.user
         original_message = Message.objects.get(id=message_id)
-        message_history = Message.objects.filter(title__icontains=original_message.title).order_by("timestamp")
+        other_user = original_message.sender if original_message.receiver == user else original_message.receiver
+        message_history = Message.objects.filter(
+            Q(sender=user) | Q(receiver=user),
+            Q(sender=other_user) | Q(receiver=other_user),
+            title__icontains=original_message.title
+        ).order_by("timestamp")
 
         if form.is_valid():
             content = form.cleaned_data['content']
 
-            receiver = original_message.sender
-
             Message.objects.create(sender=user,
-                                   receiver=receiver,
+                                   receiver=other_user,
                                    title=original_message.title,
                                    content=content)
             return redirect('message-list')
 
         else:
             ctx = {
+                'user': user,
+                'other_user': other_user,
                 'form': form,
                 'message': original_message,
                 'message_history': message_history,

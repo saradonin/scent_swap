@@ -23,13 +23,13 @@
                     <td><strong>{{ message.sender }}</strong></td>
                     <td>{{ message.receiver }}</td>
                     <td><strong>{{ message.title }}</strong></td>
-                    <td>{{ message.timestamp|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
                     <td style="color: yellow"><strong>NEW</strong></td>
                 {% else %}
                     <td>{{ message.sender }}</td>
                     <td>{{ message.receiver }}</td>
                     <td>{{ message.title }}</td>
-                    <td>{{ message.timestamp|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
                     <td style="color: grey">read</td>
                 {% endif %}
 
