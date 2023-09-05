@@ -6,30 +6,36 @@
         <thead>
         <tr>
             <th><h4>From:</h4></th>
-            <th><h4>{{ message.sender }}</h4></th>
+            <th colspan="4"><h4>{{ message.sender }}</h4></th>
         </tr>
         <tr>
             <th><h4>Title:</h4></th>
-            <th><h4>{{ message.title }}</h4></th>
+            <th colspan="4"><h4>{{ message.title }}</h4></th>
         </tr>
         </thead>
 
         <tbody>
         <tr>
-            <td>Timestamp:</td>
-            <td>{{ message.timestamp|date:"Y-m-d H:i:s" }}</td>
+            <td colspan="5">Message history:</td>
+
         </tr>
-        <tr>
-            <td>Content:</td>
-            <td>{{ message.content }}</td>
-        </tr>
+        {% for message in message_history %}
+            <tr>
+                <td>{{ message.sender }}</td>
+                <td>{{ message.timestamp|date:"Y-m-d H:i:s" }}</td>
+                <td colspan="3">{{ message.content }}</td>
+            </tr>
+        {% endfor %}
 
         </tbody>
     </table>
-    {% if message.receiver == user %}
-        <a href="{% url 'message-respond' message.id %}">
-            <button type="button" class="btn btn-success">Respond</button>
-        </a>
-    {% endif %}
+
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <input class="btn btn-success" type="submit" value="Send message">
+    </form>
+
 
 {% endblock content %}

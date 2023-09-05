@@ -608,59 +608,6 @@ class MessageAddView(LoginRequiredMixin, View):
             return render(request, 'message_add_form.html', ctx)
 
 
-class MessageRespondView(LoginRequiredMixin, View):
-    """
-    View for responding to a message to other user.
-    """
-
-    def get(self, request, message_id):
-        """
-        Handle GET requests and display the form for sending a message.
-        """
-        form = MessageAddForm()
-        user = request.user
-        original_message = Message.objects.get(id=message_id)
-
-        if not original_message.receiver == user:
-            return HttpResponseForbidden()
-
-        title = "Re: " + original_message.title
-        ctx = {
-            'form': form,
-            'sender': user,
-            'original_message': original_message,
-            'title': title,
-        }
-        return render(request, 'message_respond_form.html', ctx)
-
-    def post(self, request, message_id):
-        """
-        Handle POST requests and create respond message
-        """
-        form = MessageAddForm(request.POST)
-        user = request.user
-        original_message = Message.objects.get(id=message_id)
-        title = "Re: " + original_message.title
-
-        if form.is_valid():
-            content = form.cleaned_data['content']
-
-            Message.objects.create(sender=user,
-                                   receiver=original_message.sender,
-                                   title=title,
-                                   content=content)
-            return redirect('message-list')
-
-        else:
-            ctx = {
-                'form': form,
-                'sender': user,
-                'original_message': original_message,
-                'title': title,
-            }
-            return render(request, 'message_respond_form.html', ctx)
-
-
 class MessageListView(LoginRequiredMixin, View):
     """
     View for displaying a list of messages.
@@ -692,7 +639,9 @@ class MessageDetailsView(LoginRequiredMixin, View):
         Handle GET requests and display message details.
         """
         user = request.user
+        form = MessageAddForm()
         message = Message.objects.get(id=message_id)
+        message_history = Message.objects.filter(title__icontains=message.title).order_by("timestamp")
 
         if not (message.receiver == user or message.sender == user):
             return HttpResponseForbidden()
@@ -703,6 +652,36 @@ class MessageDetailsView(LoginRequiredMixin, View):
             message.save()
 
         ctx = {
-            'message': message
+            'form': form,
+            'message': message,
+            'message_history': message_history,
         }
         return render(request, 'message_details.html', ctx)
+
+    def post(self, request, message_id):
+        """
+        Handle POST requests and create respond message
+        """
+        form = MessageAddForm(request.POST)
+        user = request.user
+        original_message = Message.objects.get(id=message_id)
+        message_history = Message.objects.filter(title__icontains=original_message.title).order_by("timestamp")
+
+        if form.is_valid():
+            content = form.cleaned_data['content']
+
+            receiver = original_message.sender
+
+            Message.objects.create(sender=user,
+                                   receiver=receiver,
+                                   title=original_message.title,
+                                   content=content)
+            return redirect('message-list')
+
+        else:
+            ctx = {
+                'form': form,
+                'message': original_message,
+                'message_history': message_history,
+            }
+            return render(request, 'message_details.html', ctx)
