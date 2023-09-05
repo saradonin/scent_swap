@@ -106,4 +106,7 @@ class MessageAddForm(forms.Form):
     """
     Form for creating and sending a message to another user
     """
-    content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control bg-secondary text-white'}))
+    content = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control bg-secondary text-white',
+        'rows': 3,
+    }))
