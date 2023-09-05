@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -603,8 +604,9 @@ class MessageAddView(LoginRequiredMixin, View):
 
 class MessageListView(LoginRequiredMixin, View):
     """
-    View for displaying a list of offers.
+    View for displaying a list of messages.
     """
+
     def get(self, request):
         """
         Handle GET requests and display the paginated list of messages
@@ -619,3 +621,29 @@ class MessageListView(LoginRequiredMixin, View):
             'page_obj': page_obj
         }
         return render(request, 'message_list.html', ctx)
+
+
+class MessageDetailsView(LoginRequiredMixin, View):
+    """
+    View for displaying message details.
+    """
+    def get(self, request, message_id):
+        """
+        Handle GET requests and display message details.
+        """
+        user = request.user
+        message = Message.objects.get(id=message_id)
+
+        if not (message.receiver == user or message.sender == user):
+            return HttpResponseForbidden()
+
+        # mark message as read if displayed by receiver
+        if message.receiver == user and not message.is_read:
+            message.is_read = True
+            message.save()
+
+        ctx = {
+            'message': message
+        }
+        return render(request, 'message_details.html', ctx)
+
