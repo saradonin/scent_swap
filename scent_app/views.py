@@ -613,7 +613,7 @@ class MessageListView(LoginRequiredMixin, View):
         user = request.user
 
         # messages = Message.objects.filter(Q(sender=user) | Q(receiver=user)).order_by("-timestamp")
-        # TODO group messages with the same user
+        # TODO possible bug fixes
 
         # subquery to find the maximum timestamp for each combination (sender, receiver)
         subquery = Message.objects.filter(
