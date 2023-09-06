@@ -15,17 +15,10 @@
                 To:
             </td>
             <td>
-                {{ offer.offering_perfume.user.username }}
+                {{ receiver.username }}
             </td>
         </tr>
-            <tr>
-            <td>
-                Subject:
-            </td>
-            <td>
-                {{ offer.offering_perfume.perfume.full_name }}
-            </td>
-        </tr>
+
     </table>
     <form action="" method="POST">
         {% csrf_token %}

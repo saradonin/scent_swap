@@ -22,7 +22,7 @@
                 {% if not message.is_read %}
                     <td><strong>{{ message.sender }}</strong></td>
                     <td>{{ message.receiver }}</td>
-                    <td><strong>{{ message.title }}</strong></td>
+                    <td><strong>{{ message.content }}</strong></td>
                     <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
                     <td style="color: yellow"><strong>NEW</strong></td>
                 {% else %}

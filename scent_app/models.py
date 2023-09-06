@@ -184,14 +184,12 @@ class Message(models.Model):
     Attributes:
         sender (User): The user who sent the message.
         receiver (User): The user who received the message.
-        title (SwapOffer): The topic of the conversation.
         content (str): The content of the message.
         timestamp (datetime): The date and time when the message was sent.
         is_read (bool): Indicates whether the message has been read by the receiver.
     """
     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)

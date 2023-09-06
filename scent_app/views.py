@@ -567,35 +567,34 @@ class MessageAddView(LoginRequiredMixin, View):
     View for sending a message to other user.
     """
 
-    def get(self, request, offer_id):
+    def get(self, request, user_id):
         """
         Handle GET requests and display the form for sending a message.
         """
         form = MessageAddForm()
         sender = request.user
-        offer = SwapOffer.objects.get(id=offer_id)
+        receiver = User.objects.get(id=user_id)
 
         ctx = {
             'form': form,
             'sender': sender,
-            'offer': offer
+            'receiver': receiver
         }
         return render(request, 'message_add_form.html', ctx)
 
-    def post(self, request, offer_id):
+    def post(self, request, user_id):
         """
         Handle POST requests and create message
         """
         form = MessageAddForm(request.POST)
         sender = request.user
-        offer = SwapOffer.objects.get(id=offer_id)
+        receiver = User.objects.get(id=user_id)
 
         if form.is_valid():
             content = form.cleaned_data['content']
 
             Message.objects.create(sender=sender,
-                                   receiver=offer.offering_perfume.user,
-                                   title=offer.offering_perfume.perfume.full_name,
+                                   receiver=receiver,
                                    content=content)
             return redirect('message-list')
 
@@ -603,7 +602,7 @@ class MessageAddView(LoginRequiredMixin, View):
             ctx = {
                 'form': form,
                 'sender': sender,
-                'offer': offer
+                'receiver': receiver,
             }
             return render(request, 'message_add_form.html', ctx)
 
@@ -633,7 +632,7 @@ class MessageListView(LoginRequiredMixin, View):
 
 class MessageDetailsView(LoginRequiredMixin, View):
     """
-    View for displaying message details.
+    View for displaying message details and sending message to another user.
     """
 
     def get(self, request, message_id):
@@ -648,7 +647,6 @@ class MessageDetailsView(LoginRequiredMixin, View):
         message_history = Message.objects.filter(
             Q(sender=user) | Q(receiver=user),
             Q(sender=other_user) | Q(receiver=other_user),
-            title__icontains=message.title
         ).order_by("timestamp")
 
         if not (message.receiver == user or message.sender == user):
@@ -680,7 +678,6 @@ class MessageDetailsView(LoginRequiredMixin, View):
         message_history = Message.objects.filter(
             Q(sender=user) | Q(receiver=user),
             Q(sender=other_user) | Q(receiver=other_user),
-            title__icontains=original_message.title
         ).order_by("timestamp")
 
         if form.is_valid():
@@ -688,7 +685,6 @@ class MessageDetailsView(LoginRequiredMixin, View):
 
             Message.objects.create(sender=user,
                                    receiver=other_user,
-                                   title=original_message.title,
                                    content=content)
             return redirect('message-list')
 

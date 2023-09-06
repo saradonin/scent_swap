@@ -49,8 +49,9 @@
                         <a href="">
                             <button type="button" class="btn btn-outline-success">Close</button>
                         </a>
+
                     {% else %}
-                        <a href="{% url 'message-add' offer.id %}">
+                        <a href="{% url 'message-add' offer.offering_perfume.user.id %}">
                             <button type="button" class="btn btn-outline-primary">Message</button>
                         </a>
                     {% endif %}
