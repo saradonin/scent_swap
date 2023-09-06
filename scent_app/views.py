@@ -441,7 +441,7 @@ class UserPerfumeAddView(LoginRequiredMixin, View):
             return render(request, 'userperfume_add_form.html', ctx)
 
 
-class UserPerfumeDeleteView(View):
+class UserPerfumeDeleteView(LoginRequiredMixin, View):
     """
     Display confirmation to delete perfume from users collection and handle room deletion.
     """
@@ -450,8 +450,13 @@ class UserPerfumeDeleteView(View):
         """
         Handle GET requests and display confirmation window.
         """
+        user = request.user
+        userperfume = UserPerfume.objects.get(id=userperfume_id)
+        if not userperfume.user == user:
+            return HttpResponseForbidden()
+
         ctx = {
-            'userperfume': UserPerfume.objects.get(id=userperfume_id)
+            'userperfume': userperfume
         }
         return render(request, 'userperfume_delete_confirmation.html', ctx)
 
@@ -560,6 +565,40 @@ class OfferUpdateView(LoginRequiredMixin, UpdateView):
     fields = "__all__"
     template_name = "offer_update_form.html"
     success_url = reverse_lazy('offer-list')
+
+
+class OfferCloseView(LoginRequiredMixin, View):
+    """
+    Display confirmation prompt and close the offer.
+    """
+
+    def get(self, request, offer_id):
+        """
+        Handle GET requests and display confirmation window.
+        """
+        user = request.user
+        offer = SwapOffer.objects.get(id=offer_id)
+
+        if not offer.offering_perfume.user == user:
+            return HttpResponseForbidden()
+
+        ctx = {
+            'offer': offer
+        }
+        return render(request, 'offer_close_confirmation.html', ctx)
+
+    def post(self, request, offer_id):
+        """
+        Handle POST requests and closes the swap offer
+        """
+        confirm = request.POST.get('confirm')
+        offer = SwapOffer.objects.get(id=offer_id)
+        if confirm == "Yes":
+            offer.is_completed = True
+            offer.save()
+            return redirect('offer-list')
+        else:
+            return redirect('offer-list')
 
 
 class MessageListView(LoginRequiredMixin, View):

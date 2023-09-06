@@ -21,7 +21,7 @@ from scent_app.views import IndexView, PerfumeListView, BrandListView, BrandAddV
     PerfumerListView, PerfumerAddView, PerfumerUpdateView, NoteAddView, PerfumeAddView, PerfumeUpdateView, \
     PerfumeDetailsView, BrandPerfumeListView, UserLoginView, UserLogoutView, UserListView, UserAddView, \
     UserPerfumeAddView, UserPerfumeListView, OfferListView, OfferAddView, OfferUpdateView, UserPerfumeDeleteView, \
-    MessageAddView, MessageListView, MessageDetailsView
+    MessageAddView, MessageListView, MessageDetailsView, OfferCloseView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -55,6 +55,7 @@ urlpatterns = [
     path('offers', OfferListView.as_view(), name="offer-list"),
     path('offer/add', OfferAddView.as_view(), name="offer-add"),
     path('offer/edit/<pk>', OfferUpdateView.as_view(), name="offer-update"),
+    path('offer/close/<int:offer_id>', OfferCloseView.as_view(), name="offer-close"),
 
     path('message/send/<int:user_id>', MessageAddView.as_view(), name="message-add"),
     path('message/details/<int:message_id>', MessageDetailsView.as_view(), name="message-details"),
