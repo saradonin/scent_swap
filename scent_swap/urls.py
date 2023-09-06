@@ -57,6 +57,7 @@ urlpatterns = [
     path('offer/edit/<pk>', OfferUpdateView.as_view(), name="offer-update"),
 
     path('message/send/<int:user_id>', MessageAddView.as_view(), name="message-add"),
-    path('messages', MessageListView.as_view(), name="message-list"),
     path('message/details/<int:message_id>', MessageDetailsView.as_view(), name="message-details"),
+    path('messages', MessageListView.as_view(), name="message-list"),
+
 ]

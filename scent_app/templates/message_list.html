@@ -28,13 +28,13 @@
                 {% elif message.sender == user and not message.is_read %}
                     <td>{{ message.sender }}</td>
                     <td>{{ message.receiver }}</td>
-                    <td>{{ message.title }}</td>
+                    <td>{{ message.content|slice:":32" }}</td>
                     <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
                     <td class="text-white">sent</td>
                 {% else %}
                     <td>{{ message.sender }}</td>
                     <td>{{ message.receiver }}</td>
-                    <td>{{ message.title }}</td>
+                    <td>{{ message.content|slice:":32" }}</td>
                     <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
                     <td class="text-secondary">read</td>
                 {% endif %}
