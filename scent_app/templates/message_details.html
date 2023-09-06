@@ -15,7 +15,7 @@
         {% for message in message_history %}
             <tr>
                 {% if message.sender == user %}
-                    <td>{{ message.sender }}</td>
+                    <td>you</td>
                     <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
                     <td colspan="3" class="text-end">{{ message.content }}</td>
                 {% else %}

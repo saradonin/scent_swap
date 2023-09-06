@@ -19,12 +19,18 @@
         <tbody>
         {% for message in page_obj %}
             <tr>
-                {% if not message.is_read %}
+                {% if message.receiver == user and not message.is_read %}
                     <td><strong>{{ message.sender }}</strong></td>
                     <td>{{ message.receiver }}</td>
-                    <td><strong>{{ message.content|slice:":32"  }}</strong></td>
+                    <td><strong>{{ message.content|slice:":32" }}</strong></td>
                     <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
                     <td class="text-warning"><strong>NEW</strong></td>
+                {% elif message.sender == user and not message.is_read %}
+                    <td>{{ message.sender }}</td>
+                    <td>{{ message.receiver }}</td>
+                    <td>{{ message.title }}</td>
+                    <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
+                    <td class="text-white">sent</td>
                 {% else %}
                     <td>{{ message.sender }}</td>
                     <td>{{ message.receiver }}</td>

@@ -562,6 +562,29 @@ class OfferUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('offer-list')
 
 
+class MessageListView(LoginRequiredMixin, View):
+    """
+    View for displaying a list of messages.
+    """
+
+    def get(self, request):
+        """
+        Handle GET requests and display the paginated list of messages
+        """
+        user = request.user
+
+        messages = Message.objects.filter(Q(sender=user) | Q(receiver=user)).order_by("-timestamp")
+        # TODO group messages with the same user and the same subject
+        paginator = Paginator(messages, 25)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+        ctx = {
+            'page_obj': page_obj
+        }
+        return render(request, 'message_list.html', ctx)
+
+
 class MessageAddView(LoginRequiredMixin, View):
     """
     View for sending a message to other user.
@@ -605,29 +628,6 @@ class MessageAddView(LoginRequiredMixin, View):
                 'receiver': receiver,
             }
             return render(request, 'message_add_form.html', ctx)
-
-
-class MessageListView(LoginRequiredMixin, View):
-    """
-    View for displaying a list of messages.
-    """
-
-    def get(self, request):
-        """
-        Handle GET requests and display the paginated list of messages
-        """
-        user = request.user
-
-        messages = Message.objects.filter(Q(sender=user) | Q(receiver=user)).order_by("-timestamp")
-        # TODO group messages with the same user and the same subject
-        paginator = Paginator(messages, 25)
-        # current page
-        page_number = request.GET.get('page', 1)
-        page_obj = paginator.get_page(page_number)
-        ctx = {
-            'page_obj': page_obj
-        }
-        return render(request, 'message_list.html', ctx)
 
 
 class MessageDetailsView(LoginRequiredMixin, View):
