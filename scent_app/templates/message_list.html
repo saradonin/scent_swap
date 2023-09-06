@@ -8,7 +8,7 @@
             {% if page_obj %}
                 <th>From:</th>
                 <th>To:</th>
-                <th>Subject:</th>
+                <th>Content:</th>
                 <th>Timestamp:</th>
                 <th>Status:</th>
                 <th>Actions:</th>
@@ -22,15 +22,15 @@
                 {% if not message.is_read %}
                     <td><strong>{{ message.sender }}</strong></td>
                     <td>{{ message.receiver }}</td>
-                    <td><strong>{{ message.content }}</strong></td>
+                    <td><strong>{{ message.content|slice:":32"  }}</strong></td>
                     <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
-                    <td style="color: yellow"><strong>NEW</strong></td>
+                    <td class="text-warning"><strong>NEW</strong></td>
                 {% else %}
                     <td>{{ message.sender }}</td>
                     <td>{{ message.receiver }}</td>
                     <td>{{ message.title }}</td>
                     <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
-                    <td style="color: grey">read</td>
+                    <td class="text-secondary">read</td>
                 {% endif %}
 
                 <td>

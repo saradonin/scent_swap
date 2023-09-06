@@ -5,21 +5,24 @@
     <table class="table table-dark table-striped">
         <thead>
         <tr>
-            <th colspan="4"><h4>{{ other_user }}</h4></th>
+            <th colspan="4">Your conversation with <h4>{{ other_user }}</h4></th>
         </tr>
 
         </thead>
 
         <tbody>
-        <tr>
-            <td colspan="5">Message history:</td>
 
-        </tr>
         {% for message in message_history %}
             <tr>
-                <td>{{ message.sender }}</td>
-                <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
-                <td colspan="3">{{ message.content }}</td>
+                {% if message.sender == user %}
+                    <td>{{ message.sender }}</td>
+                    <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
+                    <td colspan="3" class="text-end">{{ message.content }}</td>
+                {% else %}
+                    <td>{{ message.sender }}</td>
+                    <td>{{ message.timestamp|date:"Y-m-d | H:i:s" }}</td>
+                    <td colspan="3" class="text-start">{{ message.content }}</td>
+                {% endif %}
             </tr>
         {% endfor %}
 
