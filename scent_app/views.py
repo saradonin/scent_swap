@@ -532,6 +532,29 @@ class OfferListView(LoginRequiredMixin, View):
         return render(request, "offer_list.html", ctx)
 
 
+class OfferListByUserView(LoginRequiredMixin, View):
+    """
+    View for displaying a list of offers created by logged user.
+    """
+
+    def get(self, request, user_id):
+        """
+        Handle GET requests and display the paginated list of swap offers.
+        """
+        user = User.objects.get(id=user_id)
+        offers = SwapOffer.objects.filter(offering_perfume__user=user, is_completed=False).order_by("-created_at")
+        # Paginator object with plans and 50 per page
+        paginator = Paginator(offers, 25)
+        # current page
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
+        ctx = {
+            'page_obj': page_obj,
+        }
+        return render(request, "offer_list_by_user.html", ctx)
+
+
 class OfferAddView(LoginRequiredMixin, View):
     """
     View for adding new swap offer.

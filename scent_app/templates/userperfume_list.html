@@ -1,7 +1,12 @@
 {% extends '__base__.html' %}
 {% block content %}
 
-    <h3><a href="">{{ current_user.username }}</a> collection</h3>
+    <!-- //--------------------------- profile-menu ------------------------------// -->
+    {% include 'user_profile_menu.html' %}
+    {% block profile-menu %}{% endblock profile-menu %}
+    <!-- //--------------------------- profile-menu end---------------------------// -->
+
+
     <table class="table table-dark table-striped">
         <thead>
         <tr>

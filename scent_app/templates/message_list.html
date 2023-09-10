@@ -1,6 +1,10 @@
 {% extends '__base__.html' %}
 {% block content %}
 
+    <!-- //--------------------------- profile-menu ------------------------------// -->
+    {% include 'user_profile_menu.html' %}
+    {% block profile-menu %}{% endblock profile-menu %}
+    <!-- //--------------------------- profile-menu end---------------------------// -->
 
     <table class="table table-dark table-striped">
         <thead>

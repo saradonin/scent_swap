@@ -1,0 +1,18 @@
+    <nav class="navbar navbar-dark bg-dark align-items-center p-2 mb-4">
+
+        <ul class="nav justify-content-center align-items-center">
+            <li class="nav-item">
+                <a class="nav-link text-white" href=""><h3>{{ user.username }}</h3></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'userperfume-list' user.id %}"><h3>Collection</h3></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'offer-list-by-user' user.id %}"><h3>Offers</h3></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'message-list' %}"><h3>Messages</h3></a>
+            </li>
+        </ul>
+
+    </nav>
