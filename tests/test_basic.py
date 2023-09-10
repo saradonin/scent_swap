@@ -60,7 +60,7 @@ def test_get_offer_list_logged_superuser(superuser_logged_in):
 
 
 @pytest.mark.django_db
-def test_brand_add_logged_superuser(superuser_logged_in):
+def test_brand_add_logged_superuser(superuser_logged_in, set_up):
     brand_count = Brand.objects.count()
     new_brand = {
         "name": "Test Brand Name",
@@ -70,5 +70,26 @@ def test_brand_add_logged_superuser(superuser_logged_in):
     assert response.status_code == 302
     assert Brand.objects.count() == brand_count + 1
     assert Brand.objects.filter(name=new_brand["name"]).exists()
+
+
+@pytest.mark.django_db
+def test_brand_update_logged_superuser(superuser_logged_in, set_up):
+    brand = Brand.objects.first()
+
+    # get update page
+    response = superuser_logged_in.get(reverse("brand-update", args=(brand.id,)))
+    assert response.status_code == 200
+
+    # update brand name
+    updated_brand_data = {
+        "name": "New Brand Name",
+        "description": "New updated description"
+    }
+    response = superuser_logged_in.post(reverse("brand-update", args=(brand.id,)), updated_brand_data)
+    assert response.status_code == 302
+
+    # check if updated
+    updated_brand = Brand.objects.get(id=brand.id)
+    assert updated_brand.name == updated_brand_data["name"]
 
 
