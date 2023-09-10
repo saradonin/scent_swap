@@ -51,7 +51,7 @@ python manage.py runserver
 
 6. Access the app in your web browser at http://localhost:8000.
 
-### Usage
+## Usage
 
 - Register an account or log in if you already have one.
 - Browse listed perfumes and brands.
@@ -60,6 +60,6 @@ python manage.py runserver
 - Use the messaging system to communicate and coordinate exchanges.
 - Admins can access the admin panel at http://localhost:8000/admin/ to manage users and content
 
-### License
+## License
 
 The Scent Swap App is licensed under the MIT License. Please see the LICENSE file for more details.

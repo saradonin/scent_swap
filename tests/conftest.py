@@ -15,15 +15,17 @@ def superuser_logged_in():
         is_superuser=True)
     client = Client()
     client.login(username='test_superuser', password='admin_password')
-    return client
+    test_superuser.client = client
+    return test_superuser
 
 
 @pytest.fixture
 def user_logged_in():
-    User.objects.create_user(username='test_user', password='test_password')
+    user = User.objects.create_user(username='test_user', password='test_password')
     client = Client()
     client.login(username='test_user', password='test_password')
-    return client
+    user.client = client  # Attach the client to the user object
+    return user
 
 
 @pytest.fixture
