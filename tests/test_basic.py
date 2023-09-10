@@ -15,7 +15,7 @@ def test_get_index_page():
 
 
 @pytest.mark.django_db
-def test_brand_list_not_logged():
+def test_brand_get_list_not_logged():
     client = Client()
     response = client.get(reverse("brand-list"))
     assert response.status_code == 200
@@ -75,14 +75,14 @@ def test_brand_update_logged_superuser(superuser_logged_in, set_up):
 
 
 @pytest.mark.django_db
-def test_get_perfume_list():
+def test_perfume_get_list():
     client = Client()
     response = client.get(reverse("perfume-list"))
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def test_get_collection_list(user_logged_in):
+def test_collection_get_list(user_logged_in):
     user = user_logged_in
     response = user.client.get(resolve_url("userperfume-list", user.id))
     assert response.status_code == 200
@@ -109,32 +109,68 @@ def test_collection_add_logged(user_logged_in, set_up):
 
 
 @pytest.mark.django_db
-def test_get_user_list_not_logged():
+def test_collection_update_logged(user_logged_in, set_up):
+    user = user_logged_in
+    new_userperfume = {
+        "user": user_logged_in,
+        "perfume": Perfume.objects.first(),
+        "volume": 50,
+        "status": "full",
+        "to_exchange": False
+    }
+    # create object based on data dictionary using **
+    UserPerfume.objects.create(**new_userperfume)
+    userperfume = UserPerfume.objects.filter(user=user).first()
+
+    # get update page
+    response = user_logged_in.client.get(reverse("userperfume-update", args=(userperfume.id,)))
+    assert response.status_code == 200
+
+    # update data
+    updated_userperfume_data = {
+        "user": user,
+        "perfume": userperfume.perfume,
+        "volume": 75,
+        "status": "almost full",
+        "to_exchange": False
+    }
+    response = user_logged_in.client.post(reverse("userperfume-update", args=(userperfume.id,)),
+                                          updated_userperfume_data)
+    assert response.status_code == 302
+
+    # check if updated
+    updated_userperfume = UserPerfume.objects.get(id=userperfume.id)
+    assert updated_userperfume.volume == updated_userperfume_data["volume"]
+    assert updated_userperfume.status == updated_userperfume_data["status"]
+
+
+@pytest.mark.django_db
+def test_user_get_list_not_logged():
     client = Client()
     response = client.get(reverse("user-list"))
     assert response.status_code == 302
 
 
 @pytest.mark.django_db
-def test_get_user_list_logged(user_logged_in):
+def test_user_get_list_logged(user_logged_in):
     response = user_logged_in.client.get(reverse("user-list"))
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def test_get_offer_list_not_logged():
+def test_offer_get_list_not_logged():
     client = Client()
     response = client.get(reverse("offer-list"))
     assert response.status_code == 302
 
 
 @pytest.mark.django_db
-def test_get_offer_list_logged(user_logged_in):
+def test_offer_get_list_logged(user_logged_in):
     response = user_logged_in.client.get(reverse("offer-list"))
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def test_get_offer_list_logged_superuser(superuser_logged_in):
+def test_offer_get_list_logged_superuser(superuser_logged_in):
     response = superuser_logged_in.client.get(reverse("offer-list"))
     assert response.status_code == 200
