@@ -18,7 +18,6 @@ def superuser_logged_in():
     return client
 
 
-
 @pytest.fixture
 def user_logged_in():
     User.objects.create_user(username='test_user', password='test_password')

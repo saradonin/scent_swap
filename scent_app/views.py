@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.core.paginator import Paginator
-from django.db.models import Q, Subquery, OuterRef, Max
+from django.db.models import Q
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -612,17 +612,7 @@ class MessageListView(LoginRequiredMixin, View):
         """
         user = request.user
 
-        # messages = Message.objects.filter(Q(sender=user) | Q(receiver=user)).order_by("-timestamp")
-        # TODO possible bug fixes
-
-        # subquery to find the maximum timestamp for each combination (sender, receiver)
-        subquery = Message.objects.filter(
-            Q(sender=OuterRef('sender')) | Q(receiver=OuterRef('receiver')),
-        ).values('sender', 'receiver').annotate(max_timestamp=Max('timestamp')).values('max_timestamp')[:1]
-
-        # query to get the last message for each combination (sender, receiver)
-        messages = Message.objects.filter(
-            Q(sender=user) | Q(receiver=user), timestamp=Subquery(subquery)).order_by("-timestamp")
+        messages = Message.objects.filter(Q(sender=user) | Q(receiver=user)).order_by("-timestamp")
 
         paginator = Paginator(messages, 25)
         # current page
