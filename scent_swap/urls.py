@@ -21,7 +21,7 @@ from scent_app.views import IndexView, PerfumeListView, BrandListView, BrandAddV
     PerfumerListView, PerfumerAddView, PerfumerUpdateView, NoteAddView, PerfumeAddView, PerfumeUpdateView, \
     PerfumeDetailsView, BrandPerfumeListView, UserLoginView, UserLogoutView, UserListView, UserAddView, \
     UserPerfumeAddView, UserPerfumeListView, OfferListView, OfferAddView, OfferUpdateView, UserPerfumeDeleteView, \
-    MessageAddView, MessageListView, MessageDetailsView, OfferCloseView
+    MessageAddView, MessageListView, MessageDetailsView, OfferCloseView, UserPerfumeUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -50,6 +50,7 @@ urlpatterns = [
 
     path('collection/<int:perfume_id>/add', UserPerfumeAddView.as_view(), name="userperfume-add"),
     path('collection/<int:user_id>', UserPerfumeListView.as_view(), name="userperfume-list"),
+    path('collection/item/edit/<pk>', UserPerfumeUpdateView.as_view(), name="userperfume-update"),
     path('collection/item/delete/<int:userperfume_id>', UserPerfumeDeleteView.as_view(), name="userperfume-delete"),
 
     path('offers', OfferListView.as_view(), name="offer-list"),

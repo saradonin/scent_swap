@@ -441,6 +441,18 @@ class UserPerfumeAddView(LoginRequiredMixin, View):
             return render(request, 'userperfume_add_form.html', ctx)
 
 
+class UserPerfumeUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    View for updating perfume in user's collection.
+    """
+    model = UserPerfume
+    fields = "volume", "status"
+    template_name = "userperfume_update_form.html"
+
+    def get_success_url(self):
+        return reverse_lazy('userperfume-list', kwargs={'user_id': self.request.user.id})
+
+
 class UserPerfumeDeleteView(LoginRequiredMixin, View):
     """
     Display confirmation to delete perfume from users collection and handle room deletion.
