@@ -4,7 +4,7 @@ from django.shortcuts import resolve_url
 from django.test import Client
 from django.urls import reverse
 
-from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer
+from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User
 
 
 @pytest.mark.django_db
@@ -163,7 +163,7 @@ def test_offer_add_logged(user_logged_in, set_up, create_userperfume):
     # post - .id when using form
     offer_data = {
         "offering_perfume": userperfume.id,
-        "requested_perfume": Perfume.objects.order_by('?')[0].id,
+        "requested_perfume": Perfume.objects.order_by('?').first().id,
         "is_completed": False
     }
     response = user.client.post(reverse("offer-add"), offer_data)
@@ -182,7 +182,7 @@ def test_offer_update_logged(user_logged_in, set_up, create_userperfume):
     # create offer - objects when creating directly
     offer_data = {
         "offering_perfume": userperfume,
-        "requested_perfume": Perfume.objects.order_by('?')[0],
+        "requested_perfume": Perfume.objects.order_by('?').first(),
     }
     offer = SwapOffer.objects.create(**offer_data)
 
@@ -210,7 +210,7 @@ def test_offer_close_logged(user_logged_in, set_up, create_userperfume):
     # create offer - objects when creating directly
     offer_data = {
         "offering_perfume": userperfume,
-        "requested_perfume": Perfume.objects.order_by('?')[0],
+        "requested_perfume": Perfume.objects.order_by('?').first(),
     }
     offer = SwapOffer.objects.create(**offer_data)
 
@@ -225,6 +225,35 @@ def test_offer_close_logged(user_logged_in, set_up, create_userperfume):
     # check if closed
     closed_offer = SwapOffer.objects.get(id=offer.id)
     assert closed_offer.is_completed == True
+
+
+@pytest.mark.django_db
+def test_offer_close_unauthorized_user(user_logged_in, set_up, create_userperfume):
+    user = user_logged_in
+    # pick random other user who is not user
+    other_user = None
+    while other_user is None or other_user == user:
+        other_user = User.objects.order_by('?').first()
+
+    # create userperfume and offer for the other_user
+    userperfume_data = {
+        "user": other_user,
+        "perfume": Perfume.objects.order_by('?').first(),
+        "volume": 50,
+        "status": "full",
+        "to_exchange": False
+    }
+    userperfume = UserPerfume.objects.create(**userperfume_data)
+
+    offer_data = {
+        "offering_perfume": userperfume,
+        "requested_perfume": Perfume.objects.order_by('?').first(),
+    }
+    offer = SwapOffer.objects.create(**offer_data)
+
+    # get update page by user who is not the owner of the offer should cause 403 forbidden
+    response = user.client.get(reverse("offer-close", args=(offer.id,)))
+    assert response.status_code == 403
 
 
 @pytest.mark.django_db
