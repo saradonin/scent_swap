@@ -1,10 +1,13 @@
 import pytest
+from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import resolve_url
 
-from django.test import Client
+from django.test import Client, RequestFactory
 from django.urls import reverse
 
+from scent_app.forms import SearchForm
 from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User
+from scent_app.views import BrandListView
 
 
 @pytest.mark.django_db
@@ -19,6 +22,27 @@ def test_brand_get_list_not_logged():
     client = Client()
     response = client.get(reverse("brand-list"))
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_brand_search_form(set_up):
+    # example data
+    Brand.objects.create(name="First brand")
+    Brand.objects.create(name="Some other brand")
+
+    # post search query
+    factory = RequestFactory()
+    request = factory.post(reverse("brand-list"), {"value": "other"})
+    # have to set the user, because request object doesn't have user attribute
+    request.user = AnonymousUser()
+
+    view = BrandListView.as_view()
+    response = view(request)
+    assert response.status_code == 200
+
+    # assert results
+    assert "Some" in response.content.decode()
+    assert "First" not in response.content.decode()
 
 
 @pytest.mark.django_db
@@ -224,7 +248,7 @@ def test_offer_close_logged(user_logged_in, set_up, create_userperfume):
 
     # check if closed
     closed_offer = SwapOffer.objects.get(id=offer.id)
-    assert closed_offer.is_completed == True
+    assert closed_offer.is_completed
 
 
 @pytest.mark.django_db
@@ -251,7 +275,7 @@ def test_offer_close_unauthorized_user(user_logged_in, set_up, create_userperfum
     }
     offer = SwapOffer.objects.create(**offer_data)
 
-    # get update page by user who is not the owner of the offer should cause 403 forbidden
+    # get update page by user who is not the owner of the offer - should cause 403 forbidden
     response = user.client.get(reverse("offer-close", args=(offer.id,)))
     assert response.status_code == 403
 
