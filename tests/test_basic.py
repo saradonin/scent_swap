@@ -4,7 +4,7 @@ from django.shortcuts import resolve_url
 from django.test import Client
 from django.urls import reverse
 
-from scent_app.models import Perfume, Brand, UserPerfume
+from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer
 
 
 @pytest.mark.django_db
@@ -166,6 +166,40 @@ def test_collection_delete_logged(user_logged_in, set_up):
     response = user.client.post(reverse("userperfume-delete", args=(userperfume.id,)), {"confirm": "Yes"})
     assert response.status_code == 302
     assert userperfume.id not in [item.id for item in UserPerfume.objects.all()]
+
+
+@pytest.mark.django_db
+def test_offer_add_logged(user_logged_in, set_up):
+    user = user_logged_in
+    perfume = Perfume.objects.first()
+    offer_count = SwapOffer.objects.count()
+
+    new_userperfume = {
+        "user": user,
+        "perfume": perfume,
+        "volume": 50,
+        "status": "full",
+        "to_exchange": False
+    }
+    UserPerfume.objects.create(**new_userperfume)
+    userperfume = UserPerfume.objects.filter(user=user).first()
+
+    # get add offer page
+    response = user.client.get(reverse("offer-add"))
+    assert response.status_code == 200
+
+    # post
+    offer_data = {
+        "offering_perfume": userperfume.id,
+        "requested_perfume": Perfume.objects.order_by('?')[0].id,
+        "is_completed": False
+    }
+    response = user.client.post(reverse("offer-add"), offer_data)
+    assert response.status_code == 302
+
+    # test if created
+    assert SwapOffer.objects.count() == offer_count + 1
+    assert SwapOffer.objects.filter(offering_perfume=userperfume).exists()
 
 
 @pytest.mark.django_db
