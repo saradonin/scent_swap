@@ -11,10 +11,10 @@ def superuser_logged_in():
     test_superuser = User.objects.create_superuser(
         username="test_superuser",
         email="super_email@django.com",
-        password="admin_password",
+        password="test_password",
         is_superuser=True)
     client = Client()
-    client.login(username='test_superuser', password='admin_password')
+    client.login(username='test_superuser', password='test_password')
     test_superuser.client = client
     return test_superuser
 

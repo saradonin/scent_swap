@@ -13,7 +13,7 @@ def create_test_user():
     test_user = User.objects.create_user(
         username=faker.first_name(),
         email=faker.ascii_free_email(),
-        password="haslo123"
+        password="test_password"
     )
     return test_user
 
@@ -22,7 +22,7 @@ def create_test_superuser():
     test_superuser = User.objects.create_superuser(
         username=faker.first_name(),
         email=faker.ascii_free_email(),
-        password="haslo123",
+        password="test_password",
         is_superuser=True
     )
     return test_superuser
