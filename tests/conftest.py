@@ -2,6 +2,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import Client
 
+from scent_app.models import Perfume, UserPerfume
 from tests.utils import create_test_user, create_categories, create_fake_brand, create_fake_perfumer, \
     create_random_perfume, create_test_superuser
 
@@ -40,3 +41,18 @@ def set_up():
         create_fake_perfumer()
     for _ in range(10):
         create_random_perfume()
+
+
+@pytest.fixture
+def create_userperfume(user_logged_in):
+    user = user_logged_in
+    perfume = Perfume.objects.first()
+    userperfume_data = {
+        "user": user,
+        "perfume": perfume,
+        "volume": 50,
+        "status": "full",
+        "to_exchange": False
+    }
+    userperfume = UserPerfume.objects.create(**userperfume_data)
+    return userperfume

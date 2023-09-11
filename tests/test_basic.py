@@ -109,17 +109,8 @@ def test_collection_add_logged(user_logged_in, set_up):
 
 
 @pytest.mark.django_db
-def test_collection_update_logged(user_logged_in, set_up):
+def test_collection_update_logged(user_logged_in, set_up, create_userperfume):
     user = user_logged_in
-    new_userperfume = {
-        "user": user,
-        "perfume": Perfume.objects.first(),
-        "volume": 50,
-        "status": "full",
-        "to_exchange": False
-    }
-    # create object based on data dictionary using **
-    UserPerfume.objects.create(**new_userperfume)
     userperfume = UserPerfume.objects.filter(user=user).first()
 
     # get update page
@@ -145,17 +136,8 @@ def test_collection_update_logged(user_logged_in, set_up):
 
 
 @pytest.mark.django_db
-def test_collection_delete_logged(user_logged_in, set_up):
+def test_collection_delete_logged(user_logged_in, set_up, create_userperfume):
     user = user_logged_in
-    new_userperfume = {
-        "user": user,
-        "perfume": Perfume.objects.first(),
-        "volume": 50,
-        "status": "full",
-        "to_exchange": False
-    }
-    # create object based on data dictionary using **
-    UserPerfume.objects.create(**new_userperfume)
     userperfume = UserPerfume.objects.filter(user=user).first()
 
     # get delete page
@@ -169,19 +151,9 @@ def test_collection_delete_logged(user_logged_in, set_up):
 
 
 @pytest.mark.django_db
-def test_offer_add_logged(user_logged_in, set_up):
+def test_offer_add_logged(user_logged_in, set_up, create_userperfume):
     user = user_logged_in
-    perfume = Perfume.objects.first()
     offer_count = SwapOffer.objects.count()
-
-    new_userperfume = {
-        "user": user,
-        "perfume": perfume,
-        "volume": 50,
-        "status": "full",
-        "to_exchange": False
-    }
-    UserPerfume.objects.create(**new_userperfume)
     userperfume = UserPerfume.objects.filter(user=user).first()
 
     # get add offer page
