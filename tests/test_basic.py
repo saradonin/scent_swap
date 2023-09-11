@@ -204,6 +204,30 @@ def test_offer_update_logged(user_logged_in, set_up, create_userperfume):
 
 
 @pytest.mark.django_db
+def test_offer_close_logged(user_logged_in, set_up, create_userperfume):
+    user = user_logged_in
+    userperfume = UserPerfume.objects.filter(user=user).first()
+    # create offer - objects when creating directly
+    offer_data = {
+        "offering_perfume": userperfume,
+        "requested_perfume": Perfume.objects.order_by('?')[0],
+    }
+    offer = SwapOffer.objects.create(**offer_data)
+
+    # get update page
+    response = user.client.get(reverse("offer-close", args=(offer.id,)))
+    assert response.status_code == 200
+
+    # update data - object.id when using form
+    response = user.client.post(reverse("offer-close", args=(offer.id,)), {"confirm": "Yes"})
+    assert response.status_code == 302
+
+    # check if closed
+    closed_offer = SwapOffer.objects.get(id=offer.id)
+    assert closed_offer.is_completed == True
+
+
+@pytest.mark.django_db
 def test_user_get_list_not_logged():
     client = Client()
     response = client.get(reverse("user-list"))
