@@ -112,7 +112,7 @@ def test_collection_add_logged(user_logged_in, set_up):
 def test_collection_update_logged(user_logged_in, set_up):
     user = user_logged_in
     new_userperfume = {
-        "user": user_logged_in,
+        "user": user,
         "perfume": Perfume.objects.first(),
         "volume": 50,
         "status": "full",
@@ -123,7 +123,7 @@ def test_collection_update_logged(user_logged_in, set_up):
     userperfume = UserPerfume.objects.filter(user=user).first()
 
     # get update page
-    response = user_logged_in.client.get(reverse("userperfume-update", args=(userperfume.id,)))
+    response = user.client.get(reverse("userperfume-update", args=(userperfume.id,)))
     assert response.status_code == 200
 
     # update data
@@ -134,14 +134,38 @@ def test_collection_update_logged(user_logged_in, set_up):
         "status": "almost full",
         "to_exchange": False
     }
-    response = user_logged_in.client.post(reverse("userperfume-update", args=(userperfume.id,)),
-                                          updated_userperfume_data)
+    response = user.client.post(reverse("userperfume-update", args=(userperfume.id,)),
+                                updated_userperfume_data)
     assert response.status_code == 302
 
     # check if updated
     updated_userperfume = UserPerfume.objects.get(id=userperfume.id)
     assert updated_userperfume.volume == updated_userperfume_data["volume"]
     assert updated_userperfume.status == updated_userperfume_data["status"]
+
+
+@pytest.mark.django_db
+def test_collection_delete_logged(user_logged_in, set_up):
+    user = user_logged_in
+    new_userperfume = {
+        "user": user,
+        "perfume": Perfume.objects.first(),
+        "volume": 50,
+        "status": "full",
+        "to_exchange": False
+    }
+    # create object based on data dictionary using **
+    UserPerfume.objects.create(**new_userperfume)
+    userperfume = UserPerfume.objects.filter(user=user).first()
+
+    # get delete page
+    response = user.client.get(reverse("userperfume-delete", args=(userperfume.id,)))
+    assert response.status_code == 200
+
+    # delete item when confirm = "Yes"
+    response = user.client.post(reverse("userperfume-delete", args=(userperfume.id,)), {"confirm": "Yes"})
+    assert response.status_code == 302
+    assert userperfume.id not in [item.id for item in UserPerfume.objects.all()]
 
 
 @pytest.mark.django_db
