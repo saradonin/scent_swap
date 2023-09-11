@@ -171,7 +171,37 @@ def test_offer_add_logged(user_logged_in, set_up, create_userperfume):
 
     # test if created
     assert SwapOffer.objects.count() == offer_count + 1
-    assert SwapOffer.objects.filter(offering_perfume=userperfume).exists()
+    assert SwapOffer.objects.filter(offering_perfume=userperfume,
+                                    requested_perfume=offer_data["requested_perfume"]).exists()
+
+
+@pytest.mark.django_db
+def test_offer_update_logged(user_logged_in, set_up, create_userperfume):
+    user = user_logged_in
+    userperfume = UserPerfume.objects.filter(user=user).first()
+    # create offer
+    offer_data = {
+        "offering_perfume": userperfume,
+        "requested_perfume": Perfume.objects.order_by('?')[0],
+    }
+    SwapOffer.objects.create(**offer_data)
+    offer = UserPerfume.objects.filter(user=user).first()
+
+    # get update page
+    response = user.client.get(reverse("offer-update", args=(offer.id,)))
+    assert response.status_code == 200
+
+    # update data
+    updated_offer_data = {
+        "offering_perfume": userperfume.id,
+        "requested_perfume": Perfume.objects.order_by('?')[2].id,
+    }
+    response = user.client.post(reverse("offer-update", args=(offer.id,)), updated_offer_data)
+    assert response.status_code == 302
+
+    # check if updated
+    updated_offer = SwapOffer.objects.get(id=offer.id)
+    assert updated_offer.requested_perfume.id == updated_offer_data["requested_perfume"]
 
 
 @pytest.mark.django_db
