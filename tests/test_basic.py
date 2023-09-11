@@ -160,7 +160,7 @@ def test_offer_add_logged(user_logged_in, set_up, create_userperfume):
     response = user.client.get(reverse("offer-add"))
     assert response.status_code == 200
 
-    # post
+    # post - .id when using form
     offer_data = {
         "offering_perfume": userperfume.id,
         "requested_perfume": Perfume.objects.order_by('?')[0].id,
@@ -179,19 +179,18 @@ def test_offer_add_logged(user_logged_in, set_up, create_userperfume):
 def test_offer_update_logged(user_logged_in, set_up, create_userperfume):
     user = user_logged_in
     userperfume = UserPerfume.objects.filter(user=user).first()
-    # create offer
+    # create offer - objects when creating directly
     offer_data = {
         "offering_perfume": userperfume,
         "requested_perfume": Perfume.objects.order_by('?')[0],
     }
-    SwapOffer.objects.create(**offer_data)
-    offer = UserPerfume.objects.filter(user=user).first()
+    offer = SwapOffer.objects.create(**offer_data)
 
     # get update page
     response = user.client.get(reverse("offer-update", args=(offer.id,)))
     assert response.status_code == 200
 
-    # update data
+    # update data - object.id when using form
     updated_offer_data = {
         "offering_perfume": userperfume.id,
         "requested_perfume": Perfume.objects.order_by('?')[2].id,
