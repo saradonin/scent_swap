@@ -5,7 +5,6 @@ from django.shortcuts import resolve_url
 from django.test import Client, RequestFactory
 from django.urls import reverse
 
-from scent_app.forms import SearchForm
 from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User
 from scent_app.views import BrandListView
 
@@ -278,6 +277,58 @@ def test_offer_close_unauthorized_user(user_logged_in, set_up, create_userperfum
     # get update page by user who is not the owner of the offer - should cause 403 forbidden
     response = user.client.get(reverse("offer-close", args=(offer.id,)))
     assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_user_add():
+    client = Client()
+    response = client.get(reverse("user-add"))
+    assert response.status_code == 200
+    user_count = User.objects.count()
+
+    user_data = {
+        "username": "alreadytaken",
+        "email": "already.taken@django.com",
+        "password1": "password123",
+        "password2": "password123"
+    }
+    response = client.post(reverse("user-add"), user_data)
+    assert response.status_code == 302
+
+    # test if created
+    assert User.objects.count() == user_count + 1
+    assert User.objects.filter(username=user_data["username"]).exists()
+
+
+@pytest.mark.django_db
+def test_user_login(user_logged_in):
+    User.objects.create_user(username='test_user_login', password='test_password')
+    client = Client()
+    response = client.get(reverse("user-login"))
+    assert "Login" in response.content.decode()
+    assert response.status_code == 200
+
+    user_data = {
+        "username": 'test_user',
+        "password": 'test_password'
+    }
+    response = client.post(reverse("user-login"), user_data)
+    assert response.status_code == 302
+    # test if logout possibility is active
+    response = client.get(reverse("index"))
+    assert "Login" not in response.content.decode()
+    assert "Logout" in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_user_logout(user_logged_in):
+    user = user_logged_in
+    response = user.client.get(reverse("user-logout"))
+    assert response.status_code == 302
+    # test if login possibility is active
+    response = user.client.get(reverse("index"))
+    assert "Login" in response.content.decode()
+    assert "Logout" not in response.content.decode()
 
 
 @pytest.mark.django_db
