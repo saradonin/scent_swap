@@ -18,10 +18,11 @@ from django.contrib import admin
 from django.urls import path
 
 from scent_app.views import IndexView, PerfumeListView, BrandListView, BrandAddView, BrandUpdateView, \
-    PerfumerListView, PerfumerAddView, PerfumerUpdateView, NoteAddView, PerfumeAddView, PerfumeUpdateView, \
+    PerfumerListView, PerfumerAddView, NoteAddView, PerfumeAddView, PerfumeUpdateView, \
     PerfumeDetailsView, BrandPerfumeListView, UserLoginView, UserLogoutView, UserListView, UserAddView, \
     UserPerfumeAddView, UserPerfumeListView, OfferListView, OfferAddView, OfferUpdateView, UserPerfumeDeleteView, \
-    MessageAddView, MessageListView, MessageDetailsView, OfferCloseView, UserPerfumeUpdateView, OfferListByUserView
+    MessageAddView, MessageListView, MessageDetailsView, OfferCloseView, UserPerfumeUpdateView, OfferListByUserView, \
+    NoteListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,9 +35,9 @@ urlpatterns = [
 
     path('perfumers', PerfumerListView.as_view(), name="perfumer-list"),
     path('perfumer/add', PerfumerAddView.as_view(), name="perfumer-add"),
-    path('perfumer/edit/<pk>', PerfumerUpdateView.as_view(), name="perfumer-update"),
 
     path('note/add', NoteAddView.as_view(), name="note-add"),
+    path('notes', NoteListView.as_view(), name="note-list"),
 
     path('perfumes', PerfumeListView.as_view(), name="perfume-list"),
     path('perfume/add', PerfumeAddView.as_view(), name="perfume-add"),

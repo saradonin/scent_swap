@@ -1,0 +1,31 @@
+{% extends '__base__.html' %}
+{% block content %}
+
+    {% if perms.scent_app.add_note %}
+        <a href="{% url 'note-add' %}">
+            <button type="button" class="btn btn-success m-2">Add note</button>
+        </a>
+    {% endif %}
+
+    {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+        <h5 class="mb-2">{{ letter }}</h5>
+        <p>
+            {% for note in object_list %}
+                {% if note.name.0 == letter %}
+                    {{ note.name }}{% if not forloop.last %}, {% endif %}
+                {% endif %}
+
+            {% endfor %}
+        </p>
+    {% endfor %}
+
+
+    <!-- //--------------------------- pagination links ------------------------------// -->
+    {% include 'pagination_links.html' %}
+    {% block pagination %}{% endblock pagination %}
+    <!-- //--------------------------- pagination links end---------------------------// -->
+
+
+
+
+{% endblock content %}

@@ -41,6 +41,7 @@ def test_brand_search_form(set_up):
 
     # assert results
     assert "Some" in response.content.decode()
+    assert "other" in response.content.decode()
     assert "First" not in response.content.decode()
 
 

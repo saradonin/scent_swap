@@ -1,38 +1,23 @@
 {% extends '__base__.html' %}
 {% block content %}
 
-    <a href="{% url 'perfumer-add' %}">
-        <button type="button" class="btn btn-outline-success">Add perfumer</button>
-    </a>
+    {% if perms.scent_app.add_perfumer %}
+        <a href="{% url 'perfumer-add' %}">
+            <button type="button" class="btn btn-success m-2">Add perfumer</button>
+        </a>
+    {% endif %}
 
+    {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+        <h5 class="mb-2">{{ letter }}</h5>
+        <p>
+            {% for perfumer in object_list %}
+                {% if perfumer.last_name.0 == letter %}
+                    {{ perfumer.name }}{% if not forloop.last %}, {% endif %}
+                {% endif %}
 
-    <table class="table table-dark table-striped">
-        <thead>
-        <tr>
-            <th>Name:</th>
-            <th>Details:</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {% for perfumer in object_list %}
-            <tr>
-                <td>{{ perfumer.name }}</td>
-                <td>
-                    <a href="">
-                        <button type="button" class="btn btn-outline-secondary">Details</button>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- //--------------------------- pagination links ------------------------------// -->
-    {% include 'pagination_links.html' %}
-    {% block pagination %}{% endblock pagination %}
-    <!-- //--------------------------- pagination links end---------------------------// -->
-
+            {% endfor %}
+        </p>
+    {% endfor %}
 
 
 

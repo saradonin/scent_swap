@@ -129,7 +129,6 @@ class PerfumerListView(ListView):
     """
     model = Perfumer
     template_name = "perfumer_list.html"
-    paginate_by = 20  # if pagination is desired
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -147,15 +146,16 @@ class PerfumerAddView(PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy('perfumer-list')
 
 
-class PerfumerUpdateView(PermissionRequiredMixin, UpdateView):
+class NoteListView(ListView):
     """
-    View for updating perfumers details.
+    View for displaying a list of notes.
     """
-    permission_required = 'scent_app.change_perfumer'
-    model = Perfumer
-    fields = "__all__"
-    template_name = "perfumer_update_form.html"
-    success_url = reverse_lazy('perfumer-list')
+    model = Note
+    template_name = "note_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 
 class NoteAddView(PermissionRequiredMixin, CreateView):
