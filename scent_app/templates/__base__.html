@@ -22,12 +22,11 @@
             <a class="nav-link" href="{% url 'perfume-list' %}"><h5>Perfumes</h5></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'note-list' %}"><h5>Notes</h5></a>
+            <a class="nav-link" href="{% url 'perfumer-list' %}"><h5>Artists</h5></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'perfumer-list' %}"><h5>Perfumers</h5></a>
+            <a class="nav-link" href="{% url 'note-list' %}"><h5>Notes</h5></a>
         </li>
-
         {% if user.is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'user-list' %}"><h5>Users</h5></a>

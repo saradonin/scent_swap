@@ -36,8 +36,8 @@ urlpatterns = [
     path('perfumers', PerfumerListView.as_view(), name="perfumer-list"),
     path('perfumer/add', PerfumerAddView.as_view(), name="perfumer-add"),
 
-    path('note/add', NoteAddView.as_view(), name="note-add"),
     path('notes', NoteListView.as_view(), name="note-list"),
+    path('note/add', NoteAddView.as_view(), name="note-add"),
 
     path('perfumes', PerfumeListView.as_view(), name="perfume-list"),
     path('perfume/add', PerfumeAddView.as_view(), name="perfume-add"),
