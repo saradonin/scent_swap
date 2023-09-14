@@ -5,7 +5,7 @@ from django.shortcuts import resolve_url
 from django.test import Client, RequestFactory
 from django.urls import reverse
 
-from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User
+from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User, Perfumer, Note
 from scent_app.views import BrandListView
 
 
@@ -55,23 +55,37 @@ def test_brand_details_not_logged(set_up):
 
 
 @pytest.mark.django_db
+def test_brand_add_not_logged():
+    client = Client()
+    response = client.get(reverse("brand-add"))
+    assert response.status_code == 302  # redirect to login page
+
+    response = client.post(reverse("brand-add"), {"name": "brand name"})
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
 def test_brand_add_logged(user_logged_in, set_up):
-    new_brand = {
-        "name": "Test Brand Name",
-        "description": "Test description"
-    }
-    response = user_logged_in.client.post(reverse("brand-add"), new_brand)
+    user = user_logged_in
+    response = user.client.get(reverse("brand-add"))
+    assert response.status_code == 403
+
+    response = user.client.post(reverse("brand-add"), {"name": "brand name"})
     assert response.status_code == 403
 
 
 @pytest.mark.django_db
 def test_brand_add_logged_superuser(superuser_logged_in, set_up):
+    user = superuser_logged_in
     brand_count = Brand.objects.count()
+    response = user.client.get(reverse("brand-add"))
+    assert response.status_code == 200
+
     new_brand = {
         "name": "Test Brand Name",
         "description": "Test description"
     }
-    response = superuser_logged_in.client.post(reverse("brand-add"), new_brand)
+    response = user.client.post(reverse("brand-add"), new_brand)
     assert response.status_code == 302
     assert Brand.objects.count() == brand_count + 1
     assert Brand.objects.filter(name=new_brand["name"]).exists()
@@ -103,6 +117,79 @@ def test_perfume_get_list():
     client = Client()
     response = client.get(reverse("perfume-list"))
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_perfumers_get_list():
+    client = Client()
+    response = client.get(reverse("perfumer-list"))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_perfumer_add_not_logged():
+    client = Client()
+    response = client.get(reverse("perfumer-add"))
+    assert response.status_code == 302  # redirect to login page
+
+
+@pytest.mark.django_db
+def test_perfumer_add_logged(user_logged_in):
+    response = user_logged_in.client.get(reverse("perfumer-add"))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_perfumer_add_logged_superuser(superuser_logged_in):
+    user = superuser_logged_in
+    response = user.client.get(reverse("perfumer-add"))
+    assert response.status_code == 200
+
+    perfumer_count = Perfumer.objects.count()
+    new_perfumer = {
+        "first_name": "John",
+        "last_name": "Faketestlastname"
+    }
+    response = user.client.post(reverse("perfumer-add"), new_perfumer)
+    assert response.status_code == 302
+    assert Perfumer.objects.count() == perfumer_count + 1
+    assert Perfumer.objects.filter(last_name=new_perfumer["last_name"]).exists()
+
+
+@pytest.mark.django_db
+def test_note_get_list():
+    client = Client()
+    response = client.get(reverse("note-list"))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_note_add_not_logged():
+    client = Client()
+    response = client.get(reverse("note-add"))
+    assert response.status_code == 302  # login page
+
+
+@pytest.mark.django_db
+def test_note_add_logged(user_logged_in):
+    response = user_logged_in.client.get(reverse("note-add"))
+    assert response.status_code == 403
+
+    response = user_logged_in.client.post(reverse("note-add"), {"name": "note name"})
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_note_add_logged_superuser(superuser_logged_in):
+    user = superuser_logged_in
+    note_count = Note.objects.count()
+    response = user.client.get(reverse("note-add"))
+    assert response.status_code == 200
+
+    response = user.client.post(reverse("note-add"), {"name": "weird note"})
+    assert response.status_code == 302
+    assert Note.objects.count() == note_count + 1
+    assert Note.objects.filter(name="weird note").exists()
 
 
 @pytest.mark.django_db
@@ -172,6 +259,25 @@ def test_collection_delete_logged(user_logged_in, set_up, create_userperfume):
     response = user.client.post(reverse("userperfume-delete", args=(userperfume.id,)), {"confirm": "Yes"})
     assert response.status_code == 302
     assert userperfume.id not in [item.id for item in UserPerfume.objects.all()]
+
+
+@pytest.mark.django_db
+def test_offer_get_list_not_logged():
+    client = Client()
+    response = client.get(reverse("offer-list"))
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_offer_get_list_logged(user_logged_in):
+    response = user_logged_in.client.get(reverse("offer-list"))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_offer_get_list_logged_superuser(superuser_logged_in):
+    response = superuser_logged_in.client.get(reverse("offer-list"))
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db
@@ -342,23 +448,4 @@ def test_user_get_list_not_logged():
 @pytest.mark.django_db
 def test_user_get_list_logged(user_logged_in):
     response = user_logged_in.client.get(reverse("user-list"))
-    assert response.status_code == 200
-
-
-@pytest.mark.django_db
-def test_offer_get_list_not_logged():
-    client = Client()
-    response = client.get(reverse("offer-list"))
-    assert response.status_code == 302
-
-
-@pytest.mark.django_db
-def test_offer_get_list_logged(user_logged_in):
-    response = user_logged_in.client.get(reverse("offer-list"))
-    assert response.status_code == 200
-
-
-@pytest.mark.django_db
-def test_offer_get_list_logged_superuser(superuser_logged_in):
-    response = superuser_logged_in.client.get(reverse("offer-list"))
     assert response.status_code == 200
