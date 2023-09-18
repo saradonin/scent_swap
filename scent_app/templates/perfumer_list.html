@@ -1,5 +1,6 @@
 {% extends '__base__.html' %}
 {% block content %}
+    <h2>Perfumers</h2>
 
     {% if perms.scent_app.add_perfumer %}
         <a href="{% url 'perfumer-add' %}">
