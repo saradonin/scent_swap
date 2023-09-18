@@ -1,8 +1,6 @@
 import random
 import string
 
-from common.utils import get_random_brand, get_random_concentration, get_random_perfumer, get_random_year, \
-    get_random_category, get_random_note
 from scent_app.models import Brand, Note, Perfumer, Category, CONCENTRATIONS, Perfume
 
 
@@ -13,11 +11,11 @@ def generate_random_name(brand):
 
 
 def generate_random_perfume():
-    brand = get_random_brand()
+    brand = Brand.objects.order_by('?')[0]
     name = generate_random_name(brand)
-    concentration = get_random_concentration()
-    perfumer = get_random_perfumer()
-    year = get_random_year()
+    concentration = random.choice(CONCENTRATIONS)[0]
+    perfumer = Perfumer.objects.order_by('?')[0]
+    year = random.randint(1920, 2023)
 
     perfume = Perfume.objects.create(name=name, brand=brand, concentration=concentration, year=year)
     perfume.save()
@@ -25,19 +23,19 @@ def generate_random_perfume():
     perfume.perfumer.add(perfumer)
 
     for i in range(random.randint(1, 3)):
-        category = get_random_category()
+        category = Category.objects.order_by('?')[0]
         perfume.category.add(category)
 
     for i in range(random.randint(1, 7)):
-        note = get_random_note()
+        note = Note.objects.order_by('?')[0]
         perfume.top_notes.add(note)
 
     for i in range(random.randint(1, 7)):
-        note = get_random_note()
+        note = Note.objects.order_by('?')[0]
         perfume.middle_notes.add(note)
 
     for i in range(random.randint(1, 7)):
-        note = get_random_note()
+        note = Note.objects.order_by('?')[0]
         perfume.base_notes.add(note)
 
 

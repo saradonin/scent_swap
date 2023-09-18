@@ -1,9 +1,8 @@
-from random import sample
+import random
 
 from django.contrib.auth.models import User
 from faker import Faker
 
-from common.utils import get_random_brand, get_random_concentration, get_random_year, get_random_category
 from scent_app.models import Category, Brand, Perfumer, Note, Perfume, CONCENTRATIONS
 
 faker = Faker(["en_GB", "it_IT", "fr_FR"])
@@ -50,12 +49,12 @@ def create_notes():
 
 
 def create_random_perfume():
-    brand = get_random_brand()
+    brand = Brand.objects.order_by('?')[0]
     name = faker.city()
-    concentration = get_random_concentration()
-    year = get_random_year()
+    concentration = random.choice(CONCENTRATIONS)[0]
+    year = random.randint(1960, 2023)
     perfumer = create_fake_perfumer()
-    category = get_random_category()
+    category = Category.objects.order_by('?')[0]
 
     perfume = Perfume.objects.create(brand=brand, name=name, concentration=concentration, year=year)
 

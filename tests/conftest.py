@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import Client
 
-from scent_app.models import Perfume, UserPerfume, Brand, Perfumer, Note, Category
+from scent_app.models import Perfume, Brand, Perfumer, Note, Category
 from tests.utils import create_test_user, create_categories, create_fake_brand, create_fake_perfumer, \
     create_random_perfume, create_test_superuser, create_notes
 
