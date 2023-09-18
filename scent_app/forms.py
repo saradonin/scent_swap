@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import validate_email
 
-from scent_app.models import UserPerfume, SwapOffer, Perfume
+from scent_app.models import UserPerfume, Perfume
 from scent_app.validators import validate_username_unique, validate_perfume_volume
 
 
