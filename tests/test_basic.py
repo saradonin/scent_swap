@@ -46,7 +46,7 @@ def test_brand_search_form(set_up):
 
 
 @pytest.mark.django_db
-def test_brand_details_not_logged(set_up):
+def test_brand_details(set_up):
     client = Client()
     brand = Brand.objects.first()
     # response = client.get(reverse("brand-perfumes", args=(brand.id,)))
@@ -60,7 +60,11 @@ def test_brand_add_not_logged():
     response = client.get(reverse("brand-add"))
     assert response.status_code == 302  # redirect to login page
 
-    response = client.post(reverse("brand-add"), {"name": "brand name"})
+    new_brand = {
+        "name": "Test Brand Name",
+        "description": "Test description"
+    }
+    response = client.post(reverse("brand-add"), new_brand)
     assert response.status_code == 302
 
 
@@ -70,7 +74,11 @@ def test_brand_add_logged(user_logged_in, set_up):
     response = user.client.get(reverse("brand-add"))
     assert response.status_code == 403
 
-    response = user.client.post(reverse("brand-add"), {"name": "brand name"})
+    new_brand = {
+        "name": "Test Brand Name",
+        "description": "Test description"
+    }
+    response = user.client.post(reverse("brand-add"), new_brand)
     assert response.status_code == 403
 
 
@@ -140,9 +148,8 @@ def test_perfume_search_form(set_up):
     assert perfume_not_to_find.name not in response.content.decode()
 
 
-
 @pytest.mark.django_db
-def test_perfume_details_not_logged(set_up):
+def test_perfume_details(set_up):
     client = Client()
     perfume = Perfume.objects.first()
     response = client.get(reverse("perfume-details", args=(perfume.id,)))
