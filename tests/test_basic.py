@@ -5,7 +5,7 @@ from django.shortcuts import resolve_url
 from django.test import Client, RequestFactory
 from django.urls import reverse
 
-from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User, Perfumer, Note, Category
+from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User, Perfumer, Note
 from scent_app.views import BrandListView, PerfumeListView
 
 
@@ -187,6 +187,20 @@ def test_perfume_add_logged_superuser(superuser_logged_in, set_up, new_perfume_d
     assert response.status_code == 302
     assert Perfume.objects.count() == perfume_count + 1
     assert Perfume.objects.filter(name=new_perfume_data["name"]).exists()
+
+
+@pytest.mark.django_db
+def test_perfume_update_logged_superuser(superuser_logged_in, set_up, new_perfume_data):
+    user = superuser_logged_in
+    perfume = Perfume.objects.first()
+    response = user.client.get(reverse("perfume-update", args=(perfume.id,)))
+    assert response.status_code == 200
+
+    updated_perfume_data = new_perfume_data
+    updated_perfume_data["name"] = "Updated name"
+    response = user.client.post(reverse("perfume-update", args=(perfume.id,)), updated_perfume_data)
+    assert response.status_code == 302
+    assert Perfume.objects.filter(name=updated_perfume_data["name"]).exists()
 
 
 @pytest.mark.django_db
@@ -436,6 +450,7 @@ def test_offer_close_unauthorized_user(user_logged_in, set_up):
         other_user = User.objects.order_by('?').first()
 
     # create userperfume and offer for the other_user
+
     userperfume_data = {
         "user": other_user,
         "perfume": Perfume.objects.order_by('?').first(),

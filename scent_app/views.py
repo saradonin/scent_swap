@@ -104,7 +104,7 @@ class BrandUpdateView(PermissionRequiredMixin, UpdateView):
 
 class BrandPerfumeListView(View):
     """
-    View for displaying a list of perfumes of the specific brand..
+    View for displaying a list of perfumes of the specific brand.
     """
 
     def get(self, request, brand_id):
