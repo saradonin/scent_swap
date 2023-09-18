@@ -5,7 +5,7 @@ from django.shortcuts import resolve_url
 from django.test import Client, RequestFactory
 from django.urls import reverse
 
-from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User, Perfumer, Note
+from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User, Perfumer, Note, Category
 from scent_app.views import BrandListView, PerfumeListView
 
 
@@ -154,6 +154,72 @@ def test_perfume_details(set_up):
     perfume = Perfume.objects.first()
     response = client.get(reverse("perfume-details", args=(perfume.id,)))
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_perfume_add_not_logged(set_up):
+    client = Client()
+    response = client.get(reverse("perfume-add"))
+    assert response.status_code == 302  # redirect to login page
+
+    new_perfume = {
+        "name": "Perfume Name",
+        "brand": Brand.objects.first().id,
+        "concentration": 'Eau de Toilette',
+        "year": 1999,
+        "perfumer": Perfumer.objects.first().id,
+        "top_notes": Note.objects.order_by('?').first().id,
+        "middle_notes": Note.objects.order_by('?').first().id,
+        "base_notes": Note.objects.order_by('?').first().id,
+        "category": Category.objects.first().id
+    }
+    response = client.post(reverse("perfume-add"), new_perfume)
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_perfume_add_logged(user_logged_in, set_up):
+    user = user_logged_in
+    response = user.client.get(reverse("perfume-add"))
+    assert response.status_code == 403
+
+    new_perfume = {
+        "name": "Perfume Name",
+        "brand": Brand.objects.first().id,
+        "concentration": 'Eau de Toilette',
+        "year": 1999,
+        "perfumer": Perfumer.objects.first().id,
+        "top_notes": Note.objects.order_by('?').first().id,
+        "middle_notes": Note.objects.order_by('?').first().id,
+        "base_notes": Note.objects.order_by('?').first().id,
+        "category": Category.objects.first().id
+    }
+    response = user.client.post(reverse("perfume-add"), new_perfume)
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_perfume_add_logged_superuser(superuser_logged_in, set_up):
+    user = superuser_logged_in
+    perfume_count = Perfume.objects.count()
+    response = user.client.get(reverse("perfume-add"))
+    assert response.status_code == 200
+
+    new_perfume = {
+        "name": "Perfume Name",
+        "brand": Brand.objects.first().id,
+        "concentration": 'Eau de Toilette',
+        "year": 1999,
+        "perfumer": Perfumer.objects.first().id,
+        "top_notes": Note.objects.order_by('?').first().id,
+        "middle_notes": Note.objects.order_by('?').first().id,
+        "base_notes": Note.objects.order_by('?').first().id,
+        "category": Category.objects.first().id
+    }
+    response = user.client.post(reverse("perfume-add"), new_perfume)
+    assert response.status_code == 302
+    assert Perfume.objects.count() == perfume_count + 1
+    assert Perfume.objects.filter(name=new_perfume["name"]).exists()
 
 
 @pytest.mark.django_db

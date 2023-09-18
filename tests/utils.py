@@ -43,10 +43,10 @@ def create_fake_perfumer():
     return perfumer
 
 
-def random_notes():
-
-    notes = list(Note.objects.all())
-    return sample(notes, 3)
+def create_notes():
+    note_list = ['Amber', 'Cedar', 'Iris', 'Lime', 'Pepper']
+    for note in note_list:
+        Note.objects.create(name=note)
 
 
 def create_random_perfume():
