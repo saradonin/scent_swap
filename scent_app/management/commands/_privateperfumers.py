@@ -112,10 +112,6 @@ def perfumers_convert(array):
     return new_list
 
 
-def delete_perfumers():
-    Perfumer.objects.all().delete()
-
-
 def create_perfumers():
     perfumers_list = perfumers_convert(PERFUMERS_LIST)
     for name in perfumers_list:

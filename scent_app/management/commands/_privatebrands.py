@@ -93,10 +93,6 @@ BRAND_LIST = ['Aaron Terence Hughes', 'Abdul Samad Al Qurashi', 'Abercrombie & F
               'Yves Saint Laurent', 'Zadig & Voltaire', 'Zaharoff', 'Zara', 'Zarkoperfume', 'Zoologist']
 
 
-def delete_brands():
-    Brand.objects.all().delete()
-
-
 def create_brands():
     for brand in BRAND_LIST:
         if not Brand.objects.filter(name=brand).exists():

@@ -37,7 +37,3 @@ def generate_random_perfume():
     for i in range(random.randint(1, 7)):
         note = Note.objects.order_by('?')[0]
         perfume.base_notes.add(note)
-
-
-def delete_perfumes():
-    Perfume.objects.all().delete()

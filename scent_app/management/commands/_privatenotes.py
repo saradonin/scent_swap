@@ -59,10 +59,6 @@ NOTES_LIST = ['Absinth', 'African amber', 'African violet', 'Agarwood', 'Agave',
               'Wisteria', 'Woods', 'Wool', 'Yams', 'Yarrow', 'Ylang-ylang', 'Yuzu']
 
 
-def delete_notes():
-    Note.objects.all().delete()
-
-
 def create_notes():
     for note in NOTES_LIST:
         if not Note.objects.filter(name=note).exists():
