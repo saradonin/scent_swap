@@ -6,7 +6,7 @@ from django.test import Client, RequestFactory
 from django.urls import reverse
 
 from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User, Perfumer, Note
-from scent_app.views import BrandListView
+from scent_app.views import BrandListView, PerfumeListView
 
 
 @pytest.mark.django_db
@@ -116,6 +116,36 @@ def test_brand_update_logged_superuser(superuser_logged_in, set_up):
 def test_perfume_get_list():
     client = Client()
     response = client.get(reverse("perfume-list"))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_perfume_search_form(set_up):
+    # get data
+    perfume_to_find = Perfume.objects.first()
+    perfume_not_to_find = Perfume.objects.last()
+
+    # post search query
+    factory = RequestFactory()
+    request = factory.post(reverse("perfume-list"), {"value": perfume_to_find.name[:-2]})
+    # have to set the user, because request object doesn't have user attribute
+    request.user = AnonymousUser()
+
+    view = PerfumeListView.as_view()
+    response = view(request)
+    assert response.status_code == 200
+
+    # assert results
+    assert perfume_to_find.name in response.content.decode()
+    assert perfume_not_to_find.name not in response.content.decode()
+
+
+
+@pytest.mark.django_db
+def test_perfume_details_not_logged(set_up):
+    client = Client()
+    perfume = Perfume.objects.first()
+    response = client.get(reverse("perfume-details", args=(perfume.id,)))
     assert response.status_code == 200
 
 
