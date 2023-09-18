@@ -1,7 +1,26 @@
 import random
 import string
+from faker import Faker
 
 from scent_app.models import Brand, Note, Perfumer, Category, CONCENTRATIONS, Perfume
+
+faker = Faker(["en_GB", "it_IT", "fr_FR"])
+
+CATEGORY_LIST = ['Citrus', 'Floral', 'Fresh', 'Fruity', 'Green', 'Oriental', 'Smoky', 'Spicy', 'Sweet', 'Woody']
+
+
+def create_categories():
+    for category in CATEGORY_LIST:
+        if not Category.objects.filter(name=category).exists():
+            Category.objects.create(name=category)
+
+
+def create_perfumer():
+    Perfumer.objects.create(first_name=faker.first_name(), last_name=faker.last_name())
+
+
+def create_brand():
+    Brand.objects.create(name=faker.name(), description=faker.address())
 
 
 def generate_random_name(brand):
