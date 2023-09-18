@@ -2,6 +2,18 @@
 {% block content %}
     <h2>Perfumers</h2>
 
+
+    <figure class="text-start shadow p-3 mb-5 bg-dark">
+        <blockquote class="blockquote">
+            <p class="lead text-secondary">A perfumer is an expert on creating perfume compositions, sometimes referred to affectionately as a nose
+                due to their fine sense of smell and skill in producing olfactory compositions.
+                The perfumer is effectively an artist who is trained in depth on the concepts of fragrance aesthetics
+                and who is capable of conveying abstract concepts and moods with compositions.</p>
+        </blockquote>
+        <figcaption class="blockquote-footer"><cite title="Source Title">Wikipedia</cite></figcaption>
+    </figure>
+
+
     {% if perms.scent_app.add_perfumer %}
         <a href="{% url 'perfumer-add' %}">
             <button type="button" class="btn btn-success m-2">Add perfumer</button>
