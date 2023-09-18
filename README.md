@@ -64,4 +64,5 @@ python manage.py runserver
 
 The Scent Swap App is licensed under the MIT License. Please see the LICENSE file for more details.
 
-file:///home/saradonin/Pictures/scentswap_screen.png
+![scentswap_screen](https://github.com/saradonin/scent_swap/assets/124811561/4b6f367f-16d0-426c-b8bf-196f5c643b96)
+
