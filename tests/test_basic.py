@@ -157,69 +157,36 @@ def test_perfume_details(set_up):
 
 
 @pytest.mark.django_db
-def test_perfume_add_not_logged(set_up):
+def test_perfume_add_not_logged(set_up, new_perfume_data):
     client = Client()
     response = client.get(reverse("perfume-add"))
     assert response.status_code == 302  # redirect to login page
 
-    new_perfume = {
-        "name": "Perfume Name",
-        "brand": Brand.objects.first().id,
-        "concentration": 'Eau de Toilette',
-        "year": 1999,
-        "perfumer": Perfumer.objects.first().id,
-        "top_notes": Note.objects.order_by('?').first().id,
-        "middle_notes": Note.objects.order_by('?').first().id,
-        "base_notes": Note.objects.order_by('?').first().id,
-        "category": Category.objects.first().id
-    }
-    response = client.post(reverse("perfume-add"), new_perfume)
+    response = client.post(reverse("perfume-add"), new_perfume_data)
     assert response.status_code == 302
 
 
 @pytest.mark.django_db
-def test_perfume_add_logged(user_logged_in, set_up):
+def test_perfume_add_logged(user_logged_in, set_up, new_perfume_data):
     user = user_logged_in
     response = user.client.get(reverse("perfume-add"))
     assert response.status_code == 403
 
-    new_perfume = {
-        "name": "Perfume Name",
-        "brand": Brand.objects.first().id,
-        "concentration": 'Eau de Toilette',
-        "year": 1999,
-        "perfumer": Perfumer.objects.first().id,
-        "top_notes": Note.objects.order_by('?').first().id,
-        "middle_notes": Note.objects.order_by('?').first().id,
-        "base_notes": Note.objects.order_by('?').first().id,
-        "category": Category.objects.first().id
-    }
-    response = user.client.post(reverse("perfume-add"), new_perfume)
+    response = user.client.post(reverse("perfume-add"), new_perfume_data)
     assert response.status_code == 403
 
 
 @pytest.mark.django_db
-def test_perfume_add_logged_superuser(superuser_logged_in, set_up):
+def test_perfume_add_logged_superuser(superuser_logged_in, set_up, new_perfume_data):
     user = superuser_logged_in
     perfume_count = Perfume.objects.count()
     response = user.client.get(reverse("perfume-add"))
     assert response.status_code == 200
 
-    new_perfume = {
-        "name": "Perfume Name",
-        "brand": Brand.objects.first().id,
-        "concentration": 'Eau de Toilette',
-        "year": 1999,
-        "perfumer": Perfumer.objects.first().id,
-        "top_notes": Note.objects.order_by('?').first().id,
-        "middle_notes": Note.objects.order_by('?').first().id,
-        "base_notes": Note.objects.order_by('?').first().id,
-        "category": Category.objects.first().id
-    }
-    response = user.client.post(reverse("perfume-add"), new_perfume)
+    response = user.client.post(reverse("perfume-add"), new_perfume_data)
     assert response.status_code == 302
     assert Perfume.objects.count() == perfume_count + 1
-    assert Perfume.objects.filter(name=new_perfume["name"]).exists()
+    assert Perfume.objects.filter(name=new_perfume_data["name"]).exists()
 
 
 @pytest.mark.django_db
@@ -303,28 +270,24 @@ def test_collection_get_list(user_logged_in):
 
 
 @pytest.mark.django_db
-def test_collection_add_logged(user_logged_in, set_up):
+def test_collection_add_logged(user_logged_in, set_up, new_userperfume_data):
     collection_count = UserPerfume.objects.count()
-    perfume = Perfume.objects.first()
 
-    new_userperfume = {
-        "user": user_logged_in,
-        "perfume": perfume,
-        "volume": 50,
-        "status": "full",
-        "to_exchange": False
-    }
-    response = user_logged_in.client.post(reverse("userperfume-add", args=(perfume.id,)), new_userperfume)
+    response = user_logged_in.client.post(reverse(
+        "userperfume-add",
+        args=(new_userperfume_data["perfume"].id,)),
+        new_userperfume_data)
 
     assert response.status_code == 302
     assert UserPerfume.objects.count() == collection_count + 1
 
-    assert UserPerfume.objects.filter(perfume=new_userperfume["perfume"]).exists()
+    assert UserPerfume.objects.filter(perfume=new_userperfume_data["perfume"]).exists()
 
 
 @pytest.mark.django_db
-def test_collection_update_logged(user_logged_in, set_up, create_userperfume):
+def test_collection_update_logged(user_logged_in, set_up, new_userperfume_data):
     user = user_logged_in
+    UserPerfume.objects.create(**new_userperfume_data)
     userperfume = UserPerfume.objects.filter(user=user).first()
 
     # get update page
@@ -350,8 +313,9 @@ def test_collection_update_logged(user_logged_in, set_up, create_userperfume):
 
 
 @pytest.mark.django_db
-def test_collection_delete_logged(user_logged_in, set_up, create_userperfume):
+def test_collection_delete_logged(user_logged_in, set_up, new_userperfume_data):
     user = user_logged_in
+    UserPerfume.objects.create(**new_userperfume_data)
     userperfume = UserPerfume.objects.filter(user=user).first()
 
     # get delete page
@@ -384,9 +348,10 @@ def test_offer_get_list_logged_superuser(superuser_logged_in):
 
 
 @pytest.mark.django_db
-def test_offer_add_logged(user_logged_in, set_up, create_userperfume):
+def test_offer_add_logged(user_logged_in, set_up, new_userperfume_data):
     user = user_logged_in
     offer_count = SwapOffer.objects.count()
+    UserPerfume.objects.create(**new_userperfume_data)
     userperfume = UserPerfume.objects.filter(user=user).first()
 
     # get add offer page
@@ -409,8 +374,9 @@ def test_offer_add_logged(user_logged_in, set_up, create_userperfume):
 
 
 @pytest.mark.django_db
-def test_offer_update_logged(user_logged_in, set_up, create_userperfume):
+def test_offer_update_logged(user_logged_in, set_up, new_userperfume_data):
     user = user_logged_in
+    UserPerfume.objects.create(**new_userperfume_data)
     userperfume = UserPerfume.objects.filter(user=user).first()
     # create offer - objects when creating directly
     offer_data = {
@@ -437,8 +403,9 @@ def test_offer_update_logged(user_logged_in, set_up, create_userperfume):
 
 
 @pytest.mark.django_db
-def test_offer_close_logged(user_logged_in, set_up, create_userperfume):
+def test_offer_close_logged(user_logged_in, set_up, new_userperfume_data):
     user = user_logged_in
+    UserPerfume.objects.create(**new_userperfume_data)
     userperfume = UserPerfume.objects.filter(user=user).first()
     # create offer - objects when creating directly
     offer_data = {
@@ -461,7 +428,7 @@ def test_offer_close_logged(user_logged_in, set_up, create_userperfume):
 
 
 @pytest.mark.django_db
-def test_offer_close_unauthorized_user(user_logged_in, set_up, create_userperfume):
+def test_offer_close_unauthorized_user(user_logged_in, set_up):
     user = user_logged_in
     # pick random other user who is not user
     other_user = None

@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import Client
 
-from scent_app.models import Perfume, UserPerfume
+from scent_app.models import Perfume, UserPerfume, Brand, Perfumer, Note, Category
 from tests.utils import create_test_user, create_categories, create_fake_brand, create_fake_perfumer, \
     create_random_perfume, create_test_superuser, create_notes
 
@@ -45,15 +45,28 @@ def set_up():
 
 
 @pytest.fixture
-def create_userperfume(user_logged_in):
-    user = user_logged_in
-    perfume = Perfume.objects.first()
-    userperfume_data = {
-        "user": user,
+def new_perfume_data():
+    return {
+        "name": "Perfume Name",
+        "brand": Brand.objects.first().id,
+        "concentration": 'Eau de Toilette',
+        "year": 1999,
+        "perfumer": Perfumer.objects.first().id,
+        "top_notes": Note.objects.order_by('?').first().id,
+        "middle_notes": Note.objects.order_by('?').first().id,
+        "base_notes": Note.objects.order_by('?').first().id,
+        "category": Category.objects.first().id
+    }
+
+
+@pytest.fixture
+def new_userperfume_data(user_logged_in):
+    perfume = Perfume.objects.order_by('?').first()
+
+    return {
+        "user": user_logged_in,
         "perfume": perfume,
         "volume": 50,
         "status": "full",
         "to_exchange": False
     }
-    userperfume = UserPerfume.objects.create(**userperfume_data)
-    return userperfume
