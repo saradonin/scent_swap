@@ -6,13 +6,17 @@
     {% block profile-menu %}{% endblock profile-menu %}
     <!-- //--------------------------- profile-menu end---------------------------// -->
 
-    {% if user == current_user %}
-        <div class="input-group justify-content-end">
+    <div class="input-group justify-content-between">
+        <h2>Offers</h2>
+
+        {% if user == current_user %}
+            <div class="input-group-append">
                 <a href="{% url 'offer-add' %}">
                     <button type="button" class="btn btn-success">Create swap offer</button>
                 </a>
-        </div>
-    {% endif %}
+            </div>
+        {% endif %}
+    </div>
 
     <table class="table table-dark table-striped">
         <thead>
