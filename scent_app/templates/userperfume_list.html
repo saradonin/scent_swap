@@ -36,7 +36,7 @@
                 <td>{{ userperfume.status }}</td>
                 <td>{{ userperfume.to_exchange|yesno:"Yes,No" }}</td>
                 <td>
-                    {% if user == userperfume.user %}
+                    {% if current_user == userperfume.user %}
                         <a href="{% url 'perfume-details' userperfume.perfume.id %}">
                             <button type="button" class="btn btn-outline-secondary">Details</button>
                         </a>

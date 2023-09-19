@@ -10,9 +10,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'offer-list-by-user' user.id %}"><h3>Offers</h3></a>
             </li>
+            {% if user == current_user %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'message-list' %}"><h3>Messages</h3></a>
             </li>
+            {% endif %}
         </ul>
 
     </nav>

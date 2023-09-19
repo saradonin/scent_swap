@@ -395,7 +395,7 @@ class UserPerfumeListView(View):
 
         ctx = {
             'page_obj': page_obj,
-            'current_user': user
+            'user': user
         }
         return render(request, "userperfume_list.html", ctx)
 
@@ -551,6 +551,7 @@ class OfferListByUserView(LoginRequiredMixin, View):
 
         ctx = {
             'page_obj': page_obj,
+            'user': user
         }
         return render(request, "offer_list_by_user.html", ctx)
 

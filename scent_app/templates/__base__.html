@@ -37,7 +37,7 @@
         {% endif %}
     </ul>
     <ul class="nav justify-content-end align-items-center">
-        {% if user.is_authenticated %}
+        {% if current_user.is_authenticated %}
 
             {% if unread_messages_exist %}
                 <li>
@@ -57,7 +57,7 @@
 
             <li>
                 <a class="nav-link text-white" href="{% url 'userperfume-list' user.id %}">
-                    <h5>{{ user.username }}</h5>
+                    <h5>{{ current_user.username }}</h5>
                 </a>
             </li>
             <li>
