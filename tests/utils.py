@@ -3,7 +3,7 @@ import random
 from django.contrib.auth.models import User
 from faker import Faker
 
-from scent_app.models import Category, Brand, Perfumer, Note, Perfume, CONCENTRATIONS
+from scent_app.models import Category, Brand, Perfumer, Note, Perfume, CONCENTRATIONS, Message
 
 faker = Faker(["en_GB", "it_IT", "fr_FR"])
 
@@ -62,3 +62,13 @@ def create_random_perfume():
     perfume.category.add(category)
     perfume.save()
     return perfume
+
+
+def create_test_messages():
+    users = User.objects.all()
+
+    for user in users:
+        other_user = None
+        while other_user is None or other_user == user:
+            other_user = User.objects.order_by('?').first()
+        Message.objects.create(sender=user, receiver=other_user, content=f"test content from {user.id} to {other_user.id}")

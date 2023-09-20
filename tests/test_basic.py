@@ -5,7 +5,7 @@ from django.shortcuts import resolve_url
 from django.test import Client, RequestFactory
 from django.urls import reverse
 
-from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User, Perfumer, Note
+from scent_app.models import Perfume, Brand, UserPerfume, SwapOffer, User, Perfumer, Note, Message
 from scent_app.views import BrandListView, PerfumeListView
 
 
@@ -17,7 +17,7 @@ def test_get_index_page():
 
 
 @pytest.mark.django_db
-def test_brand_get_list_not_logged():
+def test_brand_list_not_logged():
     client = Client()
     response = client.get(reverse("brand-list"))
     assert response.status_code == 200
@@ -121,7 +121,7 @@ def test_brand_update_logged_superuser(superuser_logged_in, set_up):
 
 
 @pytest.mark.django_db
-def test_perfume_get_list():
+def test_perfume_list():
     client = Client()
     response = client.get(reverse("perfume-list"))
     assert response.status_code == 200
@@ -204,7 +204,7 @@ def test_perfume_update_logged_superuser(superuser_logged_in, set_up, new_perfum
 
 
 @pytest.mark.django_db
-def test_perfumers_get_list():
+def test_perfumers_list():
     client = Client()
     response = client.get(reverse("perfumer-list"))
     assert response.status_code == 200
@@ -241,7 +241,7 @@ def test_perfumer_add_logged_superuser(superuser_logged_in):
 
 
 @pytest.mark.django_db
-def test_note_get_list():
+def test_note_list():
     client = Client()
     response = client.get(reverse("note-list"))
     assert response.status_code == 200
@@ -277,7 +277,7 @@ def test_note_add_logged_superuser(superuser_logged_in):
 
 
 @pytest.mark.django_db
-def test_collection_get_list(user_logged_in):
+def test_collection_list(user_logged_in):
     user = user_logged_in
     response = user.client.get(resolve_url("userperfume-list", user.id))
     assert response.status_code == 200
@@ -343,21 +343,28 @@ def test_collection_delete_logged(user_logged_in, set_up, new_userperfume_data):
 
 
 @pytest.mark.django_db
-def test_offer_get_list_not_logged():
+def test_offer_list_not_logged():
     client = Client()
     response = client.get(reverse("offer-list"))
     assert response.status_code == 302
 
 
 @pytest.mark.django_db
-def test_offer_get_list_logged(user_logged_in):
+def test_offer_list_logged(user_logged_in):
     response = user_logged_in.client.get(reverse("offer-list"))
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def test_offer_get_list_logged_superuser(superuser_logged_in):
+def test_offer_list_logged_superuser(superuser_logged_in):
     response = superuser_logged_in.client.get(reverse("offer-list"))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_offer_list_by_user_logged(user_logged_in, set_up):
+    user = User.objects.order_by('?').first()
+    response = user_logged_in.client.get(reverse("offer-list-by-user", args=(user.id,)))
     assert response.status_code == 200
 
 
@@ -524,13 +531,37 @@ def test_user_logout(user_logged_in):
 
 
 @pytest.mark.django_db
-def test_user_get_list_not_logged():
+def test_user_list_not_logged():
     client = Client()
     response = client.get(reverse("user-list"))
     assert response.status_code == 302
 
 
 @pytest.mark.django_db
-def test_user_get_list_logged(user_logged_in):
+def test_user_list_logged(user_logged_in):
     response = user_logged_in.client.get(reverse("user-list"))
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_message_list_not_logged():
+    client = Client()
+    response = client.get(reverse("message-list"))
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_message_list_logged(user_logged_in):
+    user = user_logged_in
+    response = user.client.get(reverse("message-list"))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_message_details_logged(user_logged_in, set_up):
+    user = user_logged_in
+
+    message = Message.objects.filter(sender=user).order_by("-timestamp").first()
+    response = user.client.get(reverse("message-details", args=(message.id,)))
+    assert response.status_code == 200
+

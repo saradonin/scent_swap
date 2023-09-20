@@ -4,7 +4,7 @@ from django.test import Client
 
 from scent_app.models import Perfume, Brand, Perfumer, Note, Category
 from tests.utils import create_test_user, create_categories, create_fake_brand, create_fake_perfumer, \
-    create_random_perfume, create_test_superuser, create_notes
+    create_random_perfume, create_test_superuser, create_notes, create_test_messages
 
 
 @pytest.fixture
@@ -30,7 +30,7 @@ def user_logged_in():
 
 
 @pytest.fixture
-def set_up():
+def set_up(user_logged_in):
     create_test_superuser()
     for _ in range(3):
         create_test_user()
@@ -42,6 +42,9 @@ def set_up():
         create_fake_perfumer()
     for _ in range(10):
         create_random_perfume()
+
+    create_test_messages()
+
 
 
 @pytest.fixture
