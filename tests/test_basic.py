@@ -567,6 +567,26 @@ def test_message_details_logged(user_logged_in, set_up):
 
 
 @pytest.mark.django_db
+def test_message_add_logged(user_logged_in, set_up):
+    user = user_logged_in
+    other_user = None
+    while other_user is None or other_user == user:
+        other_user = User.objects.order_by('?').first()
+
+    message_count = Message.objects.count()
+
+    message_data = {
+        'sender': user,
+        'receiver': other_user,
+        'content': "insignificant test message content"
+    }
+    response = user.client.post(reverse("message-add", args=(other_user.id,)), message_data)
+    assert response.status_code == 302
+    assert Message.objects.count() == message_count + 1
+    assert Message.objects.filter(content=message_data["content"]).exists()
+
+
+@pytest.mark.django_db
 def test_message_respond_logged(user_logged_in, set_up):
     user = user_logged_in
     message_count = Message.objects.count()
