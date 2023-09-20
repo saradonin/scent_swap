@@ -35,15 +35,16 @@ def set_up(user_logged_in):
     for _ in range(3):
         create_test_user()
 
+    create_test_messages()
     create_notes()
     create_categories()
+
     for _ in range(5):
         create_fake_brand()
         create_fake_perfumer()
     for _ in range(10):
         create_random_perfume()
 
-    create_test_messages()
 
 
 

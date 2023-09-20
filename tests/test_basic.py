@@ -565,3 +565,19 @@ def test_message_details_logged(user_logged_in, set_up):
     response = user.client.get(reverse("message-details", args=(message.id,)))
     assert response.status_code == 200
 
+
+@pytest.mark.django_db
+def test_message_respond_logged(user_logged_in, set_up):
+    user = user_logged_in
+    message_count = Message.objects.count()
+
+    message = Message.objects.filter(receiver=user).order_by("-timestamp").first()
+    response_data = {
+        'sender': user,
+        'receiver': message.sender,
+        'content': "test response content"
+    }
+    response = user.client.post(reverse("message-details", args=(message.id,)), response_data)
+    assert response.status_code == 302
+    assert Message.objects.count() == message_count + 1
+    assert Message.objects.filter(content=response_data["content"]).exists()

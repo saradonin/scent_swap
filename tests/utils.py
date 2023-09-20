@@ -71,4 +71,7 @@ def create_test_messages():
         other_user = None
         while other_user is None or other_user == user:
             other_user = User.objects.order_by('?').first()
-        Message.objects.create(sender=user, receiver=other_user, content=f"test content from {user.id} to {other_user.id}")
+        Message.objects.create(sender=user, receiver=other_user,
+                               content=f"test content from {user.id} to {other_user.id}")
+        Message.objects.create(sender=other_user, receiver=user,
+                               content=f"test content from {other_user.id} to {user.id}")
