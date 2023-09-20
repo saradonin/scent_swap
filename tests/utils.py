@@ -10,7 +10,7 @@ faker = Faker(["en_GB", "it_IT", "fr_FR"])
 
 def create_test_user():
     test_user = User.objects.create_user(
-        username=faker.first_name(),
+        username=faker.first_name() + str(random.randint(1, 65565)),
         email=faker.ascii_free_email(),
         password="test_password"
     )
@@ -19,7 +19,7 @@ def create_test_user():
 
 def create_test_superuser():
     test_superuser = User.objects.create_superuser(
-        username=faker.first_name(),
+        username=faker.first_name() + str(random.randint(1, 65565)),
         email=faker.ascii_free_email(),
         password="test_password",
         is_superuser=True
