@@ -395,16 +395,9 @@ def test_offer_add_logged(user_logged_in, set_up, new_userperfume_data):
 
 
 @pytest.mark.django_db
-def test_offer_update_logged(user_logged_in, set_up, new_userperfume_data):
+def test_offer_update_logged(user_logged_in, set_up, new_offer):
     user = user_logged_in
-    UserPerfume.objects.create(**new_userperfume_data)
-    userperfume = UserPerfume.objects.filter(user=user).first()
-    # create offer - objects when creating directly
-    offer_data = {
-        "offering_perfume": userperfume,
-        "requested_perfume": Perfume.objects.order_by('?').first(),
-    }
-    offer = SwapOffer.objects.create(**offer_data)
+    offer = new_offer
 
     # get update page
     response = user.client.get(reverse("offer-update", args=(offer.id,)))
@@ -412,7 +405,7 @@ def test_offer_update_logged(user_logged_in, set_up, new_userperfume_data):
 
     # update data - object.id when using form
     updated_offer_data = {
-        "offering_perfume": userperfume.id,
+        "offering_perfume": offer.offering_perfume.id,
         "requested_perfume": Perfume.objects.order_by('?')[2].id,
     }
     response = user.client.post(reverse("offer-update", args=(offer.id,)), updated_offer_data)
@@ -424,16 +417,9 @@ def test_offer_update_logged(user_logged_in, set_up, new_userperfume_data):
 
 
 @pytest.mark.django_db
-def test_offer_close_logged(user_logged_in, set_up, new_userperfume_data):
+def test_offer_close_logged(user_logged_in, set_up, new_offer):
     user = user_logged_in
-    UserPerfume.objects.create(**new_userperfume_data)
-    userperfume = UserPerfume.objects.filter(user=user).first()
-    # create offer - objects when creating directly
-    offer_data = {
-        "offering_perfume": userperfume,
-        "requested_perfume": Perfume.objects.order_by('?').first(),
-    }
-    offer = SwapOffer.objects.create(**offer_data)
+    offer = new_offer
 
     # get update page
     response = user.client.get(reverse("offer-close", args=(offer.id,)))

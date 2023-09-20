@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import Client
 
-from scent_app.models import Perfume, Brand, Perfumer, Note, Category
+from scent_app.models import Perfume, Brand, Perfumer, Note, Category, UserPerfume, SwapOffer
 from tests.utils import create_test_user, create_categories, create_fake_brand, create_fake_perfumer, \
     create_random_perfume, create_test_superuser, create_notes, create_test_messages
 
@@ -46,8 +46,6 @@ def set_up(user_logged_in):
         create_random_perfume()
 
 
-
-
 @pytest.fixture
 def new_perfume_data():
     return {
@@ -74,3 +72,17 @@ def new_userperfume_data(user_logged_in):
         "status": "full",
         "to_exchange": False
     }
+
+
+@pytest.fixture
+def new_offer(user_logged_in, new_userperfume_data):
+    user = user_logged_in
+    UserPerfume.objects.create(**new_userperfume_data)
+    userperfume = UserPerfume.objects.filter(user=user).first()
+    # create offer - objects when creating directly
+    offer_data = {
+        "offering_perfume": userperfume,
+        "requested_perfume": Perfume.objects.order_by('?').first(),
+    }
+    offer = SwapOffer.objects.create(**offer_data)
+    return offer
