@@ -63,7 +63,7 @@ def generate_random_perfume():
 def create_users():
     User.objects.create_superuser(username='admin', email='admin@scentswap.com', password='admin')
     for i in range(2):
-        username = f"user{i}"
-        email = f"user{1}@scentswap.com"
+        username = f"user{i+1}"
+        email = f"user{i+1}@scentswap.com"
         User.objects.create_user(username=username, email=email, password='password123')
     
