@@ -2,7 +2,7 @@ import random
 import string
 from faker import Faker
 
-from scent_app.models import Brand, Note, Perfumer, Category, CONCENTRATIONS, Perfume
+from scent_app.models import Brand, Note, Perfumer, Category, CONCENTRATIONS, Perfume, User
 
 faker = Faker(["en_GB", "it_IT", "fr_FR"])
 
@@ -44,18 +44,26 @@ def generate_random_perfume():
 
     perfume.perfumer.add(perfumer)
 
-    for i in range(random.randint(1, 3)):
+    for _ in range(random.randint(1, 3)):
         category = Category.objects.order_by('?')[0]
         perfume.category.add(category)
 
-    for i in range(random.randint(1, 7)):
+    for _ in range(random.randint(1, 7)):
         note = Note.objects.order_by('?')[0]
         perfume.top_notes.add(note)
 
-    for i in range(random.randint(1, 7)):
+    for _ in range(random.randint(1, 7)):
         note = Note.objects.order_by('?')[0]
         perfume.middle_notes.add(note)
 
-    for i in range(random.randint(1, 7)):
+    for _ in range(random.randint(1, 7)):
         note = Note.objects.order_by('?')[0]
         perfume.base_notes.add(note)
+        
+def create_users():
+    User.objects.create_superuser(username='admin', email='admin@scentswap.com', password='admin')
+    for i in range(2):
+        username = f"user{i}"
+        email = f"user{1}@scentswap.com"
+        User.objects.create_user(username=username, email=email, password='password123')
+    

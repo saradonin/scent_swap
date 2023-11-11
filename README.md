@@ -36,7 +36,10 @@ Ensure you have [Docker](https://www.docker.com/get-started/) installed before r
 
 ## Usage
 
-- Register an account or log in if you already have one.
+- Register an account or log in using existing accounts:
+  - superuser: username `admin`, login `admin`
+  - user 1: username `user1`, password `password123`
+  - user 2: username `user2`, password `password123`
 - Browse listed perfumes and brands.
 - Create and manage your perfume collection.
 - Create swap offers for perfumes from your collection.

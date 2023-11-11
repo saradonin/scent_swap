@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 
-from scent_app.models import Category, Note, Perfumer, Brand, Perfume
+from scent_app.models import Category, Note, Perfumer, Brand, Perfume, User
 from ._privatenotes import create_notes
-from ._privateperfumes import generate_random_perfume, create_perfumer, create_brand, create_categories
+from ._privateperfumes import generate_random_perfume, create_perfumer, create_brand, create_categories, create_users
 
 
 class Command(BaseCommand):
@@ -31,3 +31,7 @@ class Command(BaseCommand):
             for _ in range(100):
                 generate_random_perfume()
             self.stdout.write(self.style.SUCCESS("Random fake perfumes added"))
+
+        if not User.objects.exists():
+            create_users()
+            self.stdout.write(self.style.SUCCESS("Users added"))
