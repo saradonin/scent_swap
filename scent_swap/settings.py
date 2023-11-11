@@ -75,11 +75,12 @@ WSGI_APPLICATION = 'scent_swap.wsgi.application'
 
 DATABASES = {
     'default': {
-        'HOST': '127.0.0.1',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'scent',
         'USER': 'postgres',
-        'PASSWORD': 'coderslab',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 
