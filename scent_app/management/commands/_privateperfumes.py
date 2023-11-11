@@ -6,7 +6,8 @@ from scent_app.models import Brand, Note, Perfumer, Category, CONCENTRATIONS, Pe
 
 faker = Faker(["en_GB", "it_IT", "fr_FR"])
 
-CATEGORY_LIST = ['Citrus', 'Floral', 'Fresh', 'Fruity', 'Green', 'Oriental', 'Smoky', 'Spicy', 'Sweet', 'Woody']
+CATEGORY_LIST = ['Citrus', 'Floral', 'Fresh', 'Fruity',
+                 'Green', 'Oriental', 'Smoky', 'Spicy', 'Sweet', 'Woody']
 
 
 def create_categories():
@@ -16,7 +17,8 @@ def create_categories():
 
 
 def create_perfumer():
-    Perfumer.objects.create(first_name=faker.first_name(), last_name=faker.last_name())
+    Perfumer.objects.create(first_name=faker.first_name(),
+                            last_name=faker.last_name())
 
 
 def create_brand():
@@ -36,7 +38,8 @@ def generate_random_perfume():
     perfumer = Perfumer.objects.order_by('?')[0]
     year = random.randint(1920, 2023)
 
-    perfume = Perfume.objects.create(name=name, brand=brand, concentration=concentration, year=year)
+    perfume = Perfume.objects.create(
+        name=name, brand=brand, concentration=concentration, year=year)
     perfume.save()
 
     perfume.perfumer.add(perfumer)

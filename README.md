@@ -24,32 +24,15 @@ To set up the Scent Swap App locally for development or testing purposes, follow
 git clone https://github.com/saradonin/scent_swap
 ```
 
-2. Install the required dependencies:
+2. Run the container:
 
 ```
-pip install -r requirements.txt
+docker-compose up
 ```
 
-3. Configure the database settings in settings.py to match your database setup.
-4. Create the database tables and apply migrations:
+3. Access the app in your web browser at http://localhost:8000.
 
-```
-python manage.py migrate
-```
-
-5. Populate your database with sample data
-
-```
-python manage.py populateperfumes
-```
-
-6. Start the development server:
-
-```
-python manage.py runserver
-```
-
-6. Access the app in your web browser at http://localhost:8000.
+Ensure you have [Docker](https://www.docker.com/get-started/) installed before running these commands.
 
 ## Usage
 
