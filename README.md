@@ -1,6 +1,5 @@
 # Scent Swap #
 
-***
 The Scent Swap App is a web application designed to facilitate the exchange of perfumes and fragrances among users. It
 provides a platform for perfume enthusiasts to discover new scents, list their own perfumes, and connect with others for
 swaps. This repository contains the source code for the Scent Swap App.
