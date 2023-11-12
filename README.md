@@ -23,7 +23,16 @@ To set up the Scent Swap App locally for development or testing purposes, follow
 git clone https://github.com/saradonin/scent_swap
 ```
 
-2. Run the container:
+2. Create .env file in root directory
+```
+SECRET_KEY=your_secret_key
+DEBUG=True
+POSTGRES_DB=your_db_name
+POSTGRES_USER=your_db_user
+POSTGRES_PASSWORD=your_db_password
+```
+
+3. Run the container:
 
 ```
 docker-compose up
