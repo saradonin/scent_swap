@@ -1,1 +1,1 @@
-web: gunicorn scent_swap.wsgi -log-file -
+web: gunicorn scent_swap.wsgi --log-file -
