@@ -19,18 +19,18 @@ class IndexView(View):
     """
 
     def get(self, request):
-        # brands_count = Brand.objects.count()
-        # perfumer_count = Perfumer.objects.count()
-        # perfumes_count = Perfume.objects.count()
-        # offers_count = SwapOffer.objects.count()
-        # users_count = User.objects.count()
+        brands_count = Brand.objects.count()
+        perfumer_count = Perfumer.objects.count()
+        perfumes_count = Perfume.objects.count()
+        offers_count = SwapOffer.objects.count()
+        users_count = User.objects.count()
 
         ctx = {
-            # 'brands_count': brands_count,
-            # 'perfumer_count': perfumer_count,
-            # 'perfumes_count': perfumes_count,
-            # 'offers_count': offers_count,
-            # 'users_count': users_count,
+            'brands_count': brands_count,
+            'perfumer_count': perfumer_count,
+            'perfumes_count': perfumes_count,
+            'offers_count': offers_count,
+            'users_count': users_count,
         }
         return render(request, 'index.html', ctx)
 
