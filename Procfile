@@ -1,0 +1,1 @@
+web: gunicorn scent_swap.wsgi -log-file -
