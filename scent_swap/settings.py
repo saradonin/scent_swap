@@ -27,12 +27,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# ALLOWED_HOSTS = ["*.herokuapp.com","scent-swap.herokuapp.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["*.herokuapp.com", "scent-swap-0f8a23c9492b.herokuapp.com", "127.0.0.1", "0.0.0.0"]
 
-ALLOWED_HOSTS = ["*"]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
