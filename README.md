@@ -68,5 +68,6 @@ Ensure you have [Docker](https://www.docker.com/get-started/) installed before r
 
 The Scent Swap App is licensed under the MIT License. Please see the LICENSE file for more details.
 
-![scentswap_screen](https://github.com/saradonin/scent_swap/assets/124811561/4b6f367f-16d0-426c-b8bf-196f5c643b96)
+![scent](https://github.com/saradonin/scent_swap/assets/124811561/7c1f1c50-3f2b-4a4e-b646-e2686f1c1a37)
+
 
