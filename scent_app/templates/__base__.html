@@ -27,28 +27,28 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link text-info" href="{% url 'brand-list' %}">Brands</a>
+                        <a class="nav-link text-info fs-5 text" href="{% url 'brand-list' %}">Brands</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-info" href="{% url 'perfume-list' %}">Perfumes</a>
+                        <a class="nav-link text-info fs-5 text" href="{% url 'perfume-list' %}">Perfumes</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-info" href="{% url 'perfumer-list' %}">Artists</a>
+                        <a class="nav-link text-info fs-5 text" href="{% url 'perfumer-list' %}">Artists</a>
                     </li>
 
                     <li class="nav-item  navbar-dark">
-                        <a class="nav-link text-info" href="{% url 'note-list' %}">Notes</a>
+                        <a class="nav-link text-info fs-5 text" href="{% url 'note-list' %}">Notes</a>
                     </li>
 
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-info" href="{% url 'user-list' %}">Users</a>
+                        <a class="nav-link text-info fs-5 text" href="{% url 'user-list' %}">Users</a>
                     </li>
 
                     <li class="nav-item align-text-center">
-                        <a class="nav-link text-info" href="{% url 'offer-list' %}">Swap offers</a>
+                        <a class="nav-link text-info fs-5 text" href="{% url 'offer-list' %}">Swap offers</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -68,7 +68,7 @@
                 {% endif %}
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown"
+                    <a class="nav-link dropdown-toggle text-light fs-5 text" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         {{ current_user.username }}
                     </a>

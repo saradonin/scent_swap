@@ -5,14 +5,14 @@
                 <a class="nav-link text-white" href=""><h4>{{ user.username }}</h4></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-info" href="{% url 'userperfume-list' user.id %}">Collection</a>
+                <a class="nav-link text-info fs-5 text " href="{% url 'userperfume-list' user.id %}">Collection</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-info" href="{% url 'offer-list-by-user' user.id %}">Offers</a>
+                <a class="nav-link text-info fs-5 text" href="{% url 'offer-list-by-user' user.id %}">Offers</a>
             </li>
             {% if user == current_user %}
             <li class="nav-item">
-                <a class="nav-link text-info" href="{% url 'message-list' %}">Messages</a>
+                <a class="nav-link text-info fs-5 text" href="{% url 'message-list' %}">Messages</a>
             </li>
             {% endif %}
         </ul>
