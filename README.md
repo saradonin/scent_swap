@@ -15,30 +15,41 @@ swaps. This repository contains the source code for the Scent Swap App.
 
 ## Getting started
 
+### Deployed
+
+The deployed application is available at the link.
+
+https://scent-swap-0f8a23c9492b.herokuapp.com
+
+See [Usage](#usage) for
+
+### Developement
+
 To set up the Scent Swap App locally for development or testing purposes, follow these steps:
 
-1. Clone the repository to your local machine:
+1. Use `develop` branch for development.
+
+2. Clone the repository to your local machine:
 
 ```
 git clone https://github.com/saradonin/scent_swap
 ```
 
-2. Create .env file in root directory
+3. Create .env file in root directory
 ```
 SECRET_KEY=your_secret_key
-DEBUG=True
 POSTGRES_DB=your_db_name
 POSTGRES_USER=your_db_user
 POSTGRES_PASSWORD=your_db_password
 ```
 
-3. Run the container:
+4. Run the container:
 
 ```
 docker-compose up
 ```
 
-3. Access the app in your web browser at http://localhost:8000.
+5. Access the app in your web browser at http://localhost:8000.
 
 Ensure you have [Docker](https://www.docker.com/get-started/) installed before running these commands.
 
@@ -52,11 +63,11 @@ Ensure you have [Docker](https://www.docker.com/get-started/) installed before r
 - Create and manage your perfume collection.
 - Create swap offers for perfumes from your collection.
 - Use the messaging system to communicate and coordinate exchanges.
-- Admins can access the admin panel at http://localhost:8000/admin/ to manage users and content
 
 ## License
 
 The Scent Swap App is licensed under the MIT License. Please see the LICENSE file for more details.
 
-![scentswap_screen](https://github.com/saradonin/scent_swap/assets/124811561/4b6f367f-16d0-426c-b8bf-196f5c643b96)
+![scent](https://github.com/saradonin/scent_swap/assets/124811561/7c1f1c50-3f2b-4a4e-b646-e2686f1c1a37)
+
 

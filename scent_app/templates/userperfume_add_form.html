@@ -1,76 +1,104 @@
 {% extends '__base__.html' %}
 {% block content %}
 
-    <h3>Add perfume to <a href="">{{ user.username }}</a> collection</h3>
-    <table class="table table-dark table-striped">
-        <thead>
-        <tr>
-            <th><h4>Name:</h4></th>
-            <th><h4>{{ perfume.name }}</h4></th>
-        </tr>
-        </thead>
+<h3>Add perfume to <a href="">{{ user.username }}</a> collection</h3>
 
-        <tbody>
-        <tr>
-            <td>Brand:</td>
-            <td>{{ perfume.brand }}</td>
-        </tr>
-        <tr>
-            <td>Concentration:</td>
-            <td>{{ perfume.concentration }}</td>
-        </tr>
-        <tr>
-            <td>Release year:</td>
-            <td>{{ perfume.year }}</td>
-        </tr>
-        <tr>
-            <td>Perfumer:</td>
-            <td>
-                {% for perfumer in perfume.perfumer.all %}
-                    {{ perfumer.name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <td>Category:</td>
-            <td>
-                {% for category in perfume.category.all %}
-                    {{ category.name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <td>Top notes:</td>
-            <td>
-                {% for note in perfume.top_notes.all %}
-                    {{ note.name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <td>Middle notes:</td>
-            <td>
-                {% for note in perfume.middle_notes.all %}
-                    {{ note.name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <td>Base notes:</td>
-            <td>
-                {% for note in perfume.base_notes.all %}
-                    {{ note.name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </td>
-        </tr>
+<div class="container-sm border border-dark shadow mb-3 p-4 ">
+    <div class="row">
+        <div class="col-auto">
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            <h4>Name:</h4>
+                        </th>
+                        <th>
+                            <h4>{{ perfume.name }}</h4>
+                        </th>
+                    </tr>
+                </thead>
 
-        </tbody>
-    </table>
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ form.as_table }}
-        <input class="btn btn-success" type="submit" value="Add">
-    </form>
+                <tbody>
+                    <tr>
+                        <td>Brand:</td>
+                        <td>{{ perfume.brand }}</td>
+                    </tr>
+                    <tr>
+                        <td>Concentration:</td>
+                        <td>{{ perfume.concentration }}</td>
+                    </tr>
+                    <tr>
+                        <td>Release year:</td>
+                        <td>{{ perfume.year }}</td>
+                    </tr>
+                    <tr>
+                        <td>Perfumer:</td>
+                        <td>
+                            {% for perfumer in perfume.perfumer.all %}
+                            {{ perfumer.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Category:</td>
+                        <td>
+                            {% for category in perfume.category.all %}
+                            {{ category.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Top notes:</td>
+                        <td>
+                            {% for note in perfume.top_notes.all %}
+                            {{ note.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Middle notes:</td>
+                        <td>
+                            {% for note in perfume.middle_notes.all %}
+                            {{ note.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Base notes:</td>
+                        <td>
+                            {% for note in perfume.base_notes.all %}
+                            {{ note.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="col-auto justify-content-end">
+            <form action="" method="POST">
+                <div class="form-group justify-content-start m-2">
+                    {% csrf_token %}
+
+                    {{ form.as_p }}
+
+                </div>
+
+                <div class="form-group row justify-content-center m-2">
+                    <div class="row">
+                        <input class="btn btn-success mt-4 mb-4" type="submit" value="Add">
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
 
 
 {% endblock content %}
