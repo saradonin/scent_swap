@@ -75,7 +75,7 @@
                 {% endif %}
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                    <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         {{ current_user.username }}
                     </a>
@@ -83,6 +83,8 @@
                         <li><a class="dropdown-item" href="{% url 'userperfume-list' current_user.id %}">Collection</a>
                         </li>
                         <li><a class="dropdown-item" href="{% url 'offer-list-by-user' current_user.id %}">Offers</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'message-list' %}">Messages</a>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
