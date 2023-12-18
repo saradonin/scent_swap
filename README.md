@@ -21,7 +21,7 @@ The deployed application is available at the link.
 
 https://scent-swap-0f8a23c9492b.herokuapp.com
 
-See [Usage](#usage) for
+See [Usage](#usage) for details.
 
 ### Developement
 
